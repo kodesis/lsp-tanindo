@@ -96,10 +96,10 @@ $query_builder = TRUE;
 // );
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'lsptanindo.com',
+	'hostname' => '103.163.138.165',
 	'username' => 'lsptanin_admin',
 	'password' => 'adminlsptanindo',
-	'database' => 'tanindo',
+	'database' => 'lsptanin_tanindo',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
