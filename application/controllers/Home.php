@@ -24,7 +24,13 @@ class Home extends CI_Controller
     $this->load->view('home/skema');
     $this->load->view('statis_template/v_footer');
   }
-
+  public function artikel()
+  {
+    $data['title'] = 'Artikel Tanindo';
+    $this->load->view('statis_template/v_header', $data);
+    $this->load->view('home/artikel');
+    $this->load->view('statis_template/v_footer');
+  }
   public function fasilitator()
   {
     $data['title'] = 'Skema Program Fasilitator Tanindo';

@@ -11,17 +11,17 @@
           <form class="user" method="post" action="<?= base_url('home/insertktna'); ?>" enctype="multipart/form-data">
             <div class="form-group">
               <label for="form-label">NIK</label>
-              <input type="text" class="form-control form-control-user" id="nik" name="nik" placeholder="Input NIK ......" value="<?= set_value('nik'); ?>">
+              <input type="text" class="form-control form-control-user" id="nik" name="nik" placeholder="Input NIK" value="<?= set_value('nik'); ?>">
               <?= form_error('nik', '<small class="text-danger pl-3">', '</small>'); ?>
             </div>
             <div class="form-group">
               <label for="form-label">Username</label>
-              <input type="text" class="form-control form-control-user" id="username" name="username" placeholder="Input Username ......" value="<?= set_value('username'); ?>">
+              <input type="text" class="form-control form-control-user" id="username" name="username" placeholder="Input Username" value="<?= set_value('username'); ?>">
               <?= form_error('username', '<small class="text-danger pl-3">', '</small>'); ?>
             </div>
             <div class="form-group">
               <label for="form-label">Email</label>
-              <input type="text" class="form-control form-control-user" id="email" name="email" placeholder="Input email ......" value="<?= set_value('email'); ?>">
+              <input type="text" class="form-control form-control-user" id="email" name="email" placeholder="Input email" value="<?= set_value('email'); ?>">
               <?= form_error('email', '<small class="text-danger pl-3">', '</small>'); ?>
             </div>
             <div class="form-group">
@@ -42,7 +42,7 @@
             </div>
             <div class="form-group">
               <label for="form-label">Tempat Lahir</label>
-              <input type="text" class="form-control form-control-user" id="tem_lahir" name="tem_lahir" placeholder="Input Tempat Lahir...." value="<?= set_value('tem_lahir'); ?>">
+              <input type="text" class="form-control form-control-user" id="tem_lahir" name="tem_lahir" placeholder="Input Tempat Lahir" value="<?= set_value('tem_lahir'); ?>">
               <?= form_error('tem_lahir', '<small class="text-danger pl-3">', '</small>'); ?>
             </div>
             <div class="form-group">
@@ -64,7 +64,7 @@
             </div>
             <div class="form-group">
               <label for="form-label">Alamat</label>
-              <input type="text" class="form-control form-control-user" id="alamat" name="alamat" placeholder="Input Alamat...." value="<?= set_value('alamat'); ?>">
+              <input type="text" class="form-control form-control-user" id="alamat" name="alamat" placeholder="Input Alamat" value="<?= set_value('alamat'); ?>">
               <?= form_error('alamat', '<small class="text-danger pl-3">', '</small>'); ?>
             </div>
             <div class="form-group">
@@ -110,7 +110,7 @@
             </div>
             <div class="form-group">
               <label for="form-label">Nomor Hp</label>
-              <input type="text" class="form-control form-control-user" id="nomor_hp" name="nomor_hp" placeholder="Input Nomor HP....." value="<?= set_value('nomor_hp'); ?>">
+              <input type="text" class="form-control form-control-user" id="nomor_hp" name="nomor_hp" placeholder="Input Nomor HP" value="<?= set_value('nomor_hp'); ?>">
               <?= form_error('nomor_hp', '<small class="text-danger pl-3">', '</small>'); ?>
             </div>
 

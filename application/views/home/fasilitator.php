@@ -14,6 +14,9 @@
             <a class="nav-link fw-medium" href="<?= base_url('home/skema') ?>">Skema</a><!-- ganti link ke menu skema -->
           </li>
           <li class="nav-item px-2">
+            <a class="nav-link fw-medium" href="<?= base_url('home/artikel') ?>">Artikel</a><!-- ganti link ke menu skema -->
+          </li>
+          <li class="nav-item px-2">
             <a class="nav-link fw-medium" href="<?= base_url('home') ?>#tentang">Tentang</a>
           </li>
           <li class="nav-item px-2">

@@ -61,7 +61,7 @@
                             </label>
                           </div>
                           <!-- <input type="text" name="assessment" value="<?= $ass['uid'] ?>"> -->
-                          <input type="text" name="assessment_<?= $ass['uid'] ?>" id="assessment_<?= $ass['uid'] ?>" value="<?= $ass['uid'] ?>">
+                          <!-- <input type="text" name="assessment_<?= $ass['uid'] ?>" id="assessment_<?= $ass['uid'] ?>" value="<?= $ass['uid'] ?>"> -->
                           <!-- <input type="hidden" name="user_uid" value="<?= $username->user_uid ?>"> -->
                         </td>
                         <!-- <td>
