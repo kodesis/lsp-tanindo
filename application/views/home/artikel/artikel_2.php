@@ -44,12 +44,6 @@
                "></div>
         <!--/.bg-holder-->
 
-        <div class="bg-holder d-md-none" style="
-                  background-image: url(<?= base_url('template/tanindo/') ?>assets/img/illustrations/hero-bg.png);
-                  background-position: right top;
-                  background-size: contain;
-               "></div>
-        <!--/.bg-holder-->
 
         <div class="container">
             <div class="row align-items-center min-vh-75 min-vh-lg-100">

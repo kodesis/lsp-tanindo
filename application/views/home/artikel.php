@@ -54,69 +54,157 @@
       <div class="row align-items-center min-vh-75 min-vh-lg-100">
         <div class="col-md-7 col-lg-6 col-xxl-5 py-6 text-sm-start text-center">
           <h1 class="mt-6 mb-sm-4 fw-semi-bold lh-sm fs-4 fs-lg-5 fs-xl-6">
-            Berbagai Artikel
-            <br class="d-block d-lg-block" />Tersedia Di LSP Tanindo
+            Bersertifikasi untuk
+            <br class="d-block d-lg-block" />Masa Depan Pertanian
           </h1>
           <p class="mb-4 fs-1">
-            Mengukuhkan Kompetensi, Meningkatkan Daya Saing.
-          </p>
-          <a href="#skema" class="btn btn-lg btn-success">Selengkapnya ...</a>
+            SERTIFIKAT LISENSI
+            Nomor: BNSP-LSP-2525-ID
+            23 Agustus 2024 </p>
+          <a href="#tentang" class="btn btn-lg btn-success">Selengkapnya ...</a>
         </div>
       </div>
     </div>
   </section>
-
-  <br><br><br>
-  <div class="row" id="skema">
-    <div class="col-lg-9 mx-auto text-center mb-3">
-      <h5 class="fw-bold fs-3 fs-lg-5 lh-sm mb-3">Artikel LSP TANINDO </h5>
-      <!-- <h4><b>Berdasarkan Surat Keputusan Ketua BNSP Nomor KEP 1813/BNSP/VII/2024. </b></h4> -->
+  <section class="py-2" id="header">
+    <div class="row" id="skema">
+      <div class="col-lg-9 mx-auto text-center mb-3">
+        <h5 class="fw-bold fs-3 fs-lg-5 lh-sm mb-3">Artikel LSP TANINDO </h5>
+        <marquee behavior="" direction="left">
+          <h4><b>Kado spesial HUT Ketua PPPSI H Otong Wiranta kompeten penyuluh pertanian berstandar Nasional BNSP</b></h4>
+        </marquee>
+      </div>
     </div>
-  </div>
-  <div class="row h-100 justify-content-center align-items-center mb-6">
-    <div class="col-xl-12">
-      <div class="row justify-content-center">
-        <div class="col-md-4 mb-5">
-          <div class="card h-100 shadow px-4 px-md-2 px-lg-3 card-span pt-6">
-            <div class="text-center text-md-start card-hover">
-              <div class="d-flex justify-content-center align-items-center">
-                <img class="ps-3 icons" src="<?= base_url('assets/images/artikel/artikel_1.jpg') ?>" style="width: 100%;" alt="" />
+    <div class="row h-100 justify-content-center align-items-center mb-6">
+      <div class="col-xl-12">
+        <div class="row justify-content-center">
+          <div class="col-md-3 mb-5">
+            <a href="<?= base_url('artikel/artikel_1') ?>">
+              <div class="card h-10 shadow px-4 px-md-2 px-lg-3 card-span pt-6">
+                <div class="text-center text-md-start card-hover">
+                  <div class="d-flex justify-content-center align-items-center">
+                    <img class="ps-3 icons" src="<?= base_url('assets/images/artikel/artikel_1.jpg') ?>" style="width: 100%;" alt="" />
+                  </div>
+                  <div class="card-body">
+                    <p class="fw-bold fs-0 heading-color">
+                      BNSP GELAR WORKSHOP DI LSP TANINDO
+                    </p>
+                  </div>
+                </div>
               </div>
-              <div class="card-body">
-                <h6 class="fw-bold fs-1 heading-color">
-                  BNSP GELAR WORKSHOP DI LSP TANINDO
-                </h6>
-                <p class="mt-3 mb-md-0 mb-lg-2">
-                  Tangerang (lsptanindo.com).
-                  Menrupakan satu kehormatan tersendiri bagi para punggawa LSP Tanindo, bahwa pada hari Selasa, 29 Oktober 2024 bertempat di Ruang CBT lantai 3 kantor Harmoni Group di Vivo Business Park Tangerang ...
-                </p>
-                <br>
-                <a href="<?= base_url('artikel/artikel_1') ?>" class="btn btn-lg btn-light text-success" type="button">Selengkapnya</a>
+            </a>
+          </div>
+          <div class="col-md-3 mb-5">
+            <a href="<?= base_url('artikel/artikel_1') ?>">
+              <div class="card h-100 shadow px-4 px-md-2 px-lg-3 card-span pt-6">
+                <div class="text-center text-md-start card-hover">
+                  <div class="d-flex justify-content-center align-items-center">
+                    <img class="ps-3 icons" src="<?= base_url('assets/images/artikel/artikel_2.jpg') ?>" style="width: 100%;" alt="" />
+                  </div>
+                  <div class="card-body">
+                    <p class="fw-bold fs-0 heading-color">
+                      LSP TANINDO GELAR SERTIFIKASI PENYULUH PERGANIAN BATCH #1
+                    </p>
+                    <br>
+                  </div>
+                </div>
               </div>
-            </div>
+            </a>
           </div>
         </div>
-        <div class="col-md-4 mb-5">
-          <div class="card h-100 shadow px-4 px-md-2 px-lg-3 card-span pt-6">
-            <div class="text-center text-md-start card-hover">
-              <!-- <img class="ps-3 icons" src="<?= base_url('template/tanindo/') ?>assets/img/icons/growth.svg" height="60" alt="" /> -->
-              <div class="d-flex justify-content-center align-items-center">
-                <img class="ps-3 icons" src="<?= base_url('assets/images/artikel/artikel_2.jpg') ?>" style="width: 100%;" alt="" />
+      </div>
+    </div>
+    <hr style="height:5px">
+    <div class="row" id="skema">
+      <div class="col-lg-9 mx-auto text-center mb-3">
+        <h5 class="fw-bold fs-3 fs-lg-5 lh-sm mb-3">New Feed </h5>
+        <h4><b>Artikel Terbaru</b></h4>
+      </div>
+    </div>
+
+    <!-- <div class="row h-100 justify-content-center align-items-center mb-6"> -->
+    <div class="row h-100 mb-6">
+      <div class="col-xl-8">
+        <div class="row justify-content-center">
+          <!-- <div class="row"> -->
+          <div class="col-md-4 mb-5">
+            <a href="<?= base_url('artikel/artikel_1') ?>">
+              <div class="card h-100 shadow px-4 px-md-2 px-lg-3 card-span pt-2">
+                <div class="text-center text-md-start card-hover">
+                  <div class="d-flex justify-content-center align-items-center">
+                    <img class="ps-3 icons" src="<?= base_url('assets/images/artikel/artikel_1.jpg') ?>" style="width: 100%;" alt="" />
+                  </div>
+                  <div class="card-body">
+                    <h6 class="fw-bold fs-1 heading-color">
+                      BNSP GELAR WORKSHOP DI LSP TANINDO
+                    </h6>
+                    <p class="mt-3 mb-md-0 mb-lg-2">
+                      Tangerang (lsptanindo.com).
+                      Menrupakan satu kehormatan tersendiri bagi para punggawa LSP Tanindo ...
+                    </p>
+                    <br>
+                    <a href="<?= base_url('artikel/artikel_1') ?>" class="btn btn-lg btn-light text-success" type="button">Selengkapnya</a>
+                  </div>
+                </div>
               </div>
-              <div class="card-body">
-                <h6 class="fw-bold fs-1 heading-color">
-                  LSP TANINDO GELAR SERTIFIKASI PENYULUH PERGANIAN BATCH #1
-                </h6>
-                <p class="mt-3 mb-md-0 mb-lg-2">
-                  Jakarta (lsptanindo.com).
-                  Tak perlu menunggu lama, setelah lisensi LSP Tanindo diterima dari BNSP pada tanggal 29 Oktober 2024, maka kick off LSP Tanindo langsung melaksanakan kegiatan Sertifikasi Penyuluh Pertanian Swadaya pada tanggal 6-7 November 2024 ...
-                </p>
-                <br>
-                <a href="<?= base_url('artikel/artikel_2') ?>" class="btn btn-lg btn-light text-success" type="button">Selengkapnya</a>
+            </a>
+          </div>
+          <div class="col-md-4 mb-5">
+            <a href="<?= base_url('artikel/artikel_2') ?>">
+              <div class="card h-100 shadow px-4 px-md-2 px-lg-3 card-span pt-2">
+                <div class="text-center text-md-start card-hover">
+                  <!-- <img class="ps-3 icons" src="<?= base_url('template/tanindo/') ?>assets/img/icons/growth.svg" height="60" alt="" /> -->
+                  <div class="d-flex justify-content-center align-items-center">
+                    <img class="ps-3 icons" src="<?= base_url('assets/images/artikel/artikel_2.jpg') ?>" style="width: 100%;" alt="" />
+                  </div>
+                  <div class="card-body">
+                    <h6 class="fw-bold fs-1 heading-color">
+                      LSP TANINDO GELAR SERTIFIKASI PENYULUH PERGANIAN BATCH #1
+                    </h6>
+                    <p class="mt-3 mb-md-0 mb-lg-2">
+                      Jakarta (lsptanindo.com).
+                      Tak perlu menunggu lama, setelah lisensi LSP Tanindo diterima dari BNSP pada tanggal 29 Oktober 2024 ...
+                    </p>
+                    <br>
+                    <a href="<?= base_url('artikel/artikel_2') ?>" class="btn btn-lg btn-light text-success" type="button">Selengkapnya</a>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-4">
+        <div class="row justify-content-center">
+          <!-- <div class="row"> -->
+          <div class="col-md-10">
+            <div class="card h-100 shadow px-4 px-md-2 px-lg-3 pt-2">
+              <div class="text-center text-md-start">
+                <div class="card-body">
+                  <h6 class="fw-bold fs-1">
+                    Berita Populer
+                  </h6>
+                  <hr style="height: 10px;">
+                  <a href="<?= base_url('artikel/artikel_1') ?>">
+                    <p class="mt-3 mb-md-0 mb-lg-2">
+                      Tangerang (11/8/2024)
+                      <br>
+                      BNSP GELAR WORKSHOP DI LSP TANINDO
+                    </p>
+                  </a>
+                  <hr style="height: 10px;">
+                  <a href="<?= base_url('artikel/artikel_2') ?>">
+                    <p class="mt-3 mb-md-0 mb-lg-2">
+                      Tangerang (11/8/2024)
+                      <br>
+                      LSP TANINDO GELAR SERTIFIKASI PENYULUH PERGANIAN BATCH #1
+                    </p>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
