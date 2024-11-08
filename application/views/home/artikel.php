@@ -57,10 +57,13 @@
             Bersertifikasi untuk
             <br class="d-block d-lg-block" />Masa Depan Pertanian
           </h1>
-          <p class="mb-4 fs-1">
-            SERTIFIKAT LISENSI
-            Nomor: BNSP-LSP-2525-ID
-            23 Agustus 2024 </p>
+          <p class="mb-4 fs-0">
+            <b>
+              SERTIFIKAT LISENSI
+              Nomor: BNSP-LSP-2525-ID
+              23 Agustus 2024
+            </b>
+          </p>
           <a href="#tentang" class="btn btn-lg btn-success">Selengkapnya ...</a>
         </div>
       </div>
@@ -70,7 +73,7 @@
     <div class="row" id="skema">
       <div class="col-lg-9 mx-auto text-center mb-3">
         <h5 class="fw-bold fs-3 fs-lg-5 lh-sm mb-3">Artikel LSP TANINDO </h5>
-        <marquee behavior="" direction="left">
+        <marquee width="90%" direction="left">
           <h4><b>Kado spesial HUT Ketua PPPSI H Otong Wiranta kompeten penyuluh pertanian berstandar Nasional BNSP</b></h4>
         </marquee>
       </div>
@@ -90,6 +93,12 @@
                       BNSP GELAR WORKSHOP DI LSP TANINDO
                     </p>
                   </div>
+                  <div class="card-foot">
+                    <hr>
+                    <p>
+                      8 November 2024
+                    </p>
+                  </div>
                 </div>
               </div>
             </a>
@@ -101,11 +110,16 @@
                   <div class="d-flex justify-content-center align-items-center">
                     <img class="ps-3 icons" src="<?= base_url('assets/images/artikel/artikel_2.jpg') ?>" style="width: 100%;" alt="" />
                   </div>
-                  <div class="card-body">
+                  <div class="card-body mb-6">
                     <p class="fw-bold fs-0 heading-color">
                       LSP TANINDO GELAR SERTIFIKASI PENYULUH PERGANIAN BATCH #1
                     </p>
-                    <br>
+                  </div>
+                  <div class="card-foot">
+                    <hr>
+                    <p>
+                      8 November 2024
+                    </p>
                   </div>
                 </div>
               </div>
