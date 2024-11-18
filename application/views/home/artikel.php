@@ -244,17 +244,17 @@
                                       $date_artikel = new DateTime($artikel['tanggal'], new DateTimeZone('Asia/Jakarta'));
                                       $interval = $date_now->diff($date_artikel);
                                       if ($interval->y > 0) {
-                                        $time_ago = $interval->y . ' Tahun' . ($interval->y > 1 ? 's' : '') . ' lalu';
+                                        $time_ago = $interval->y . ' Tahun' . ($interval->y > 1 ? '' : '') . ' lalu';
                                       } elseif ($interval->m > 0) {
-                                        $time_ago = $interval->m . ' Bulan' . ($interval->m > 1 ? 's' : '') . ' lalu';
+                                        $time_ago = $interval->m . ' Bulan' . ($interval->m > 1 ? '' : '') . ' lalu';
                                       } elseif ($interval->d > 0) {
-                                        $time_ago = $interval->d . ' Hari' . ($interval->d > 1 ? 's' : '') . ' lalu';
+                                        $time_ago = $interval->d . ' Hari' . ($interval->d > 1 ? '' : '') . ' lalu';
                                       } elseif ($interval->h > 0) {
-                                        $time_ago = $interval->h . ' Jam' . ($interval->h > 1 ? 's' : '') . ' lalu';
+                                        $time_ago = $interval->h . ' Jam' . ($interval->h > 1 ? '' : '') . ' lalu';
                                       } elseif ($interval->i > 0) {
-                                        $time_ago = $interval->i . ' Menit' . ($interval->i > 1 ? 's' : '') . ' lalu';
+                                        $time_ago = $interval->i . ' Menit' . ($interval->i > 1 ? '' : '') . ' lalu';
                                       } else {
-                                        $time_ago = $interval->s . ' Detik' . ($interval->s > 1 ? 's' : '') . ' lalu';
+                                        $time_ago = $interval->s . ' Detik' . ($interval->s > 1 ? '' : '') . ' lalu';
                                       }
                                       echo $time_ago;
                                       ?>
@@ -302,22 +302,22 @@
                               // Format the difference
                               if ($interval->y > 0) {
                                 // If the difference is in years
-                                $time_ago = $interval->y . ' Tahun' . ($interval->y > 1 ? 's' : '') . ' lalu';
+                                $time_ago = $interval->y . ' Tahun' . ($interval->y > 1 ? '' : '') . ' lalu';
                               } elseif ($interval->m > 0) {
                                 // If the difference is in months
-                                $time_ago = $interval->m . ' Bulan' . ($interval->m > 1 ? 's' : '') . ' lalu';
+                                $time_ago = $interval->m . ' Bulan' . ($interval->m > 1 ? '' : '') . ' lalu';
                               } elseif ($interval->d > 0) {
                                 // If the difference is in days
-                                $time_ago = $interval->d . ' Hari' . ($interval->d > 1 ? 's' : '') . ' lalu';
+                                $time_ago = $interval->d . ' Hari' . ($interval->d > 1 ? '' : '') . ' lalu';
                               } elseif ($interval->h > 0) {
                                 // If the difference is in hours
-                                $time_ago = $interval->h . ' Jam' . ($interval->h > 1 ? 's' : '') . ' lalu';
+                                $time_ago = $interval->h . ' Jam' . ($interval->h > 1 ? '' : '') . ' lalu';
                               } elseif ($interval->i > 0) {
                                 // If the difference is in minutes
-                                $time_ago = $interval->i . ' Menit' . ($interval->i > 1 ? 's' : '') . ' lalu';
+                                $time_ago = $interval->i . ' Menit' . ($interval->i > 1 ? '' : '') . ' lalu';
                               } else {
                                 // If the difference is in seconds
-                                $time_ago = $interval->s . ' Detik' . ($interval->s > 1 ? 's' : '') . ' lalu';
+                                $time_ago = $interval->s . ' Detik' . ($interval->s > 1 ? '' : '') . ' lalu';
                               }
 
                               // Display the result
@@ -383,22 +383,22 @@
                                 // Format the difference
                                 if ($interval->y > 0) {
                                   // If the difference is in years
-                                  $time_ago = $interval->y . ' Tahun' . ($interval->y > 1 ? 's' : '') . ' lalu';
+                                  $time_ago = $interval->y . ' Tahun' . ($interval->y > 1 ? '' : '') . ' lalu';
                                 } elseif ($interval->m > 0) {
                                   // If the difference is in months
-                                  $time_ago = $interval->m . ' Bulan' . ($interval->m > 1 ? 's' : '') . ' lalu';
+                                  $time_ago = $interval->m . ' Bulan' . ($interval->m > 1 ? '' : '') . ' lalu';
                                 } elseif ($interval->d > 0) {
                                   // If the difference is in days
-                                  $time_ago = $interval->d . ' Hari' . ($interval->d > 1 ? 's' : '') . ' lalu';
+                                  $time_ago = $interval->d . ' Hari' . ($interval->d > 1 ? '' : '') . ' lalu';
                                 } elseif ($interval->h > 0) {
                                   // If the difference is in hours
-                                  $time_ago = $interval->h . ' Jam' . ($interval->h > 1 ? 's' : '') . ' lalu';
+                                  $time_ago = $interval->h . ' Jam' . ($interval->h > 1 ? '' : '') . ' lalu';
                                 } elseif ($interval->i > 0) {
                                   // If the difference is in minutes
-                                  $time_ago = $interval->i . ' Menit' . ($interval->i > 1 ? 's' : '') . ' lalu';
+                                  $time_ago = $interval->i . ' Menit' . ($interval->i > 1 ? '' : '') . ' lalu';
                                 } else {
                                   // If the difference is in seconds
-                                  $time_ago = $interval->s . ' Detik' . ($interval->s > 1 ? 's' : '') . ' lalu';
+                                  $time_ago = $interval->s . ' Detik' . ($interval->s > 1 ? '' : '') . ' lalu';
                                 }
 
                                 // Display the result
