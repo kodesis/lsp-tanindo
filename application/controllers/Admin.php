@@ -7,6 +7,7 @@ class Admin extends CI_Controller
   {
     parent::__construct();
     $this->load->model('Admin_model');
+    $this->load->model('Artikel_model');
     $this->load->model('User_model');
     cek_akses('1');  // Hanya admin yang dapat mengakses controller ini
   }
@@ -156,6 +157,179 @@ class Admin extends CI_Controller
     redirect('admin/manage_users');
   }
 
+  public function manage_artikel()
+  {
+    cek_akses('1');  // Periksa akses lagi jika dibutuhkan untuk method tertentu
+
+
+    // Ambil data pencarian dari form
+    $search = $this->input->get('search');
+
+    // Konfigurasi paginasi
+    $config = array();
+    $config['base_url'] = base_url('admin/manage_artikel');
+    $config['total_rows'] = $this->Artikel_model->count_all_artikel($search);
+    $config['per_page'] = 10; // Jumlah data per halaman
+    $config['uri_segment'] = 3; // Posisi nomor halaman di URL
+    $config['reuse_query_string'] = TRUE; // Agar query string tetap ada
+
+    // Style pagination menggunakan Bootstrap (opsional)
+    $config['full_tag_open'] = '<ul class="pagination">';
+    $config['full_tag_close'] = '</ul>';
+    $config['first_link'] = 'First';
+    $config['last_link'] = 'Last';
+    $config['next_link'] = 'Next';
+    $config['prev_link'] = 'Prev';
+    $config['num_tag_open'] = '<li class="page-item">';
+    $config['num_tag_close'] = '</li>';
+    $config['cur_tag_open'] = '<li class="page-item active"><a class="page-link">';
+    $config['cur_tag_close'] = '</a></li>';
+    $config['attributes'] = array('class' => 'page-link');
+
+    $this->pagination->initialize($config);
+
+    // Dapatkan data user sesuai paginasi
+    $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+    $data['data_artikel'] = $this->Artikel_model->get_artikel($config['per_page'], $page, $search);
+
+    // Buat link paginasi
+    $data['pagination'] = $this->pagination->create_links();
+    $data['search'] = $search; // Mengirim nilai pencarian ke view untuk menampilkan kembali form pencarian
+
+    $data['title'] = 'Manage Artikel';
+    $data['active_menu'] = 'manage_artikel';
+    $this->load->view('statis_template/dashboard_header', $data);
+    $this->load->view('statis_template/dashboard_sidebar', $data);
+    $this->load->view('admin/manage_artikel');
+    $this->load->view('statis_template/dashboard_footer');
+  }
+
+  public function add_artikel()
+  {
+    cek_akses('1');  // Periksa akses lagi jika dibutuhkan untuk method tertentu
+    $data['title'] = 'Add Artikel';
+    $data['active_menu'] = 'manage_artikel';
+
+
+    $this->load->view('statis_template/dashboard_header', $data);
+    $this->load->view('statis_template/dashboard_sidebar', $data);
+    $this->load->view('admin/add_artikel');
+    $this->load->view('statis_template/dashboard_footer');
+  }
+  public function update_artikel($id)
+  {
+    cek_akses('1');  // Periksa akses lagi jika dibutuhkan untuk method tertentu
+    $data['title'] = 'Update Artikel';
+    $data['active_menu'] = 'manage_artikel';
+
+    $data['data_artikel'] = $this->Artikel_model->get_artikel_id($id);
+
+    $this->load->view('statis_template/dashboard_header', $data);
+    $this->load->view('statis_template/dashboard_sidebar', $data);
+    $this->load->view('admin/update_artikel');
+    $this->load->view('statis_template/dashboard_footer');
+  }
+  public function process_artikel()
+  {
+    // $this->form_validation->set_rules('thumbnail', 'Thumbnail', 'required');
+    $this->form_validation->set_rules('title', 'Title', 'required');
+    $this->form_validation->set_rules('text', 'Text', 'required');
+    $this->form_validation->set_rules('tanggal', 'Tanggal', 'required');
+
+
+    if ($this->form_validation->run() == FALSE) {
+      $data['title'] = 'Add Artikel';
+      $this->load->view('statis_template/dashboard_header', $data);
+      $this->load->view('statis_template/dashboard_sidebar', $data);
+      $this->load->view('admin/add_artikel');
+      $this->load->view('statis_template/dashboard_footer');
+    } else {
+      $title = $this->input->post('title');
+      $config['upload_path'] = FCPATH . 'uploads/artikel/'; // Same as the config file
+      $config['allowed_types'] = 'gif|jpg|jpeg|png';
+      $config['file_name'] = 'thumbnail_' . $title;
+
+      $this->load->library('upload', $config);
+      $this->upload->initialize($config);
+
+      if (!$this->upload->do_upload('thumbnail')) {
+        $error = $this->upload->display_errors();
+
+        $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+        Input Data Failed. Error :' . $error . '
+        </div>');
+        // redirect('admin/add_artikel');
+      } else {
+        $image_data = $this->upload->data();
+        $thumbnail = file_get_contents($image_data['full_path']);
+        $image = $image_data['file_name'];
+
+        $user_data = array(
+          'thumbnail' => $image,
+          'title' => $this->input->post('title'),
+          'text' => $this->input->post('text'),
+          'tanggal' => $this->input->post('tanggal'),
+          'view_count' => 0,
+        );
+        $this->Artikel_model->save($user_data);
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+        Input Data Successfully Added please check in the table.
+        </div>');
+        redirect('admin/manage_artikel');
+      }
+      $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+        Input Data Failed
+        </div>');
+      // redirect('admin/add_artikel');
+      // var_dump($user_data);
+      // exit;
+
+      // untuk simpan data user staff
+
+    }
+  }
+  public function process_update_artikel()
+  {
+    $title = $this->input->post('title');
+    $date = new DateTime('now', new DateTimeZone('Asia/Jakarta'));
+    $data_update = [
+      'title'      => $title,
+      'text' => $this->input->post('text'),
+      'tanggal' => $this->input->post('tanggal'),
+    ];
+
+    echo $this->input->post('tanggal');
+    $config['upload_path'] = FCPATH . 'uploads/artikel/'; // Same as the config file
+    $config['allowed_types'] = 'gif|jpg|jpeg|png';
+    $config['file_name'] = 'thumbnail_' . $title;
+
+
+    $this->load->library('upload', $config);
+    $this->upload->initialize($config);
+
+    if ($this->upload->do_upload('thumbnail')) {
+      $image_data = $this->upload->data();
+      $imgdata = file_get_contents($image_data['full_path']);
+      $thumbnail = $image_data['file_name'];
+      $data_update['thumbnail'] = $thumbnail;
+    }
+
+    $this->Artikel_model->update($data_update, array('Id' => $this->input->post('id_edit')));
+    $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+        Update Data Successfully Added please check in the table.
+        </div>');
+    redirect('admin/manage_artikel');
+  }
+
+  public function delete_artikel($id)
+  {
+    $this->Artikel_model->delete(array('Id' => $id));
+
+    $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+        Delete Data Successfully Added please check in the table.
+        </div>');
+    redirect('admin/manage_artikel');
+  }
   public function manage_course()
   {
     cek_akses('1');  // Periksa akses lagi jika dibutuhkan untuk method tertentu

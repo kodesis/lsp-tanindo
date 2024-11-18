@@ -62,3 +62,4 @@ $route['home'] = 'home/index';
 $route['update-status/(:num)/(:any)'] = 'admin/update_status/$1/$2';
 $route['manage_users'] = 'admin/manage_users';
 $route['manage_course'] = 'admin/manage_course';
+$route['manage_artikel'] = 'admin/manage_artikel';

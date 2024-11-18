@@ -44,12 +44,6 @@
                "></div>
         <!--/.bg-holder-->
 
-        <div class="bg-holder d-md-none" style="
-                  background-image: url(<?= base_url('template/tanindo/') ?>assets/img/illustrations/hero-bg.png);
-                  background-position: right top;
-                  background-size: contain;
-               "></div>
-        <!--/.bg-holder-->
 
         <div class="container">
             <div class="row align-items-center min-vh-75 min-vh-lg-100">
@@ -69,32 +63,27 @@
     <?= $this->session->flashdata('message'); ?>
     <section class="py-5" id="tentang">
         <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-6 col-12 mb-5 text-center">
-                    <img src="<?= base_url('assets/images/artikel/artikel_1.jpg') ?>" alt="" class="img-fluid" />
-                </div>
-                <div class="col-md-6 col-12">
+            <div class="row align-items-center">\
+                <div class="col-md-12 col-12">
                     <h5 class="fw-bold fs-3 fs-lg-5 lh-sm mb-3">
-                        BNSP GELAR WORKSHOP DI LSP TANINDO
+                        <?= $data_artikel->title ?>
                     </h5>
-                    <p style="text-align: justify;" class=" mb-5">
-                        Tangerang (lsptanindo.com).
-                        <br>
-                        Menrupakan satu kehormatan tersendiri bagi para punggawa LSP Tanindo, bahwa pada hari Selasa, 29 Oktober 2024 bertempat di Ruang CBT lantai 3 kantor Harmoni Group di Vivo Business Park Tangerang, telah dilaksanakan warkshop pengelolaan akun LSP pada Sistem Informasi (Sisfo BNSP) yang dilaksanakan oleh BNSP (Badan Nasional Sertifikasi Profesi).
-                        <br>
-                        <br>
-                        Kegiatan tersebut dihadiri oleh 9 orang terdiri dari 2 orang instruktur dari BNSP dan 7 orang dari 4 LSP, yaitu : LSP Tenik Manajemen Industri, LSP Institut Informatika dan Bisnis Darmajaya Lampung, LSP SMKN 1 Anyer serta LSP Tani Andalan Nasional Indonesia (Tanindo) sekaligus sebagai tuan rumah yang kebetulan di ruangan yang dilengkapi fasilitas CBT (Computer Base Test) dan LAN (Local Area Network) sehingga dapat menunjangbkelancaran acara.
-                    </p>
+                </div>
+                <div class="col-md-12 col-12 mb-2 text-center">
+                    <img src="<?= base_url('uploads/artikel/' . $data_artikel->thumbnail) ?>" style="width: 60%;" class="img-fluid" />
                 </div>
             </div>
             <div class="row mb-5 align-items-center">
                 <div class="col-md-12 col-12 mb-3">
-                    <p style="text-align: justify;" class="mb-5">
-                        Dalam kesempatan tersebut materi disampaikan oleh Bapak Syamsudin dan Ibu Desy selaku pengelola sisfo BNSP selama 2 session. Session I berisikan materi penginputan data LSP dan session II berisikan materi penginputan data dan pengajuan blanko sertifikasi. Selama kedua session tersebut sangat interakrif dan tanya jawab peserta dengan instruktur sehingga metode learnin by doing langsung praktek dapat memberikan pemahaman yang applicable dalam pengelolaan LSP.
-                        <br>
-                        <br>
-                        Secara umum acara yang terselenggara atas kerjasama BNSP dengan LSP Tanindo berjalanlancar dan sukses. Acara diakhiri dengan foto bersama seluruh peserta dan instruktur dengan senyum puas atas lancarnya acara dan pemahaman yang mendalam dari seluruh peserta. Semoga acara ini bermanfaat bagi seluruh yang berkepentingan. (msholeh10@com)
-
+                    <p style="text-align: justify;" class=" mb-5">
+                        <?= $data_artikel->text ?>
+                    </p>
+                </div>
+            </div>
+            <div class="row align-items-left">
+                <div class="col-md-12 col-12 mb-3">
+                    <p style="text-align: justify;" class=" mb-5">
+                        <?= date('d F Y', strtotime($data_artikel->tanggal)) ?>
                     </p>
                 </div>
             </div>

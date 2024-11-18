@@ -7,6 +7,7 @@ class Home extends CI_Controller
   {
     parent::__construct();
     $this->load->model('Home_model');
+    $this->load->model('Artikel_model');
   }
 
   public function index()
@@ -26,9 +27,56 @@ class Home extends CI_Controller
   }
   public function artikel()
   {
+    // Ambil data pencarian dari form
+    $search = $this->input->get('search');
+
+    // Konfigurasi paginasi
+    $config = array();
+    $config['base_url'] = base_url('home/artikel');
+    $config['total_rows'] = $this->Home_model->count_all_artikel($search);
+    $config['per_page'] = 5; // Jumlah data per halaman
+    $config['uri_segment'] = 3; // Posisi nomor halaman di URL
+    $config['reuse_query_string'] = TRUE; // Agar query string tetap ada
+
+    // Style pagination menggunakan Bootstrap (opsional)
+    $config['full_tag_open'] = '<ul class="pagination">';
+    $config['full_tag_close'] = '</ul>';
+    $config['first_link'] = 'First';
+    $config['last_link'] = 'Last';
+    $config['next_link'] = 'Next';
+    $config['prev_link'] = 'Prev';
+    $config['num_tag_open'] = '<li class="page-item">';
+    $config['num_tag_close'] = '</li>';
+    $config['cur_tag_open'] = '<li class="page-item active"><a class="page-link">';
+    $config['cur_tag_close'] = '</a></li>';
+    $config['attributes'] = array('class' => 'page-link');
+
+    $this->pagination->initialize($config);
+
+    // Dapatkan data user sesuai paginasi
+    $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+    $data['data_artikel_populer'] = $this->Home_model->get_artikel_populer();
+    $data['data_artikel'] = $this->Home_model->get_artikel($config['per_page'], $page, $search);
+
+    // Buat link paginasi
+    $data['pagination'] = $this->pagination->create_links();
+    $data['search'] = $search; // Mengirim nilai pencarian ke view untuk menampilkan kembali form pencarian
+
     $data['title'] = 'Artikel Tanindo';
+    $data['active_menu'] = 'Artikel Tanindo';
     $this->load->view('statis_template/v_header', $data);
     $this->load->view('home/artikel');
+    $this->load->view('statis_template/v_footer');
+  }
+
+  public function artikel_detail($id)
+  {
+    $this->Home_model->update_count($id);
+    $data['data_artikel'] = $this->Home_model->get_artikel_id($id);
+
+    $data['title'] = 'Artikel Tanindo';
+    $this->load->view('statis_template/v_header', $data);
+    $this->load->view('home/artikel/artikel_detail');
     $this->load->view('statis_template/v_footer');
   }
   public function fasilitator()
