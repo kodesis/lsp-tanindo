@@ -10,7 +10,7 @@
           </small>
           <form action="<?= base_url('auth/process') ?>" method="post" class="pt-3 register" id="register_tanindo">
             <div class="form-group">
-              <label>Full Name: </label>
+              <label>Nama Lengkap: </label>
               <input type="text" class="form-control form-control-lg" name="full_name" value="<?php echo set_value('full_name'); ?>" placeholder="Nama Lengkap">
             </div>
             <div class="form-group">
@@ -28,30 +28,30 @@
               </div>
             </div>
             <div class="form-group">
-              <label>Mobile Number: </label>
-              <input type="text" class="form-control form-control-lg" name="mobile_number" value="<?php echo set_value('mobile_number'); ?>" placeholder="Nomor Telepon">
+              <label>Nomor HP: </label>
+              <input type="number" min="0" class="form-control form-control-lg" name="mobile_number" value="<?php echo set_value('mobile_number'); ?>" placeholder="Nomor Telepon">
             </div>
             <div class="form-group">
-              <label>Home Address: </label>
+              <label>Alamat Rumah: </label>
               <textarea class="form-control form-control-lg" name="home_address" placeholder="Alamat Rumah Anda."><?php echo set_value('home_address'); ?></textarea>
             </div>
             <div class="form-group row">
               <div class="col">
-                <label>Village: </label>
+                <label>Kelurahan: </label>
                 <input type="text" class="form-control form-control-lg" name="village" value="<?php echo set_value('village'); ?>" placeholder="Kelurahan">
               </div>
               <div class="col">
-                <label>Sub-district: </label>
+                <label>Kecamatan: </label>
                 <input type="text" class="form-control form-control-lg" name="sub_district" value="<?php echo set_value('sub_district'); ?>" placeholder="Kecamatan">
               </div>
             </div>
             <div class="form-group row">
               <div class="col">
-                <label>City: </label>
+                <label>Kota: </label>
                 <input type="text" class="form-control form-control-lg" name="city" value="<?php echo set_value('city'); ?>" placeholder="Kota / Kabupaten">
               </div>
               <div class="col">
-                <label>Province: </label>
+                <label>Provinsi: </label>
                 <input type="text" class="form-control form-control-lg" name="province" value="<?php echo set_value('province'); ?>" placeholder="Provinsi">
               </div>
             </div>
@@ -63,16 +63,16 @@
               </select>
             </div>
             <div class="form-group">
-              <label>Nationality: </label>
+              <label>Kebangsaan: </label>
               <input type="text" class="form-control form-control-lg" name="nationality" value="<?php echo set_value('nationality'); ?>" placeholder="Kebangsaan">
             </div>
             <div class="form-group row">
               <div class="col">
-                <label>Place of Birth: </label>
+                <label>Tempat Lahir: </label>
                 <input type="text" class="form-control form-control-lg" name="place_of_birth" value="<?php echo set_value('place_of_birth'); ?>" placeholder="Tempat Lahir">
               </div>
               <div class="col">
-                <label>Date of Birth: </label>
+                <label>Tanggal Lahir: </label>
                 <input type="date" class="form-control form-control-lg" name="date_of_birth" value="<?php echo set_value('date_of_birth'); ?>">
               </div>
             </div>

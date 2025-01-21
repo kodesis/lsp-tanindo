@@ -29,41 +29,6 @@ class Admin extends CI_Controller
     cek_akses('1');  // Periksa akses lagi jika dibutuhkan untuk method tertentu
 
 
-    // Ambil data pencarian dari form
-    $search = $this->input->get('search');
-
-    // Konfigurasi paginasi
-    $config = array();
-    $config['base_url'] = base_url('admin/manage_users');
-    $config['total_rows'] = $this->Admin_model->count_all_users($search);
-    $config['per_page'] = 10; // Jumlah data per halaman
-    $config['uri_segment'] = 3; // Posisi nomor halaman di URL
-    $config['reuse_query_string'] = TRUE; // Agar query string tetap ada
-
-    // Style pagination menggunakan Bootstrap (opsional)
-    $config['full_tag_open'] = '<ul class="pagination">';
-    $config['full_tag_close'] = '</ul>';
-    $config['first_link'] = 'First';
-    $config['last_link'] = 'Last';
-    $config['next_link'] = 'Next';
-    $config['prev_link'] = 'Prev';
-    $config['num_tag_open'] = '<li class="page-item">';
-    $config['num_tag_close'] = '</li>';
-    $config['cur_tag_open'] = '<li class="page-item active"><a class="page-link">';
-    $config['cur_tag_close'] = '</a></li>';
-    $config['attributes'] = array('class' => 'page-link');
-
-    $this->pagination->initialize($config);
-
-    // Dapatkan data user sesuai paginasi
-    $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-    $data['data_users'] = $this->Admin_model->get_users($config['per_page'], $page, $search);
-    $data['data_users_ktna'] = $this->Admin_model->get_users_ktna($config['per_page'], $page, $search);
-
-    // Buat link paginasi
-    $data['pagination'] = $this->pagination->create_links();
-    $data['search'] = $search; // Mengirim nilai pencarian ke view untuk menampilkan kembali form pencarian
-
     $data['title'] = 'Manage Staff';
     $data['active_menu'] = 'manage_users';
     $this->load->view('statis_template/dashboard_header', $data);
@@ -71,6 +36,144 @@ class Admin extends CI_Controller
     $this->load->view('admin/manage_users');
     $this->load->view('statis_template/dashboard_footer');
   }
+
+  public function ajax_list()
+  {
+    $list = $this->Admin_model->get_datatables();
+    $data = array();
+    $crs = "";
+    $no = $_POST['start'];
+
+
+
+
+    foreach ($list as $cat) {
+
+      $no++;
+      $row = array();
+      $row[] = $no;
+      $row[] = $cat->full_name;
+      $row[] = $cat->email;
+      $row[] = $cat->mobile_number;
+      $row[] = $cat->home_address;
+
+      if ($cat->status == 2) {
+        $row[] = '<label type="text" class="btn btn-primary btn-rounded btn-fw btn-sm">Staff</label>';
+      } else if ($cat->status == 3) {
+        $row[] = '<label type="text" class="btn btn-info btn-rounded btn-fw btn-sm">Users</label>';
+      }
+      if ($cat->is_verified == '0'):
+        $row[] = '<a href="' . base_url('admin/update_status/' . $cat->uid . '/1') . '" class="btn btn-success">Aktifkan</a>';
+      else :
+        $row[] = '<a href="' . base_url('admin/update_status/' . $cat->uid . '/0') . '" class="btn btn-danger">Nonaktifkan</a>';
+      endif;
+
+
+
+      $data[] = $row;
+    }
+
+    $output = array(
+      "draw" => $_POST['draw'],
+      "recordsTotal" => $this->Admin_model->count_all(),
+      "recordsFiltered" => $this->Admin_model->count_filtered(),
+      "data" => $data,
+    );
+    echo json_encode($output);
+  }
+
+  public function ajax_list2()
+  {
+    $list = $this->Admin_model->get_datatables2();
+    $data = array();
+    $crs = "";
+    $no = $_POST['start'];
+
+
+
+
+    foreach ($list as $cat) {
+
+      $no++;
+      $row = array();
+      $row[] = $no;
+      $row[] = $cat->username;
+      $row[] = $cat->email;
+      $row[] = $cat->nomor_hp;
+      $row[] = $cat->alamat;
+
+      if ($cat->jabatan == '1') {
+        $row[] = '<label type="text" class="btn btn-primary btn-rounded btn-fw btn-sm">Ketua Umum</label>';
+      } elseif ($cat->jabatan == '2') {
+        $row[] = '<label type="text" class="btn btn-info btn-rounded btn-fw btn-sm">Sekertariat Jendral</label>';
+      } elseif ($cat->jabatan == '3') {
+        $row[] = '<label type="text" class="btn btn-warning btn-rounded btn-fw btn-sm">Bendahara Umum</label>';
+      } elseif ($cat->jabatan == '4') {
+        $row[] = '<label type="text" class="btn btn-success btn-rounded btn-fw btn-sm">Ketua Provinsi</label>';
+      } elseif ($cat->jabatan == '5') {
+        $row[] = '<label type="text" class="btn btn-danger btn-rounded btn-fw btn-sm">Dep. Kelautan dan Perikanan</label>';
+      } elseif ($cat->jabatan == '6') {
+        $row[] = '<label type="text" class="btn btn-dark btn-rounded btn-fw btn-sm">Dep. Kemitraan Strategis dan Advokasi</label>';
+      } elseif ($cat->jabatan == '7') {
+        $row[] = '<label type="text" class="btn btn-light btn-rounded btn-fw btn-sm">Dep. LITBANG</label>';
+      } elseif ($cat->jabatan == '8') {
+        $row[] = '<label type="text" class="btn btn-secondary btn-rounded btn-fw btn-sm">Dep. Media Informasi dan Komunikasi</label>';
+      } elseif ($cat->jabatan == '9') {
+        $row[] = '<label type="text" class="btn btn-primary btn-rounded btn-fw btn-sm">Dep. Hukum & HAM</label>';
+      } elseif ($cat->jabatan == '10') {
+        $row[] = '<label type="text" class="btn btn-info btn-rounded btn-fw btn-sm">Anggota</label>';
+      }
+
+
+
+
+      $data[] = $row;
+    }
+
+    $output = array(
+      "draw" => $_POST['draw'],
+      "recordsTotal" => $this->Admin_model->count_all2(),
+      "recordsFiltered" => $this->Admin_model->count_filtered2(),
+      "data" => $data,
+    );
+    echo json_encode($output);
+  }
+
+  public function ajax_list3()
+  {
+    $list = $this->Admin_model->get_datatables3();
+    $data = array();
+    $crs = "";
+    $no = $_POST['start'];
+
+
+
+
+    foreach ($list as $cat) {
+
+      $no++;
+      $row = array();
+      $row[] = $no;
+      $row[] = $cat->course_name;
+      $row[] = $cat->course_description;
+      $row[] = $cat->full_name;
+      $row[] = '<button type="button" class="btn btn-outline-warning btn-icon-text btn-sm" data-toggle="modal" data-target="#edit' . $cat->uid . '"><i class="typcn typcn-document btn-icon-append"></i>Edit</button>
+                        <a href="' . base_url('admin/deletecourse/' . $cat->uid) . '" class="btn btn-outline-danger btn-icon-text btn-sm" onclick="return confirm("Apakah Anda yakin ingin menghapus pelatihan ini?")"><i class="typcn typcn-warning btn-icon-prepend"></i>Delete</a>';
+
+
+
+      $data[] = $row;
+    }
+
+    $output = array(
+      "draw" => $_POST['draw'],
+      "recordsTotal" => $this->Admin_model->count_all3(),
+      "recordsFiltered" => $this->Admin_model->count_filtered3(),
+      "data" => $data,
+    );
+    echo json_encode($output);
+  }
+
 
   // Fungsi untuk mengupdate status user berdasarkan UID
   public function update_status($uid, $new_status)
@@ -330,6 +433,9 @@ class Admin extends CI_Controller
         </div>');
     redirect('admin/manage_artikel');
   }
+
+
+
   public function manage_course()
   {
     cek_akses('1');  // Periksa akses lagi jika dibutuhkan untuk method tertentu

@@ -13,14 +13,14 @@
             <div class="tab-pane fade show active" id="nav-profil" role="tabpanel" aria-labelledby="nav-profil-tab">
               <br>
               <div class="row">
-                <div class="col-sm-3">
-                  <div class="card" style="width: 20rem;">
+                <div class="col-sm-4">
+                  <div class="card">
                     <?php
 
                     if (isset($user_doc['image'])) { ?>
                       <img src="<?= base_url('uploads/') . $user_doc['image'] ?>" alt="profile">
                     <?php } else { ?>
-                      <img src=" <?= base_url('assets/') ?>images/faces/face5.jpg" alt="profile">
+                      <img src=" <?= base_url('assets/') ?>images/faces/imada_mio_2.png" alt="profile">
                     <?php } ?>
                     <div class="card-body">
                       <h4 class="card-text"><b><?= $this->session->userdata('username') ?></b></h4>
@@ -29,17 +29,17 @@
                 </div>
                 <div class="col-sm-7">
                   <label for="exampleFormControlInput1" class="form-label">Nama</label>
-                  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="<?= $users->full_name ?>">
+                  <input type="text" class="form-control" id="exampleFormControlInput1" readonly value="<?= $users->full_name ?>">
                   <label for="exampleFormControlInput1" class="form-label">Email</label>
-                  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="<?= $users->email ?>">
+                  <input type="email" class="form-control" id="exampleFormControlInput1" readonly value="<?= $users->email ?>">
                   <label for="exampleFormControlInput1" class="form-label">Nomor Hp</label>
-                  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="<?= $users->mobile_number ?>">
+                  <input type="text" class="form-control" id="exampleFormControlInput1" readonly value="<?= $users->mobile_number ?>">
                   <label for="exampleFormControlInput1" class="form-label">Alamat</label>
-                  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="<?= $users->home_address ?>">
+                  <input type="text" class="form-control" id="exampleFormControlInput1" readonly value="<?= $users->home_address ?>">
                   <label for="exampleFormControlInput1" class="form-label">Gender</label>
-                  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="<?= $users->gender ?>">
+                  <input type="text" class="form-control" id="exampleFormControlInput1" readonly value="<?= $users->gender ?>">
                   <label for="exampleFormControlInput1" class="form-label">Tempat, Tanggal Lahir</label>
-                  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="<?= $users->place_of_birth ?>, &nbsp;<?= $users->date_of_birth ?>">
+                  <input type="text" class="form-control" id="exampleFormControlInput1" readonly value="<?= $users->place_of_birth ?>, &nbsp;<?= $users->date_of_birth ?>">
                 </div>
               </div>
               <br>

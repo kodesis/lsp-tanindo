@@ -13,6 +13,11 @@ class Home extends CI_Controller
   public function index()
   {
     $data['title'] = 'Pertanian';
+    $data['artikel_trending_now_1'] = $this->Home_model->artikel_trending_now_1();
+    $data['artikel_trending_now_2'] = $this->Home_model->artikel_trending_now_2();
+    $data['artikel_sub_trending_1'] = $this->Home_model->artikel_sub_trending_1();
+    $data['artikel_sub_trending_2'] = $this->Home_model->artikel_sub_trending_2();
+    $data['artikel_weekly_topnews'] = $this->Home_model->artikel_weekly_topnews();
     $this->load->view('statis_template/v_header', $data);
     $this->load->view('home/index');
     $this->load->view('statis_template/v_footer');
@@ -58,6 +63,11 @@ class Home extends CI_Controller
     $data['data_artikel_populer'] = $this->Home_model->get_artikel_populer();
     $data['data_artikel'] = $this->Home_model->get_artikel($config['per_page'], $page, $search);
 
+    $data['artikel_trending_now_1'] = $this->Home_model->artikel_trending_now_1();
+    $data['artikel_trending_now_2'] = $this->Home_model->artikel_trending_now_2();
+    $data['artikel_sub_trending_1'] = $this->Home_model->artikel_sub_trending_1();
+    $data['artikel_sub_trending_2'] = $this->Home_model->artikel_sub_trending_2();
+    $data['artikel_weekly_topnews'] = $this->Home_model->artikel_weekly_topnews();
     // Buat link paginasi
     $data['pagination'] = $this->pagination->create_links();
     $data['search'] = $search; // Mengirim nilai pencarian ke view untuk menampilkan kembali form pencarian

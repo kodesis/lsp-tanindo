@@ -6,6 +6,205 @@ class Admin_model extends CI_Model
     $this->load->database();
   }
 
+  var $table = 'users';
+  var $column_order = array('users.uid', 'full_name', 'email', 'mobile_number', 'home_address', 'status', 'is_verified'); //set column field database for datatable orderable
+  var $column_search = array('users.uid', 'full_name', 'email', 'mobile_number', 'home_address', 'status', 'is_verified'); //set column field database for datatable searchable 
+  var $order = array('users.uid' => 'asc'); // default order 
+
+  function _get_datatables_query()
+  {
+
+    $this->db->select('users.*');
+    $this->db->from('users');
+    $this->db->where('users.status >', 1);
+    $i = 0;
+
+    foreach ($this->column_search as $item) // loop column 
+    {
+      if ($_POST['search']['value']) // if datatable send POST for search
+      {
+
+        if ($i === 0) // first loop
+        {
+          $this->db->group_start(); // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND.
+          $this->db->like($item, $_POST['search']['value']);
+        } else {
+          $this->db->or_like($item, $_POST['search']['value']);
+        }
+
+        if (count($this->column_search) - 1 == $i) //last loop
+          $this->db->group_end(); //close bracket
+      }
+      $i++;
+    }
+
+    if (isset($_POST['order'])) // here order processing
+    {
+      $this->db->order_by($this->column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+    } else if (isset($this->order)) {
+      $order = $this->order;
+      $this->db->order_by(key($order), $order[key($order)]);
+    }
+  }
+
+  function get_datatables()
+  {
+    $this->_get_datatables_query();
+    if ($_POST['length'] != -1)
+      $this->db->limit($_POST['length'], $_POST['start']);
+    $query = $this->db->get();
+    return $query->result();
+  }
+
+  function count_filtered()
+  {
+    $this->_get_datatables_query();
+    $query = $this->db->get();
+    return $query->num_rows();
+  }
+
+  function count_all()
+  {
+
+    $this->_get_datatables_query();
+    $query = $this->db->get();
+
+    return $this->db->count_all_results();
+  }
+
+
+  var $table2 = 'user_ktna';
+  var $column_order2 = array('user_ktna.uid', 'username', 'email', 'nomor_hp', 'alamat', 'jabatan'); //set column field database for datatable orderable
+  var $column_search2 = array('user_ktna.uid', 'username', 'email', 'nomor_hp', 'alamat', 'jabatan'); //set column field database for datatable searchable 
+  var $order2 = array('user_ktna.uid' => 'asc'); // default order 
+
+  function _get_datatables_query2()
+  {
+
+    $this->db->select('user_ktna.*');
+    $this->db->from('user_ktna');
+    // $this->db->where('user_ktna.status >', 1);
+    $i = 0;
+
+    foreach ($this->column_search as $item) // loop column 
+    {
+      if ($_POST['search']['value']) // if datatable send POST for search
+      {
+
+        if ($i === 0) // first loop
+        {
+          $this->db->group_start(); // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND.
+          $this->db->like($item, $_POST['search']['value']);
+        } else {
+          $this->db->or_like($item, $_POST['search']['value']);
+        }
+
+        if (count($this->column_search) - 1 == $i) //last loop
+          $this->db->group_end(); //close bracket
+      }
+      $i++;
+    }
+
+    if (isset($_POST['order'])) // here order processing
+    {
+      $this->db->order_by($this->column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+    } else if (isset($this->order)) {
+      $order = $this->order2;
+      $this->db->order_by(key($order), $order[key($order)]);
+    }
+  }
+
+  function get_datatables2()
+  {
+    $this->_get_datatables_query2();
+    if ($_POST['length'] != -1)
+      $this->db->limit($_POST['length'], $_POST['start']);
+    $query = $this->db->get();
+    return $query->result();
+  }
+
+  function count_filtered2()
+  {
+    $this->_get_datatables_query2();
+    $query = $this->db->get();
+    return $query->num_rows();
+  }
+
+  function count_all2()
+  {
+
+    $this->_get_datatables_query2();
+    $query = $this->db->get();
+
+    return $this->db->count_all_results();
+  }
+
+  var $table3 = 'courses';
+  var $column_order3 = array('courses.uid', 'course_name', 'course_description', 'full_name'); //set column field database for datatable orderable
+  var $column_search3 = array('courses.uid', 'course_name', 'course_description', 'full_name'); //set column field database for datatable searchable 
+  var $order3 = array('courses.uid' => 'asc'); // default order 
+
+  function _get_datatables_query3()
+  {
+    $this->db->select('courses.*, users.full_name');
+    $this->db->from('courses');
+    $this->db->join('users', 'courses.teacher_uid = users.uid');
+    $i = 0;
+
+    foreach ($this->column_search as $item) // loop column 
+    {
+      if ($_POST['search']['value']) // if datatable send POST for search
+      {
+
+        if ($i === 0) // first loop
+        {
+          $this->db->group_start(); // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND.
+          $this->db->like($item, $_POST['search']['value']);
+        } else {
+          $this->db->or_like($item, $_POST['search']['value']);
+        }
+
+        if (count($this->column_search) - 1 == $i) //last loop
+          $this->db->group_end(); //close bracket
+      }
+      $i++;
+    }
+
+    if (isset($_POST['order'])) // here order processing
+    {
+      $this->db->order_by($this->column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+    } else if (isset($this->order)) {
+      $order = $this->order3;
+      $this->db->order_by(key($order), $order[key($order)]);
+    }
+  }
+
+  function get_datatables3()
+  {
+    $this->_get_datatables_query3();
+    if ($_POST['length'] != -1)
+      $this->db->limit($_POST['length'], $_POST['start']);
+    $query = $this->db->get();
+    return $query->result();
+  }
+
+  function count_filtered3()
+  {
+    $this->_get_datatables_query3();
+    $query = $this->db->get();
+    return $query->num_rows();
+  }
+
+  function count_all3()
+  {
+
+    $this->_get_datatables_query3();
+    $query = $this->db->get();
+
+    return $this->db->count_all_results();
+  }
+
+
   // Fungsi untuk mendapatkan user dengan paginasi dan pencarian
   public function get_users($limit, $start, $search = '')
   {
@@ -24,7 +223,7 @@ class Admin_model extends CI_Model
     $query = $this->db->get();
     return $query->result_array();
   }
-  public function get_users_ktna($limit, $start, $search = '')
+  public function get_user_ktna($limit, $start, $search = '')
   {
     $this->db->select('*');
     $this->db->from('user_ktna');
@@ -78,6 +277,7 @@ class Admin_model extends CI_Model
     $this->db->from('courses');
     $this->db->join('users', 'courses.teacher_uid = users.uid');
     $this->db->where('users.status =', 2);
+    $this->db->order_by('courses.uid', 'asc');
     $query = $this->db->get();
     return $query->result_array();
 

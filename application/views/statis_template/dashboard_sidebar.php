@@ -35,7 +35,7 @@
     <?php if ($this->session->userdata('status') == 1) { ?>
       <li class="nav-item <?php echo ($this->uri->segment(1) == 'manage_users') ? 'active' : ''; ?>">
         <a class="nav-link" href="<?= base_url('admin/manage_users') ?>">
-          <i class="fad fa-user-plus menu-icon"></i> &nbsp; &nbsp;
+          <i class="fa fa-user-plus menu-icon"></i> &nbsp; &nbsp;
           <span class="menu-title">Manage Staff</span>
         </a>
       </li>

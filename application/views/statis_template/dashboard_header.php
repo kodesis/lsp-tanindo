@@ -77,16 +77,16 @@
                 if (isset($user_doc['image'])) { ?>
                   <img src="<?= base_url('uploads/') . $user_doc['image'] ?>" alt="profile" />
                 <?php } else { ?>
-                  <img src="<?= base_url('assets/') ?>images/faces/face5.jpg" alt="profile">
+                  <img src="<?= base_url('assets/') ?>images/faces/imada_mio_2.png" alt="profile">
                 <?php } ?>
 
                 <span class="nav-profile-name"><?= $this->session->userdata('username') ?></span>
               </a>
               <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-                <a class="dropdown-item">
+                <!-- <a class="dropdown-item">
                   <i class="typcn typcn-cog-outline text-primary"></i>
                   Settings
-                </a>
+                </a> -->
                 <a href="<?= base_url('auth/logout') ?>" class="dropdown-item">
                   <i class="typcn typcn-eject text-primary"></i>
                   Logout

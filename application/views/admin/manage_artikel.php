@@ -37,7 +37,8 @@
 
       <div class="row">
         <div class="col-12">
-          <div class="table-responsive">
+          <!-- <div class="table-responsive"> -->
+          <div>
             <table id="table1" class="table table-hover">
               <thead>
                 <tr>
@@ -95,7 +96,10 @@
 
 <script>
   $(document).ready(function() {
-    $('#table1').DataTable();
+    $('#table1').DataTable({
+      scrollX: true,
+
+    });
 
   });
 </script>
