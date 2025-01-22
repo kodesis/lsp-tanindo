@@ -16,7 +16,22 @@
             <h4 class="mt-2 card-text">
               <?= $cour->course_name ?>
             </h4>
-            <button type="submit" class="btn btn-inverse-success btn-sm mt-3 mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal<?= $cour->uid ?>">Join Program</button>
+            <?php
+            $this->db->from('user_courses');
+            $this->db->where('user_uid', $this->session->userdata('user_id'));
+            $this->db->where('course_uid', $cour->uid);
+            $cek_course_user = $this->db->get()->row();
+            if ($cek_course_user) {
+            ?>
+              <button class="btn btn-inverse-secondary btn-sm mt-3 mb-4">Sudah Join Program</button>
+            <?php
+            } else {
+            ?>
+              <button type="submit" class="btn btn-inverse-success btn-sm mt-3 mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal<?= $cour->uid ?>">Join Program</button>
+            <?php
+            }
+            ?>
+
           </div>
         </div>
       </div>
