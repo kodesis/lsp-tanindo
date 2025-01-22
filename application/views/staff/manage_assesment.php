@@ -46,32 +46,33 @@
                       </td>
                       <td>
                         <?php if ($uc['status'] == '0') { ?>
-                          <a type="button" class="btn btn-inverse-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="typcn typcn-document btn-icon-append"></i>No Assessment Yet</a>
+                          <a type="button" class="btn btn-inverse-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal<?= $uc['uid'] ?>"><i class="typcn typcn-document btn-icon-append"></i>No Assessment Yet</a>
                         <?php } elseif ($uc['status'] == '1') { ?>
-                          <a type="button" class="btn btn-inverse-warning btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fas fa-user-graduate"></i>&nbsp; Competent</a>
+                          <a type="button" class="btn btn-inverse-warning btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal<?= $uc['uid'] ?>"><i class="fas fa-user-graduate"></i>&nbsp; Competent</a>
                         <?php } else { ?>
-                          <a type="button" class="btn btn-inverse-info btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fas fa-not-equal"></i>&nbsp; Not Competent</a>
+                          <a type="button" class="btn btn-inverse-info btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal<?= $uc['uid'] ?>"><i class="fas fa-not-equal"></i>&nbsp; Not Competent</a>
                         <?php } ?>
                       </td>
                     </tr>
 
                     <!-- Modal -->
-                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="exampleModal<?= $uc['uid'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                       <div class="modal-dialog">
                         <div class="modal-content">
                           <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">Update Status</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                           </div>
                           <form action="<?= base_url('staff/status_kelulusan/') . $uc['uid'] ?>" method="post">
                             <div class="modal-body">
                               <div class="form-group">
                                 <label for="status">Isi Status Kelayakan :</label>
-                                <select name="status" id="status" class="form-control">
-                                  <option value="0">-- Pilih Status Kelulusan --</option>
+                                <select name="status" id="status" class="form-select">
+                                  <option disabled <?php if ($uc['status'] == '0') echo "selected"; ?>>-- Pilih Status Kelulusan --</option>
                                   <option value='1' <?php if ($uc['status'] == '1') echo "selected"; ?>>Competent</option>
                                   <option value='2' <?php if ($uc['status'] == '2') echo "selected"; ?>>Not Competent</option>
                                 </select>
+
                                 <input type="hidden" name="user_uid" value="<?= $uc['user_uid'] ?>">
                               </div>
                             </div>

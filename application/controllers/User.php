@@ -90,7 +90,7 @@ class User extends CI_Controller
     $bagian5 = date("Y");
 
     // Gabungkan semua bagian
-    $nomorsertifikat = "$bagian1-$bagian2 -$bagian3-$bagian4-$bagian5";
+    $nomorsertifikat = "$bagian1-$bagian2-$bagian3-$bagian4-$bagian5";
 
     $data = [
       'user_uid' => $user_uid,

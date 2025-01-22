@@ -133,9 +133,9 @@
                       <td><?php echo $dc['course_name']; ?></td>
                       <td>
                         <?php if ($dc['status'] == '1') { ?>
-                          <label class='badge badge-success'>Lulus</label>
+                          <label class='btn btn-success'>Lulus</label>
                         <?php } else { ?>
-                          <label class='badge badge-warning'>Belum Ada Penilaian</label>
+                          <label class='btn btn-warning'>Belum Ada Penilaian</label>
                         <?php } ?>
                       </td>
                       <td>
@@ -147,7 +147,7 @@
                         <?php } else { ?>
                           <a type="button" class="btn btn-outline-warning btn-icon-text">
                             <i class="typcn typcn-warning btn-icon-prepend"></i>
-                            Warning
+                            Belum Selesai!
                           </a>
                         <?php } ?>
                       </td>
