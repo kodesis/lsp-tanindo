@@ -17,10 +17,10 @@
                   <div class="card" style="width: 20rem;">
                     <?php
 
-                    if ($user_doc['image'] != '') { ?>
-                      <img src="<?= base_url('uploads/') . $user_doc['image'] ?>" alt="profile" />
+                    if (isset($user_doc['image'])) { ?>
+                      <img src="<?= base_url('uploads/') . $user_doc['image'] ?>" alt="profile">
                     <?php } else { ?>
-                      <img src="<?= base_url('assets/') ?>images/faces/face5.jpg" alt="profile">
+                      <img src=" <?= base_url('assets/') ?>images/faces/imada_mio_2.png" alt="profile">
                     <?php } ?>
                     <div class="card-body">
                       <h4 class="card-text"><b><?= $this->session->userdata('username') ?></b></h4>

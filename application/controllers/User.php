@@ -13,7 +13,7 @@ class User extends CI_Controller
 
   public function index()
   {
-    $data['course'] = $this->User_model->get_course();
+    $data['course'] = $this->User_model->get_course_limit();
     $data['users'] = $this->User_model->get_user($this->session->userdata('email'));
     $data['data_course'] = $this->User_model->get_data_course($this->session->userdata('user_id'));
 

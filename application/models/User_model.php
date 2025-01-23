@@ -52,14 +52,23 @@ class User_model extends CI_Model
   }
 
   // fungsi untuk mengambil Course
+  public function get_course_limit()
+  {
+    $this->db->select('c.uid, c.course_name');
+    $this->db->from('courses c');
+    $this->db->limit(3);
+    $this->db->order_by('uid', 'DESC');
+    $query = $this->db->get();
+    return $query->result();
+  }
   public function get_course()
   {
     $this->db->select('c.uid, c.course_name');
     $this->db->from('courses c');
+    // $this->db->limit(3);
     $query = $this->db->get();
     return $query->result();
   }
-
   // Fungsi untuk mengambil usernumber tertinggi
   public function get_max_sertif_num()
   {
