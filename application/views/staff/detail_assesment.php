@@ -9,8 +9,41 @@
 
   <div class="card">
     <div class="card-body">
-      <h4 class="card-title">Assesment <?= $username->full_name ?></h4>
+      <h4 class="card-title">Soal Assesmen <?= $username->full_name ?></h4>
+      <?php
+      if (empty($soal)) {
+      ?>
+        <button type="submit" class="btn btn-inverse-success btn-sm mt-3 mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal">Tambah Soal</button>
+      <?php
+      }
+      ?>
 
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Tambah Soal</h5>
+            </div>
+            <?php echo form_open_multipart('staff/save_soal/' . $this->uri->segment(3)); ?>
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="foto">Soal:</label>
+                <textarea name="soal" id="soal" class="form-control"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="foto">File Soal:</label>
+                <input type="file" name="file_soal" id="file_soal" class="form-control">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-success">Submit</button>
+              <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+            </div>
+            <!-- </form> -->
+            <?php echo form_close(); ?>
+          </div>
+        </div>
+      </div>
       <?php if ($this->session->flashdata('success')): ?>
         <p><?php echo $this->session->flashdata('success'); ?></p>
       <?php endif; ?>
@@ -29,12 +62,10 @@
                 <thead>
                   <tr>
                     <th>No.</th>
-                    <th>Tipe Assesmen</th>
-                    <th>Kode Unit</th>
-                    <th>Judul Unit Kompetensi</th>
-                    <th>Assignment</th>
-                    <th>Detail</th>
-                    <th style="text-align: center;">Status</th>
+                    <th>Soal</th>
+                    <th>File</th>
+                    <th>Action</th>
+                    <!-- <th style="text-align: center;">Status</th> -->
                   </tr>
                   <!-- <tr>
                     <th style="text-align: center;">Available</th>
@@ -42,75 +73,27 @@
                   </tr> -->
                 </thead>
                 <tbody>
-                  <?php if (!empty($assesment)): ?>
+                  <?php if (!empty($soal)): ?>
                     <?php $no = 1; ?>
-                    <?php foreach ($assesment as $ass):
-                      $cek = $this->db->where('user_uid', $username->user_uid)->where('assesment_uid', $ass['uid'])->get('grades')->row_array();
-
-                      $assessment_uid = (isset($cek['assesment_uid'])) ? $cek['assesment_uid'] : '0';
-                      // print_r($cek);
+                    <?php foreach ($soal as $ass):
                     ?>
                       <tr>
                         <td><?php echo $no++; ?></td>
                         <td>
-                          <?php
-                          if ($ass['tipe_assesmen'] == 1) {
-                            echo 'Pra Assesmen';
-                          } else if ($ass['tipe_assesmen'] == 2) {
-                            echo 'Uji Kompetensi';
-                          } else {
-                            echo 'Belum Dipilih';
-                          }
-                          ?>
-
+                          <?php echo $ass['soal']; ?>
                         </td>
                         <td>
-                          <?php echo $ass['kode_unit']; ?>
-
+                          <a class="btn btn-secondary" href="<?= base_url('uploads/detail_assesmen/' . $ass['file_soal']) ?>" download target="_blank">Unduh</a>
                         </td>
                         <td>
-                          <?php echo $ass['judul_unit_kompetensi']; ?>
-
+                          <a class="btn btn-danger" href="<?= base_url('staff/hapus_detail_assesmen/' . $ass['uid_assesmen'] . '/' . $ass['uid']) ?>">Hapus</a>
                         </td>
-                        <td>
-                          <?php echo $ass['assignments']; ?>
-
-                        </td>
-                        <td>
-                          <!-- <a href="<?= base_url('staff/detail_assesmen/' . $ass['uid']) ?>" class="btn btn-secondary">Detail</a> -->
-                          <?php
-                          if (!empty($ass['file'])) {
-                          ?>
-                            <a class="btn btn-secondary btn-icon-text btn-sm" href="<?= base_url('uploads/file/' . $ass['file']) ?>" download target="_blank">Unduh</a>
-                          <?php
-                          }
-                          ?>
-                        </td>
-                        <td>
-                          <div class="form-check form-check-success">
-                            <label class="form-check-label">
-                              <!-- <input type="checkbox" class="form-check-input" name="status[]" value="1" <?= ($assessment_uid == $ass['uid'] ? 'checked' : '') ?>> -->
-                              <input type="checkbox" class="form-check-input" name="assessment_<?= $ass['uid'] ?>" id="assessment_<?= $ass['uid'] ?>" value="<?= $ass['uid'] ?>" <?= ($assessment_uid == $ass['uid'] ? 'checked' : '') ?>>
-                              Available
-                              <i class="input-helper"></i>
-                            </label>
-                          </div>
-                          <input type="hidden" name="assessment" value="<?= $ass['uid'] ?>">
-                          <input type="hidden" name="user_uid" value="<?= $username->user_uid ?>">
-                        </td>
-                        <!-- <td>
-                          <div class="form-check form-check-danger">
-                            <label class="form-check-label">
-                              <input type="checkbox" class="form-check-input" name="status[<?= $ass['uid'] ?>]" value="0">
-                              Not available
-                              <i class="input-helper"></i></label>
-                          </div>
-                        </td> -->
                       </tr>
                     <?php endforeach; ?>
+
                   <?php else: ?>
                     <tr>
-                      <td colspan="4">No users found.</td>
+                      <td colspan="4">No Soal found.</td>
                     </tr>
                   <?php endif; ?>
                 </tbody>
@@ -119,10 +102,8 @@
           </div>
         </div>
       </form>
-      <button onclick="submitassesment()" class="btn btn-info btn-rounded btn-sm">Save Assessment</button>
-
       <!-- <button type="submit" class="btn btn-info btn-rounded btn-sm">Save Assessment</button> -->
-      <!-- </form> -->
+      <!-- <button onclick="submitassesment()" class="btn btn-info btn-rounded btn-sm">Save Assessment</button> -->
     </div>
   </div>
 </div>

@@ -113,4 +113,19 @@ class Staff_model extends CI_Model
     $query = $this->db->get();
     return $query->row();
   }
+
+  public function get_detail_assesmen($id)
+  {
+    $this->db->select('*');
+    $this->db->from('detail_assesmen');
+    $this->db->where('uid_assesmen', $id);
+    // $this->db->where('uid_user', $this->session->userdata('user_id'));
+    $query = $this->db->get();
+    return $query->result_array();
+  }
+  public function delete_detail_assesmen($id)
+  {
+    $this->db->where('uid', $id);
+    $this->db->delete('detail_assesmen');
+  }
 }

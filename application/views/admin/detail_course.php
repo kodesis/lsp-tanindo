@@ -8,16 +8,16 @@
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb breadcrumb-custom bg-inverse-info">
       <li class="breadcrumb-item"><a href="<?= base_url('admin') ?>">Dashboard</a></li>
-      <li class="breadcrumb-item active" aria-current="page"><span>Manage Course</span></li>
+      <li class="breadcrumb-item active" aria-current="page"><span>Manage Assesmen</span></li>
     </ol>
   </nav>
   <div class="card">
     <div class="card-body">
-      <h4 class="card-title">Data Course</h4>
+      <h4 class="card-title">Data Assesmen</h4>
 
       <div class="row">
         <div class="col-sm-12 col-md-6">
-          <a href="<?= base_url('admin/add_course') ?>" type="button" class="btn btn-inverse-info btn-fw btn-sm">Tambah Course</a>
+          <a href="<?= base_url('admin/add_assesmen/' . $this->uri->segment(3)) ?>" type="button" class="btn btn-inverse-info btn-fw btn-sm">Tambah Assesmen</a>
         </div>
         <div class="col-sm-12 col-md-6">
         </div>
@@ -31,17 +31,19 @@
               <thead>
                 <tr>
                   <th>No.</th>
-                  <th>Course</th>
-                  <th>Course Description</th>
-                  <th>Course Information</th>
-                  <th>Responsible Person</th>
+                  <th>Assesment Method</th>
+                  <th>Tipe Assesment</th>
+                  <th>Kode Unit</th>
+                  <th>Judul Unit Kompetensi</th>
+                  <th>Assignment</th>
+                  <th>File</th>
                   <th>Actions</th>
                 </tr>
               </thead>
 
-              <?php if (!empty($course)): ?>
+              <?php if (!empty($assesmen)): ?>
                 <?php $no = 1; ?>
-                <?php foreach ($course as $c): ?>
+                <?php foreach ($assesmen as $c): ?>
                   <div class="modal fade" id="edit<?= $c['uid'] ?>" tabindex="-1" aria-labelledby="editLabel" aria-hidden="true">
                     <div class="modal-dialog">
                       <div class="modal-content">
@@ -51,31 +53,39 @@
                             <span aria-hidden="true">&times;</span>
                           </button>
                         </div>
-                        <form action="<?= base_url('admin/updatecourse/' . $c['uid']) ?>" method="POST">
+                        <form action="<?= base_url('admin/updateassesmen/' . $c['uid']) ?>" method="POST" enctype="multipart/form-data">
                           <div class="modal-body">
                             <h4><b>Course</b></h4>
                             <div class="form-group">
-                              <label for="name" class='control-label'>Nama Course</label>
-                              <input type="text" class="form-control" id="course_name" name="course_name" value="<?= $c['course_name'] ?>">
-                            </div>
-                            <div class="form-group">
-                              <label for="name" class='control-label'>Course Description</label>
-                              <input type="text" class="form-control" id="course_description" name="course_description" value="<?= $c['course_description'] ?>">
-                            </div>
-                            <div class="form-group">
-                              <label for="name" class='control-label'>Course Information</label>
-                              <input type="text" class="form-control" id="course_information" name="course_information" value="<?= $c['course_information'] ?>">
-                            </div>
-                            <div class="form-group">
-                              <label for="name" class='control-label'>Responsible Person</label>
-                              <select class="form-control" id="teacher_uid" name="teacher_uid" required>
-                                <option value="">Pilih Pelatih</option>
-                                <?php foreach ($users as $pt): ?>
-                                  <option value="<?= $pt['uid'] ?>" <?php if ($c['teacher_uid'] == $pt['uid']) {
-                                                                      echo 'selected';
-                                                                    } ?>><?= $pt['full_name'] ?></option>
-                                <?php endforeach; ?>
+                              <label for="name" class='control-label'>Metode Assesmen</label>
+                              <select style="color: black;" name="assesment_metode" id="assesment_metode" class="form-select">
+                                <option <?php if ($c['assesment_metode'] == 1) echo "selected" ?> value="1">Metode DIT</option>
+                                <option <?php if ($c['assesment_metode'] == 2) echo "selected" ?> value="2">Metode Observasi</option>
+                                <option <?php if ($c['assesment_metode'] == 3) echo "selected" ?> value="3">Metode Portofolio</option>
                               </select>
+                            </div>
+                            <div class="form-group">
+                              <label for="name" class='control-label'>Tipe Assesmen</label>
+                              <select style="color: black;" name="tipe_assesmen" id="tipe_assesmen" class="form-select">
+                                <option <?php if ($c['tipe_assesmen'] == 1) echo "selected" ?> value="1">Pra Assesmen</option>
+                                <option <?php if ($c['tipe_assesmen'] == 2) echo "selected" ?> value="2">Uji Kompetensi</option>
+                              </select>
+                            </div>
+                            <div class="form-group">
+                              <label for="name" class='control-label'>Kode Unit</label>
+                              <input type="text" class="form-control" id="kode_unit" name="kode_unit" value="<?= $c['kode_unit'] ?>">
+                            </div>
+                            <div class="form-group">
+                              <label for="name" class='control-label'>Judul Unit Kompetensi</label>
+                              <input type="text" class="form-control" id="judul_unit_kompetensi" name="judul_unit_kompetensi" value="<?= $c['judul_unit_kompetensi'] ?>">
+                            </div>
+                            <div class="form-group">
+                              <label for="name" class='control-label'>Assignments</label>
+                              <input type="text" class="form-control" id="assignments" name="assignments" value="<?= $c['assignments'] ?>">
+                            </div>
+                            <div class="form-group">
+                              <label for="name" class='control-label'>File</label>
+                              <input type="file" class="form-control" id="file" name="file">
                             </div>
 
                           </div>
@@ -115,12 +125,12 @@
 
       // Load data for the table's content from an Ajax source
       ajax: {
-        url: "<?php echo site_url('Admin/ajax_list3') ?> ",
+        url: "<?php echo site_url('Admin/ajax_list4/' . $this->uri->segment('3')) ?> ",
         type: "POST",
         data: function(data) {}
       },
       columnDefs: [{
-        targets: 5, // The 8th column (0-indexed)
+        targets: 7, // The 8th column (0-indexed)
         orderable: false // Disable sorting
       }]
     });

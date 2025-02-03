@@ -28,6 +28,7 @@
                   <th>User Course</th>
                   <th>Course</th>
                   <th>Assesment Metode</th>
+                  <th>Jawaban Assesi</th>
                   <th>Eligibility status</th>
                 </tr>
               </thead>
@@ -43,6 +44,9 @@
                         <a href="<?= base_url('staff/metode_dit/') . $uc['uid'] ?>" class="btn btn-inverse-warning btn-sm"><i class="fas fa-vote-yea"></i>&nbsp;Metode DIT</a>
                         <a href="<?= base_url('staff/obser/') . $uc['uid'] ?>" class="btn btn-inverse-info btn-sm"><i class="fas fa-file-prescription"></i>&nbsp;Metode Observasi</a>
                         <a href="<?= base_url('staff/port/') . $uc['uid'] ?>" class="btn btn-inverse-primary btn-sm"><i class="fas fa-fax"></i>&nbsp;Metode Portofolio</a>
+                      </td>
+                      <td>
+                        <a class="btn btn-primary" href="<?= base_url('staff/jawaban_assesi/' . $uc['user_uid'] . '/' . $uc['course_uid']) ?>">Jawaban Assesi</a>
                       </td>
                       <td>
                         <?php if ($uc['status'] == '0') { ?>

@@ -148,11 +148,27 @@ class Staff extends CI_Controller
       echo json_encode(['status' => 'no_assessments_selected']);
       return;
     }
+    // echo json_encod
     // $error = $this->upload->display_errors();
     // echo json_encode(array("status" => FALSE, "error" => $error));
 
     // redirect('staff/manage_assesment');
   }
+
+  // public function detail_assesmen($uid)
+  // {
+  //   $data['soal'] = $this->Staff_model->get_detail_assesmen($uid);
+  //   $data['username'] = $this->Staff_model->get_user_name($uid);
+  //   // $data['checklist'] = $this->Staff_model->get_status_assesment($uid);
+
+  //   // exit;
+  //   $data['title'] = 'Detail Assesmen';
+  //   $data['active_menu'] = 'metode_dit'; // nanti ganti jadi username 
+  //   $this->load->view('statis_template/dashboard_header', $data);
+  //   $this->load->view('statis_template/dashboard_sidebar', $data);
+  //   $this->load->view('staff/detail_assesment');
+  //   $this->load->view('statis_template/dashboard_footer');
+  // }
 
   public function status_kelulusan($uid)
   {
@@ -190,5 +206,104 @@ class Staff extends CI_Controller
     $this->load->view('statis_template/dashboard_sidebar', $data);
     $this->load->view('staff/profil');
     $this->load->view('statis_template/dashboard_footer');
+  }
+
+  public function save_soal($uid)
+  {
+    $title = $this->input->post('soal');
+    $config['upload_path'] = FCPATH . 'uploads/detail_assesmen/'; // Same as the config file
+    $config['allowed_types'] = 'docx|word|pdf';
+    $config['file_name'] = 'file_soal_' . $title;
+
+    $this->load->library('upload', $config);
+    $this->upload->initialize($config);
+
+    if (!$this->upload->do_upload('file_soal')) {
+      $error = $this->upload->display_errors();
+
+      $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+        Input Data Failed. Error :' . $error . '
+        </div>');
+      // redirect('admin/add_artikel');
+    } else {
+      $image_data = $this->upload->data();
+      $thumbnail = file_get_contents($image_data['full_path']);
+      $image = $image_data['file_name'];
+
+      $data = array(
+        'uid_assesmen' => $uid,
+        'soal' => $this->input->post('soal'),
+        'file_soal' => $image,
+      );
+      if ($this->db->insert('detail_assesmen', $data)) {
+        $this->session->set_flashdata('success', '<div class="alert alert-success" role="alert">Data assessment berhasil disimpan.</div>');
+        redirect('staff/detail_assesmen/' . $uid);
+      } else {
+        // Jika gagal
+        $this->session->set_flashdata('error', '<div class="alert alert-danger" role="alert">Terjadi kesalahan saat menyimpan data.<?div>');
+        redirect('staff/detail_assesmen/' . $uid);
+      }
+    }
+  }
+  public function hapus_detail_assesmen($id_assesmen, $uid)
+  {
+    $this->Staff_model->delete_detail_assesmen($uid);
+
+    $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+        Delete Data Successfully Added please check in the table.
+        </div>');
+    redirect('staff/detail_assesmen/' . $id_assesmen);
+  }
+  public function jawaban_assesi($user_uid, $course_uid)
+  {
+    $data['data_assessor'] = $this->User_model->get_data_assessor($course_uid);
+    $data['data_assesmen_pra_assesmen'] = $this->User_model->get_data_assesmen_pra_assesmen_staff($user_uid, $course_uid);
+    $data['data_assesmen_uji_kompetensi'] = $this->User_model->get_data_assesmen_uji_kompetensi_staff($user_uid, $course_uid);
+    $data['username'] = $this->Staff_model->get_user_name($user_uid);
+    // $data['checklist'] = $this->Staff_model->get_status_assesment($uid);
+
+    // exit;
+    $data['title'] = 'Metode Penilaian DIT';
+    $data['active_menu'] = 'metode_dit'; // nanti ganti jadi username 
+    $this->load->view('statis_template/dashboard_header', $data);
+    $this->load->view('statis_template/dashboard_sidebar', $data);
+    $this->load->view('staff/jawaban_assesi');
+    $this->load->view('statis_template/dashboard_footer');
+  }
+  public function detail_assesmen($uid)
+  {
+    $data['data_soal'] = $this->User_model->get_data_detail_assesmen($uid);
+
+    $data['title'] = 'Assesmen User';
+    $data['active_menu'] = 'User'; // nanti ganti jadi username
+    $this->load->view('statis_template/dashboard_header', $data);
+    $this->load->view('statis_template/dashboard_sidebar', $data);
+    $this->load->view('staff/detail_assesmen');
+    $this->load->view('statis_template/dashboard_footer');
+  }
+  public function save_rekomendasi($id_user)
+  {
+    $id = $this->input->post('id_assesmen');
+    $data_update = [
+      'status' => 3,
+      'correct' => $this->input->post('correct'),
+    ];
+
+    // echo ($id);
+    // $assesmen = $this->User_model->get_data_detail_assesmen_uid($id);
+    // var_dump($assesmen);
+    var_dump($data_update);
+
+    if ($this->User_model->update_grades($data_update, array('uid' => $id))) {
+      echo 'success';
+      $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+        Update Data Successfully Added please check in the table.
+        </div>');
+    } else {
+      echo 'error';
+    }
+
+
+    redirect('staff/jawaban_assesi/' . $id_user . '/' . $this->input->post('course_uid'));
   }
 }

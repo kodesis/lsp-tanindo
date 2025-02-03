@@ -13,15 +13,9 @@
             <div class="tab-pane fade show active" id="nav-profil" role="tabpanel" aria-labelledby="nav-profil-tab">
               <br>
               <div class="row">
-                <div class="col-sm-3">
-                  <div class="card" style="width: 20rem;">
-                    <?php
-
-                    if (isset($user_doc['image'])) { ?>
-                      <img src="<?= base_url('uploads/') . $user_doc['image'] ?>" alt="profile">
-                    <?php } else { ?>
-                      <img src=" <?= base_url('assets/') ?>images/faces/imada_mio_2.png" alt="profile">
-                    <?php } ?>
+                <div class="col-sm-4">
+                  <div class="card">
+                    <img src=" <?= base_url('assets/') ?>images/faces/imada_mio_2.png" alt="profile">
                     <div class="card-body">
                       <h4 class="card-text"><b><?= $this->session->userdata('username') ?></b></h4>
                     </div>

@@ -27,6 +27,12 @@
             </div>
           </div>
           <div class="form-group row">
+            <label for="course_description" class="col-sm-3 col-form-label">Deskripsi Pelatihan</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control form-control-sm" name="course_information" id="course_information" value="<?php echo set_value('course_information'); ?>" placeholder="Informasi Pelatihan" required>
+            </div>
+          </div>
+          <div class="form-group row">
             <label for="teacher_uid" class="col-sm-3 col-form-label">Responsible Person</label>
             <div class="col-sm-9">
               <select class="form-control" id="pelatih_id" name="pelatih_id" required>

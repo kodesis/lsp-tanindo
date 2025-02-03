@@ -86,7 +86,7 @@ class Admin_model extends CI_Model
     // $this->db->where('user_ktna.status >', 1);
     $i = 0;
 
-    foreach ($this->column_search as $item) // loop column 
+    foreach ($this->column_search2 as $item) // loop column 
     {
       if ($_POST['search']['value']) // if datatable send POST for search
       {
@@ -99,7 +99,7 @@ class Admin_model extends CI_Model
           $this->db->or_like($item, $_POST['search']['value']);
         }
 
-        if (count($this->column_search) - 1 == $i) //last loop
+        if (count($this->column_search2) - 1 == $i) //last loop
           $this->db->group_end(); //close bracket
       }
       $i++;
@@ -107,7 +107,7 @@ class Admin_model extends CI_Model
 
     if (isset($_POST['order'])) // here order processing
     {
-      $this->db->order_by($this->column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+      $this->db->order_by($this->column_order2[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
     } else if (isset($this->order)) {
       $order = $this->order2;
       $this->db->order_by(key($order), $order[key($order)]);
@@ -140,8 +140,8 @@ class Admin_model extends CI_Model
   }
 
   var $table3 = 'courses';
-  var $column_order3 = array('courses.uid', 'course_name', 'course_description', 'full_name'); //set column field database for datatable orderable
-  var $column_search3 = array('courses.uid', 'course_name', 'course_description', 'full_name'); //set column field database for datatable searchable 
+  var $column_order3 = array('courses.uid', 'course_name', 'course_description', 'course_information', 'full_name'); //set column field database for datatable orderable
+  var $column_search3 = array('courses.uid', 'course_name', 'course_description', 'course_information', 'full_name'); //set column field database for datatable searchable 
   var $order3 = array('courses.uid' => 'asc'); // default order 
 
   function _get_datatables_query3()
@@ -151,7 +151,7 @@ class Admin_model extends CI_Model
     $this->db->join('users', 'courses.teacher_uid = users.uid');
     $i = 0;
 
-    foreach ($this->column_search as $item) // loop column 
+    foreach ($this->column_search3 as $item) // loop column 
     {
       if ($_POST['search']['value']) // if datatable send POST for search
       {
@@ -164,7 +164,7 @@ class Admin_model extends CI_Model
           $this->db->or_like($item, $_POST['search']['value']);
         }
 
-        if (count($this->column_search) - 1 == $i) //last loop
+        if (count($this->column_search3) - 1 == $i) //last loop
           $this->db->group_end(); //close bracket
       }
       $i++;
@@ -172,7 +172,7 @@ class Admin_model extends CI_Model
 
     if (isset($_POST['order'])) // here order processing
     {
-      $this->db->order_by($this->column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+      $this->db->order_by($this->column_order3[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
     } else if (isset($this->order)) {
       $order = $this->order3;
       $this->db->order_by(key($order), $order[key($order)]);
@@ -204,6 +204,71 @@ class Admin_model extends CI_Model
     return $this->db->count_all_results();
   }
 
+
+  var $table4 = 'assesmen';
+  var $column_order4 = array('assesmen.uid', 'assesment_metode', 'tipe_assesmen', 'kode_unit', 'judul_unit_kompetensi', 'assignments', 'file'); //set column field database for datatable orderable
+  var $column_search4 = array('assesmen.uid', 'assesment_metode', 'tipe_assesmen', 'kode_unit', 'judul_unit_kompetensi', 'assignments', 'file'); //set column field database for datatable searchable 
+  var $order4 = array('assesmen.uid' => 'asc'); // default order 
+
+  function _get_datatables_query4()
+  {
+    $this->db->select('assesmen.*');
+    $this->db->from('assesmen');
+    $this->db->where('course_uid', $this->uri->segment(3));
+    $i = 0;
+
+    foreach ($this->column_search4 as $item) // loop column 
+    {
+      if ($_POST['search']['value']) // if datatable send POST for search
+      {
+
+        if ($i === 0) // first loop
+        {
+          $this->db->group_start(); // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND.
+          $this->db->like($item, $_POST['search']['value']);
+        } else {
+          $this->db->or_like($item, $_POST['search']['value']);
+        }
+
+        if (count($this->column_search4) - 1 == $i) //last loop
+          $this->db->group_end(); //close bracket
+      }
+      $i++;
+    }
+
+    if (isset($_POST['order'])) // here order processing
+    {
+      $this->db->order_by($this->column_order4[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+    } else if (isset($this->order)) {
+      $order = $this->order4;
+      $this->db->order_by(key($order), $order[key($order)]);
+    }
+  }
+
+  function get_datatables4()
+  {
+    $this->_get_datatables_query4();
+    if ($_POST['length'] != -1)
+      $this->db->limit($_POST['length'], $_POST['start']);
+    $query = $this->db->get();
+    return $query->result();
+  }
+
+  function count_filtered4()
+  {
+    $this->_get_datatables_query4();
+    $query = $this->db->get();
+    return $query->num_rows();
+  }
+
+  function count_all4()
+  {
+
+    $this->_get_datatables_query4();
+    $query = $this->db->get();
+
+    return $this->db->count_all_results();
+  }
 
   // Fungsi untuk mendapatkan user dengan paginasi dan pencarian
   public function get_users($limit, $start, $search = '')
@@ -341,5 +406,34 @@ class Admin_model extends CI_Model
     // $this->db->where('u.status', 3);
     $query = $this->db->get();
     return $query->result_array();
+  }
+
+  public function get_all_assesmen($uid)
+  {
+    $this->db->select('assesmen.*');
+    $this->db->from('assesmen');
+    $this->db->where('course_uid', $uid);
+
+    $query = $this->db->get();
+    return $query->result_array();
+
+    // query untuk mengambil seluruh data dari tabel courses mentor agar 1 mentor bisa banyak kursus dan sebaliknya
+    // $this->db->select('c.*, u.full_name');
+    // $this->db->from('courses c');
+    // $this->db->join('courses_mentor cm', 'c.uid = cm.courses_uid');
+    // $this->db->join('users u', 'cm.mentor_uid = u.uid');
+    // $this->db->where('u.status =', 2);
+    // $query = $this->db->get();
+    // return $query->result_array();
+  }
+  public function update_assesmen($id, $data)
+  {
+    $this->db->where('uid', $id);
+    $this->db->update('assesmen', $data);
+  }
+  public function delete_assesmen($id)
+  {
+    $this->db->where('uid', $id);
+    $this->db->delete('assesmen');
   }
 }

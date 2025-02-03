@@ -65,6 +65,7 @@ class User_model extends CI_Model
   {
     $this->db->select('c.uid, c.course_name');
     $this->db->from('courses c');
+    $this->db->order_by('uid', 'DESC');
     // $this->db->limit(3);
     $query = $this->db->get();
     return $query->result();
@@ -125,12 +126,28 @@ class User_model extends CI_Model
     $this->db->where('uc.user_uid', $user_uid); // Ganti $user_id dengan ID user yang diinginkan
     $this->db->group_start();
     $this->db->where('uc.status', 1);
-    $this->db->or_where('uc.status !=', 1);
+    // $this->db->where('uc.status', 1);
+    // $this->db->or_where('uc.status !=', 1);
     $this->db->group_end();
+    $this->db->order_by('uc.uid');
     $query = $this->db->get();
     return $query->result_array();
   }
-
+  public function get_data_course_all($user_uid)
+  {
+    $this->db->select('uc.uid, uc.user_uid, uc.course_uid, c.course_name, uc.certificate_number, uc.status');
+    $this->db->from('user_courses uc');
+    $this->db->join('courses c', 'uc.course_uid = c.uid');
+    $this->db->where('uc.user_uid', $user_uid); // Ganti $user_id dengan ID user yang diinginkan
+    // $this->db->group_start();
+    // $this->db->where('uc.status', 1);
+    // $this->db->where('uc.status', 1);
+    // $this->db->or_where('uc.status !=', 1);
+    // $this->db->group_end();
+    $this->db->order_by('uc.uid');
+    $query = $this->db->get();
+    return $query->result_array();
+  }
   // ambil data berdasarkan kode certif user yang mau di print
   public function get_data_sertif($certificate_number)
   {
@@ -144,5 +161,111 @@ class User_model extends CI_Model
 
     // var_dump($query->row());
     // exit;
+  }
+  public function get_data_assessor($uid)
+  {
+    $this->db->select('a.*, b.course_name, b.course_description, b.course_information');
+    $this->db->from('users a');
+    $this->db->join('courses b', 'a.uid = b.teacher_uid', '');
+    $this->db->where('b.uid', $uid); // Ganti $user_id dengan ID user yang diinginkan
+    // $this->db->group_start();
+    // $this->db->where('a.status', '1');
+    // $this->db->where('a.user_uid', $this->session->userdata('user_id'));
+    // $this->db->group_end();
+    $query = $this->db->get();
+    return $query->row();
+  }
+  public function get_data_assesmen($uid)
+  {
+    $this->db->select('a.*, b.assignments');
+    $this->db->from('grades a');
+    $this->db->join('assesmen b', 'a.assesment_uid = b.uid', '');
+    $this->db->where('b.course_uid', $uid); // Ganti $user_id dengan ID user yang diinginkan
+    // $this->db->group_start();
+    // $this->db->where('a.status', '1');
+    $this->db->where('a.user_uid', $this->session->userdata('user_id'));
+    // $this->db->group_end();
+    $query = $this->db->get();
+    return $query->result_array();
+  }
+  public function get_data_assesmen_pra_assesmen($uid)
+  {
+    $this->db->select('a.*, b.kode_unit, b.judul_unit_kompetensi, b.assignments');
+    $this->db->from('grades a');
+    $this->db->join('assesmen b', 'a.assesment_uid = b.uid', '');
+    $this->db->where('b.tipe_assesmen', 1); // Ganti $user_id dengan ID user yang diinginkan
+    $this->db->where('b.course_uid', $uid); // Ganti $user_id dengan ID user yang diinginkan
+    // $this->db->group_start();
+    // $this->db->where('a.status', '1');
+    $this->db->where('a.user_uid', $this->session->userdata('user_id'));
+    // $this->db->group_end();
+    $query = $this->db->get();
+    return $query->result_array();
+  }
+  public function get_data_assesmen_uji_kompetensi($uid)
+  {
+    $this->db->select('a.*, b.kode_unit, b.judul_unit_kompetensi, b.assignments');
+    $this->db->from('grades a');
+    $this->db->join('assesmen b', 'a.assesment_uid = b.uid', '');
+    $this->db->where('b.tipe_assesmen', 2); // Ganti $user_id dengan ID user yang diinginkan
+    $this->db->where('b.course_uid', $uid); // Ganti $user_id dengan ID user yang diinginkan
+    // $this->db->group_start();
+    // $this->db->where('a.status', '1');
+    $this->db->where('a.user_uid', $this->session->userdata('user_id'));
+    // $this->db->group_end();
+    $query = $this->db->get();
+    return $query->result_array();
+  }
+  public function get_data_detail_assesmen($uid)
+  {
+    $this->db->select('a.*, b.course_uid, b.kode_unit, b.judul_unit_kompetensi, b.assignments, b.file');
+    $this->db->from('grades a');
+    $this->db->join('assesmen b', 'a.assesment_uid = b.uid', '');
+    $this->db->where('a.uid', $uid); // Ganti $user_id dengan ID user yang diinginkan
+    // $this->db->group_end();
+    $query = $this->db->get();
+    return $query->row();
+  }
+  public function get_data_detail_assesmen_uid($uid)
+  {
+    $this->db->select('b.course_uid');
+    $this->db->from('grades a');
+    $this->db->join('assesmen b', 'a.assesment_uid = b.uid', '');
+    $this->db->where('a.uid', $uid); // Ganti $user_id dengan ID user yang diinginkan
+    // $this->db->group_end();
+    $query = $this->db->get();
+    return $query->row();
+  }
+  public function update_grades($data, $where)
+  {
+    return $this->db->update('grades', $data, $where);
+  }
+  public function get_data_assesmen_pra_assesmen_staff($uid, $course_uid)
+  {
+    $this->db->select('a.*, b.kode_unit, b.judul_unit_kompetensi, b.assignments');
+    $this->db->from('grades a');
+    $this->db->join('assesmen b', 'a.assesment_uid = b.uid', '');
+    $this->db->where('b.tipe_assesmen', 1); // Ganti $user_id dengan ID user yang diinginkan
+    $this->db->where('b.course_uid', $course_uid); // Ganti $user_id dengan ID user yang diinginkan
+    // $this->db->group_start();
+    // $this->db->where('a.status', '1');
+    $this->db->where('a.user_uid', $uid);
+    // $this->db->group_end();
+    $query = $this->db->get();
+    return $query->result_array();
+  }
+  public function get_data_assesmen_uji_kompetensi_staff($uid, $course_uid)
+  {
+    $this->db->select('a.*, b.kode_unit, b.judul_unit_kompetensi, b.assignments');
+    $this->db->from('grades a');
+    $this->db->join('assesmen b', 'a.assesment_uid = b.uid', '');
+    $this->db->where('b.tipe_assesmen', 2); // Ganti $user_id dengan ID user yang diinginkan
+    $this->db->where('b.course_uid', $course_uid); // Ganti $user_id dengan ID user yang diinginkan
+    // $this->db->group_start();
+    // $this->db->where('a.status', '1');
+    $this->db->where('a.user_uid', $uid);
+    // $this->db->group_end();
+    $query = $this->db->get();
+    return $query->result_array();
   }
 }

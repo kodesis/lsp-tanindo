@@ -178,4 +178,92 @@ class User extends CI_Controller
     $this->load->view('user/profil');
     $this->load->view('statis_template/dashboard_footer');
   }
+  public function assesmen($uid)
+  {
+    $data['data_assessor'] = $this->User_model->get_data_assessor($uid);
+    $data['data_assesmen_pra_assesmen'] = $this->User_model->get_data_assesmen_pra_assesmen($uid);
+    $data['data_assesmen_uji_kompetensi'] = $this->User_model->get_data_assesmen_uji_kompetensi($uid);
+
+    $data['title'] = 'Assesmen User';
+    $data['active_menu'] = 'User'; // nanti ganti jadi username
+    $this->load->view('statis_template/dashboard_header', $data);
+    $this->load->view('statis_template/dashboard_sidebar', $data);
+    $this->load->view('user/assesmen');
+    $this->load->view('statis_template/dashboard_footer');
+  }
+  public function detail_assesmen($uid)
+  {
+    $data['data_soal'] = $this->User_model->get_data_detail_assesmen($uid);
+
+    $data['title'] = 'Assesmen User';
+    $data['active_menu'] = 'User'; // nanti ganti jadi username
+    $this->load->view('statis_template/dashboard_header', $data);
+    $this->load->view('statis_template/dashboard_sidebar', $data);
+    $this->load->view('user/detail_assesmen');
+    $this->load->view('statis_template/dashboard_footer');
+  }
+  public function save_answer()
+  {
+    $id = $this->input->post('id_assesmen');
+    $data_update = [
+      'status' => 2,
+    ];
+
+    $config['upload_path'] = FCPATH . 'uploads/answer/'; // Same as the config file
+    $config['allowed_types'] = 'docx|word|pdf';
+    // $config['file_name'] = 'thumbnail_' . $title;
+
+
+    $this->load->library('upload', $config);
+    $this->upload->initialize($config);
+
+    if ($this->upload->do_upload('answer')) {
+      $image_data = $this->upload->data();
+      $imgdata = file_get_contents($image_data['full_path']);
+      $thumbnail = $image_data['file_name'];
+      $data_update['answer'] = $thumbnail;
+    }
+    // echo ($id);
+    $assesmen = $this->User_model->get_data_detail_assesmen_uid($id);
+    // var_dump($assesmen);
+    var_dump($data_update);
+
+    if ($this->User_model->update_grades($data_update, array('uid' => $id))) {
+      echo 'success';
+      $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+        Update Data Successfully Added please check in the table.
+        </div>');
+    } else {
+      echo 'error';
+    }
+
+
+    redirect('user/Assesmen/' . $assesmen->course_uid);
+  }
+  public function course()
+  {
+    $data['course'] = $this->User_model->get_course();
+    $data['users'] = $this->User_model->get_user($this->session->userdata('email'));
+    // $data['data_course'] = $this->User_model->get_data_course($this->session->userdata('user_id'));
+
+    $data['title'] = 'Course User';
+    $data['active_menu'] = 'User'; // nanti ganti jadi username
+    $this->load->view('statis_template/dashboard_header', $data);
+    $this->load->view('statis_template/dashboard_sidebar', $data);
+    $this->load->view('user/course');
+    $this->load->view('statis_template/dashboard_footer');
+  }
+  public function sertifikasi()
+  {
+    // $data['sertifikasi'] = $this->User_model->get_sertifikasi();
+    $data['users'] = $this->User_model->get_user($this->session->userdata('email'));
+    $data['data_course'] = $this->User_model->get_data_course_all($this->session->userdata('user_id'));
+
+    $data['title'] = 'Sertifikasi User';
+    $data['active_menu'] = 'User'; // nanti ganti jadi username
+    $this->load->view('statis_template/dashboard_header', $data);
+    $this->load->view('statis_template/dashboard_sidebar', $data);
+    $this->load->view('user/sertifikasi');
+    $this->load->view('statis_template/dashboard_footer');
+  }
 }

@@ -6,6 +6,7 @@ class Admin extends CI_Controller
   public function __construct()
   {
     parent::__construct();
+    $this->load->library('upload');
     $this->load->model('Admin_model');
     $this->load->model('Artikel_model');
     $this->load->model('User_model');
@@ -156,8 +157,9 @@ class Admin extends CI_Controller
       $row[] = $no;
       $row[] = $cat->course_name;
       $row[] = $cat->course_description;
+      $row[] = $cat->course_information;
       $row[] = $cat->full_name;
-      $row[] = '<button type="button" class="btn btn-outline-warning btn-icon-text btn-sm" data-toggle="modal" data-target="#edit' . $cat->uid . '"><i class="typcn typcn-document btn-icon-append"></i>Edit</button>
+      $row[] = ' <a href="' . base_url('admin/detail_course/' . $cat->uid) . '" class="btn btn-outline-secondary btn-icon-text btn-sm">Detail</a> <button type="button" class="btn btn-outline-warning btn-icon-text btn-sm" data-toggle="modal" data-target="#edit' . $cat->uid . '"><i class="typcn typcn-document btn-icon-append"></i>Edit</button>
                         <a href="' . base_url('admin/deletecourse/' . $cat->uid) . '" class="btn btn-outline-danger btn-icon-text btn-sm" onclick="return confirm("Apakah Anda yakin ingin menghapus pelatihan ini?")"><i class="typcn typcn-warning btn-icon-prepend"></i>Delete</a>';
 
 
@@ -169,6 +171,61 @@ class Admin extends CI_Controller
       "draw" => $_POST['draw'],
       "recordsTotal" => $this->Admin_model->count_all3(),
       "recordsFiltered" => $this->Admin_model->count_filtered3(),
+      "data" => $data,
+    );
+    echo json_encode($output);
+  }
+
+  public function ajax_list4($uid)
+  {
+    $list = $this->Admin_model->get_datatables4($uid);
+    $data = array();
+    $crs = "";
+    $no = $_POST['start'];
+
+
+
+
+    foreach ($list as $cat) {
+
+      $no++;
+      $row = array();
+      $row[] = $no;
+      if ($cat->assesment_metode == 1) {
+        $row[] = 'Metode DIT';
+      } else if ($cat->assesment_metode == 2) {
+        $row[] = 'Metode Observasi';
+      } else if ($cat->assesment_metode == 3) {
+        $row[] = 'Metode Portofolio';
+      }
+      if ($cat->tipe_assesmen == 1) {
+        $row[] = 'Pra Assesmen';
+      } else if ($cat->tipe_assesmen == 2) {
+        $row[] = 'Uji Kompetensi';
+      } else {
+        $row[] = 'Belum Dipilih';
+      }
+
+      $row[] = $cat->kode_unit;
+      $row[] = $cat->judul_unit_kompetensi;
+      $row[] = $cat->assignments;
+      if (isset($cat->file)) {
+        $row[] = '<a class="btn btn-secondary btn-icon-text btn-sm" href="' . base_url('uploads/file/' . $cat->file) . '">Unduh</a>';
+      } else {
+        $row[] = '';
+      }
+      $row[] = ' <button type="button" class="btn btn-outline-warning btn-icon-text btn-sm" data-toggle="modal" data-target="#edit' . $cat->uid . '"><i class="typcn typcn-document btn-icon-append"></i>Edit</button>
+                        <a href="' . base_url('admin/deleteassesmen/' . $cat->uid) . '" class="btn btn-outline-danger btn-icon-text btn-sm" onclick="return confirm("Apakah Anda yakin ingin menghapus pelatihan ini?")"><i class="typcn typcn-warning btn-icon-prepend"></i>Delete</a>';
+
+
+
+      $data[] = $row;
+    }
+
+    $output = array(
+      "draw" => $_POST['draw'],
+      "recordsTotal" => $this->Admin_model->count_all4(),
+      "recordsFiltered" => $this->Admin_model->count_filtered4(),
       "data" => $data,
     );
     echo json_encode($output);
@@ -450,6 +507,17 @@ class Admin extends CI_Controller
     $this->load->view('admin/manage_course');
     $this->load->view('statis_template/dashboard_footer');
   }
+  public function detail_course($uid)
+  {
+    $data['assesmen'] = $this->Admin_model->get_all_assesmen($uid); // Dapatkan semua pelatihan/ course
+
+    $data['title'] = 'Detail Course';
+    $data['active_menu'] = 'manage_course';
+    $this->load->view('statis_template/dashboard_header', $data);
+    $this->load->view('statis_template/dashboard_sidebar', $data);
+    $this->load->view('admin/detail_course');
+    $this->load->view('statis_template/dashboard_footer');
+  }
 
   // Fungsi untuk menambahkan pelatihan baru
   public function addcourse()
@@ -461,7 +529,8 @@ class Admin extends CI_Controller
     $data = array(
       'course_name' => $this->input->post('course_name'),
       'teacher_uid' => $this->input->post('teacher_uid'),
-      'course_description' => $this->input->post('course_description')
+      'course_description' => $this->input->post('course_description'),
+      'course_information' => $this->input->post('course_information')
     );
     $this->Admin_model->insert_pelatihan($data);
     redirect('admin/manage_course');
@@ -482,11 +551,12 @@ class Admin extends CI_Controller
       // 'courses_uid' => $this->input->post($uid),
       'course_name' => $this->input->post('course_name'),
       'course_description' => $this->input->post('course_description'),
+      'course_information' => $this->input->post('course_information'),
       'teacher_uid' => $this->input->post('teacher_uid')
     );
 
-    print_r($data);
-    exit;
+    // print_r($data);
+    // exit;
     $this->Admin_model->update_pelatihan($uid, $data);
     redirect('admin/manage_course');
   }
@@ -512,6 +582,19 @@ class Admin extends CI_Controller
     $this->load->view('statis_template/dashboard_footer');
   }
 
+  public function add_assesmen()
+  {
+    cek_akses('1');  // Periksa akses lagi jika dibutuhkan untuk method tertentu
+    $data['title'] = 'Add Assesmen';
+    $data['active_menu'] = 'manage_assesmen';
+
+    // $data['users'] = $this->Admin_model->get_all_pelatih(); // Dapatkan pelatih untuk dropdown
+
+    $this->load->view('statis_template/dashboard_header', $data);
+    $this->load->view('statis_template/dashboard_sidebar', $data);
+    $this->load->view('admin/add_assesmen');
+    $this->load->view('statis_template/dashboard_footer');
+  }
   public function profil()
   {
     $data['users'] = $this->User_model->get_user($this->session->userdata('email'));
@@ -657,5 +740,90 @@ class Admin extends CI_Controller
 
     $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
     $writer->save('php://output');
+  }
+
+  public function process_course()
+  {
+    $data = array(
+      'course_name' => $this->input->post('course_name'),
+      'course_description' => $this->input->post('course_description'),
+      'teacher_uid' => $this->input->post('pelatih_id'),
+    );
+    if ($this->db->insert('courses', $data)) {
+      $this->session->set_flashdata('success', '<div class="alert alert-success" role="alert">Data assessment berhasil disimpan.</div>');
+      redirect('admin/manage_course');
+    } else {
+      // Jika gagal
+      $this->session->set_flashdata('error', '<div class="alert alert-danger" role="alert">Terjadi kesalahan saat menyimpan data.<?div>');
+      redirect('admin/manage_course');
+    }
+  }
+
+  public function process_assesmen($id)
+  {
+    $data = array(
+      'course_uid' => $id,
+      'assesment_metode' => $this->input->post('assesment_metode'),
+      'tipe_assesmen' => $this->input->post('tipe_assesmen'),
+      'kode_unit' => $this->input->post('kode_unit'),
+      'judul_unit_kompetensi' => $this->input->post('judul_unit_kompetensi'),
+      'assignments' => $this->input->post('assignments'),
+    );
+    $config['upload_path'] = FCPATH . 'uploads/file/'; // Ensure this directory exists
+    $config['allowed_types'] = 'pdf|doc|docx';
+    $config['file_name'] = 'file_' . preg_replace('/[^a-zA-Z0-9_-]/', '_', $this->input->post('assignments'));
+
+    $this->load->library('upload', $config);
+    $this->upload->initialize($config);
+
+    if ($this->upload->do_upload('file')) {
+      $image_data = $this->upload->data();
+      $file = $image_data['file_name'];
+      $data['file'] = $file; // Add uploaded file to $data
+    }
+
+    if ($this->db->insert('assesmen', $data)) {
+      $this->session->set_flashdata('success', '<div class="alert alert-success" role="alert">Data assessment berhasil disimpan.</div>');
+      redirect('admin/detail_course/' . $id);
+    } else {
+      // Jika gagal
+      $this->session->set_flashdata('error', '<div class="alert alert-danger" role="alert">Terjadi kesalahan saat menyimpan data.<?div>');
+      redirect('admin/detail_course/' . $id);
+    }
+  }
+
+  public function updateassesmen($uid)
+  {
+    $data = array(
+      'assesment_metode' => $this->input->post('assesment_metode'),
+      'tipe_assesmen' => $this->input->post('tipe_assesmen'),
+      'kode_unit' => $this->input->post('kode_unit'),
+      'judul_unit_kompetensi' => $this->input->post('judul_unit_kompetensi'),
+      'assignments' => $this->input->post('assignments'),
+    );
+
+    $config['upload_path'] = FCPATH . 'uploads/file/'; // Ensure this directory exists
+    $config['allowed_types'] = 'pdf|doc|docx';
+    $config['file_name'] = 'file_' . preg_replace('/[^a-zA-Z0-9_-]/', '_', $this->input->post('assignments'));
+
+    $this->load->library('upload', $config);
+    $this->upload->initialize($config);
+
+    if ($this->upload->do_upload('file')) {
+      $image_data = $this->upload->data();
+      $file = $image_data['file_name'];
+      $data['file'] = $file; // Add uploaded file to $data
+    }
+
+    // print_r($data); // Debug the final $data array
+    // exit;
+
+    $this->Admin_model->update_assesmen($uid, $data); // Save to database
+    redirect('admin/detail_course/' . $uid);
+  }
+  public function deleteassesmen($uid)
+  {
+    $this->Admin_model->delete_assesmen($uid);
+    redirect('admin/manage_course');
   }
 }

@@ -29,7 +29,11 @@
                 <thead>
                   <tr>
                     <th>No.</th>
-                    <th>Assesment</th>
+                    <th>Tipe Assesmen</th>
+                    <th>Kode Unit</th>
+                    <th>Judul Unit Kompetensi</th>
+                    <th>Assignment</th>
+                    <th>Detail</th>
                     <th style="text-align: center;">Status</th>
                   </tr>
                   <!-- <tr>
@@ -49,8 +53,38 @@
                       <tr>
                         <td><?php echo $no++; ?></td>
                         <td>
+                          <?php
+                          if ($ass['tipe_assesmen'] == 1) {
+                            echo 'Pra Assesmen';
+                          } else if ($ass['tipe_assesmen'] == 2) {
+                            echo 'Uji Kompetensi';
+                          } else {
+                            echo 'Belum Dipilih';
+                          }
+                          ?>
+
+                        </td>
+                        <td>
+                          <?php echo $ass['kode_unit']; ?>
+
+                        </td>
+                        <td>
+                          <?php echo $ass['judul_unit_kompetensi']; ?>
+
+                        </td>
+                        <td>
                           <?php echo $ass['assignments']; ?>
 
+                        </td>
+                        <td>
+                          <!-- <a href="<?= base_url('staff/detail_assesmen/' . $ass['uid']) ?>" class="btn btn-secondary">Detail</a> -->
+                          <?php
+                          if (!empty($ass['file'])) {
+                          ?>
+                            <a class="btn btn-secondary btn-icon-text btn-sm" href="<?= base_url('uploads/file/' . $ass['file']) ?>" download target="_blank">Unduh</a>
+                          <?php
+                          }
+                          ?>
                         </td>
                         <td>
                           <div class="form-check form-check-success">

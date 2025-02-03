@@ -125,13 +125,7 @@
           <?php if ($this->session->userdata('status') == 3) { ?>
             <li class="nav-item nav-profile dropdown">
               <a class="nav-link" href="#" data-bs-toggle="dropdown" id="profileDropdown">
-                <?php
-
-                if (isset($user_doc['image'])) { ?>
-                  <img src="<?= base_url('uploads/') . $user_doc['image'] ?>" alt="profile" />
-                <?php } else { ?>
-                  <img src="<?= base_url('assets/') ?>images/faces/face5.jpg" alt="profile">
-                <?php } ?>
+                <img src="<?= base_url('assets/') ?>images/faces/face5.jpg" alt="profile">
 
                 <span class="nav-profile-name"><?= $this->session->userdata('username') ?></span>
               </a>

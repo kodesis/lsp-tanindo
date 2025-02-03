@@ -23,7 +23,7 @@
 
     <!-- User -->
     <?php if ($this->session->userdata('status') == 3) { ?>
-      <li class="nav-item <?php echo ($this->uri->segment(1) == 'user') ? 'active' : ''; ?>">
+      <li class="nav-item <?php echo ($this->uri->segment(1) == 'user' && $this->uri->segment(2) == null) ? 'active' : ''; ?>">
         <a class="nav-link" href="<?= base_url('user') ?>">
           <i class="fas fa-tachometer-alt menu-icon"></i> &nbsp; &nbsp;
           <span class="menu-title">Dashboard</span>
@@ -87,7 +87,7 @@
     <?php } ?>
     <!-- User -->
     <?php if ($this->session->userdata('status') == 3) { ?>
-      <li class="nav-item <?php echo ($this->uri->segment(1) == 'profil') ? 'active' : ''; ?>">
+      <li class="nav-item <?php echo (empty($this->uri->segment(2)) || $this->uri->segment(2) == 'profil') ? '' : 'active'; ?>">
         <a class="nav-link" href="<?= base_url('user/profil') ?>">
           <i class="fas fa-user-cog menu-icon"></i> &nbsp; &nbsp;
           <span class="menu-title">Profile</span>
@@ -97,6 +97,12 @@
         <a class="nav-link" href="<?= base_url('user/course') ?>">
           <i class="fas fa-book menu-icon"></i> &nbsp; &nbsp;
           <span class="menu-title">Course</span>
+        </a>
+      </li>
+      <li class="nav-item <?php echo ($this->uri->segment(2) == 'sertifikasi') ? 'active' : ''; ?>">
+        <a class="nav-link" href="<?= base_url('user/sertifikasi') ?>">
+          <i class="fas fa-book menu-icon"></i> &nbsp; &nbsp;
+          <span class="menu-title">Sertifikasi</span>
         </a>
       </li>
     <?php } ?>
