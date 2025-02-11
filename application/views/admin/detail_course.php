@@ -35,6 +35,7 @@
                   <th>Tipe Assesment</th>
                   <th>Kode Unit</th>
                   <th>Judul Unit Kompetensi</th>
+                  <th>Tahap Rekomendasi</th>
                   <th>Assignment</th>
                   <th>File</th>
                   <th>Actions</th>
@@ -54,6 +55,7 @@
                           </button>
                         </div>
                         <form action="<?= base_url('admin/updateassesmen/' . $c['uid']) ?>" method="POST" enctype="multipart/form-data">
+                          <input type="hidden" name="id_url" value="<?= $this->uri->segment(3) ?>">
                           <div class="modal-body">
                             <h4><b>Course</b></h4>
                             <div class="form-group">
@@ -78,6 +80,17 @@
                             <div class="form-group">
                               <label for="name" class='control-label'>Judul Unit Kompetensi</label>
                               <input type="text" class="form-control" id="judul_unit_kompetensi" name="judul_unit_kompetensi" value="<?= $c['judul_unit_kompetensi'] ?>">
+                            </div>
+                            <div class="form-group">
+                              <label for="name" class='control-label'>Tahap Rekomendasi</label>
+                              <input type="number" class="form-control" id="tahap_rekomendasi" name="tahap_rekomendasi" value="<?= $c['rekomendasi'] ?>">
+                            </div>
+                            <div class="form-group">
+                              <label for="name" class='control-label'>Akses</label>
+                              <select style="color: black;" name="akses" id="akses" class="form-select">
+                                <option <?php if ($c['akses'] == 2) echo "selected" ?> value="2">Assesor</option>
+                                <option <?php if ($c['akses'] == 3) echo "selected" ?> value="3">Assesi</option>
+                              </select>
                             </div>
                             <div class="form-group">
                               <label for="name" class='control-label'>Assignments</label>

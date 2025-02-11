@@ -288,6 +288,20 @@ class Staff extends CI_Controller
       'status' => 3,
       'correct' => $this->input->post('correct'),
     ];
+    $config['upload_path'] = FCPATH . 'uploads/answer/'; // Same as the config file
+    $config['allowed_types'] = 'docx|word|pdf';
+    // $config['file_name'] = 'thumbnail_' . $title;
+
+
+    $this->load->library('upload', $config);
+    $this->upload->initialize($config);
+
+    if ($this->upload->do_upload('answer')) {
+      $image_data = $this->upload->data();
+      $imgdata = file_get_contents($image_data['full_path']);
+      $thumbnail = $image_data['file_name'];
+      $data_update['answer'] = $thumbnail;
+    }
 
     // echo ($id);
     // $assesmen = $this->User_model->get_data_detail_assesmen_uid($id);

@@ -134,27 +134,50 @@
                       </td>
                       <td>
                         <?php
-                        if ($dc['status'] == 1) {
+                        if ($dc['akses'] == 2) {
+                          if ($dc['status'] == 1) {
                         ?>
-                          <a href="<?= base_url('staff/detail_assesmen/') . $dc['uid'] . '/' . $this->uri->segment(3) ?>" type="button" class="btn btn-danger btn-icon-text">
-                            <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
-                            Ikuti Assesmen
-                          </a>
+                            <a href="<?= base_url('staff/detail_assesmen/') . $dc['uid'] . '/' . $this->uri->segment(3) ?>" type="button" class="btn btn-danger btn-icon-text">
+                              <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
+                              Assesor Belum Menjawab </a>
+                          <?php
+                          } else if ($dc['status'] == 2) {
+                          ?>
+                            <a href="<?= base_url('staff/detail_assesmen/') . $dc['uid'] . '/' . $this->uri->segment(3) ?>" type="button" class="btn btn-warning btn-icon-text">
+                              <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
+                              Menunggu Feedback Assessor
+                            </a>
+                          <?php
+                          } else if ($dc['status'] == 3) {
+                          ?>
+                            <a href="<?= base_url('staff/detail_assesmen/') . $dc['uid'] . '/' . $this->uri->segment(3) ?>" type="button" class="btn btn-success btn-icon-text">
+                              <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
+                              Assesmen Selesai
+                            </a>
+                          <?php
+                          }
+                        } else {
+                          if ($dc['status'] == 1) {
+                          ?>
+                            <a href="<?= base_url('staff/detail_assesmen/') . $dc['uid'] . '/' . $this->uri->segment(3) ?>" type="button" class="btn btn-danger btn-icon-text">
+                              <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
+                              Assessi Belum Menjawab </a>
+                          <?php
+                          } else if ($dc['status'] == 2) {
+                          ?>
+                            <a href="<?= base_url('staff/detail_assesmen/') . $dc['uid'] . '/' . $this->uri->segment(3) ?>" type="button" class="btn btn-warning btn-icon-text">
+                              <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
+                              Menunggu Feedback Assessor
+                            </a>
+                          <?php
+                          } else if ($dc['status'] == 3) {
+                          ?>
+                            <a href="<?= base_url('staff/detail_assesmen/') . $dc['uid'] . '/' . $this->uri->segment(3) ?>" type="button" class="btn btn-success btn-icon-text">
+                              <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
+                              Assesmen Selesai
+                            </a>
                         <?php
-                        } else if ($dc['status'] == 2) {
-                        ?>
-                          <a href="<?= base_url('staff/detail_assesmen/') . $dc['uid'] . '/' . $this->uri->segment(3) ?>" type="button" class="btn btn-warning btn-icon-text">
-                            <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
-                            Menunggu Feedback Assessor
-                          </a>
-                        <?php
-                        } else if ($dc['status'] == 3) {
-                        ?>
-                          <a href="<?= base_url('staff/detail_assesmen/') . $dc['uid'] . '/' . $this->uri->segment(3) ?>" type="button" class="btn btn-success btn-icon-text">
-                            <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
-                            Assesmen Selesai
-                          </a>
-                        <?php
+                          }
                         }
                         ?>
 
@@ -236,27 +259,50 @@
                       </td>
                       <td>
                         <?php
-                        if ($dc['status'] == 1) {
+                        if ($dc['akses'] == 2) {
+                          if ($dc['status'] == 1) {
                         ?>
-                          <a href="<?= base_url('user/detail_assesmen/') . $dc['uid'] . '/' . $this->uri->segment(3) ?>" type="button" class="btn btn-danger btn-icon-text">
-                            <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
-                            Ikuti Assesmen
-                          </a>
+                            <a href="<?= base_url('staff/detail_assesmen/') . $dc['uid'] . '/' . $this->uri->segment(3) ?>" type="button" class="btn btn-danger btn-icon-text">
+                              <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
+                              Assesor Belum Menjawab </a>
+                          <?php
+                          } else if ($dc['status'] == 2) {
+                          ?>
+                            <a href="<?= base_url('staff/detail_assesmen/') . $dc['uid'] . '/' . $this->uri->segment(3) ?>" type="button" class="btn btn-warning btn-icon-text">
+                              <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
+                              Menunggu Feedback Assessor
+                            </a>
+                          <?php
+                          } else if ($dc['status'] == 3) {
+                          ?>
+                            <a href="<?= base_url('staff/detail_assesmen/') . $dc['uid'] . '/' . $this->uri->segment(3) ?>" type="button" class="btn btn-success btn-icon-text">
+                              <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
+                              Assesmen Selesai
+                            </a>
+                          <?php
+                          }
+                        } else {
+                          if ($dc['status'] == 1) {
+                          ?>
+                            <a href="<?= base_url('staff/detail_assesmen/') . $dc['uid'] . '/' . $this->uri->segment(3) ?>" type="button" class="btn btn-danger btn-icon-text">
+                              <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
+                              Assessi Belum Menjawab </a>
+                          <?php
+                          } else if ($dc['status'] == 2) {
+                          ?>
+                            <a href="<?= base_url('staff/detail_assesmen/') . $dc['uid'] . '/' . $this->uri->segment(3) ?>" type="button" class="btn btn-warning btn-icon-text">
+                              <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
+                              Menunggu Feedback Assessor
+                            </a>
+                          <?php
+                          } else if ($dc['status'] == 3) {
+                          ?>
+                            <a href="<?= base_url('staff/detail_assesmen/') . $dc['uid'] . '/' . $this->uri->segment(3) ?>" type="button" class="btn btn-success btn-icon-text">
+                              <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
+                              Assesmen Selesai
+                            </a>
                         <?php
-                        } else if ($dc['status'] == 2) {
-                        ?>
-                          <a href="<?= base_url('user/detail_assesmen/') . $dc['uid'] . '/' . $this->uri->segment(3) ?>" type="button" class="btn btn-warning btn-icon-text">
-                            <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
-                            Menunggu Feedback Assessor
-                          </a>
-                        <?php
-                        } else if ($dc['status'] == 3) {
-                        ?>
-                          <a href="<?= base_url('user/detail_assesmen/') . $dc['uid'] . '/' . $this->uri->segment(3) ?>" type="button" class="btn btn-success btn-icon-text">
-                            <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
-                            Assesmen Selesai
-                          </a>
-                        <?php
+                          }
                         }
                         ?>
 

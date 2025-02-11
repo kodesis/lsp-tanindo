@@ -208,6 +208,7 @@ class Admin extends CI_Controller
 
       $row[] = $cat->kode_unit;
       $row[] = $cat->judul_unit_kompetensi;
+      $row[] = $cat->rekomendasi;
       $row[] = $cat->assignments;
       if (isset($cat->file)) {
         $row[] = '<a class="btn btn-secondary btn-icon-text btn-sm" href="' . base_url('uploads/file/' . $cat->file) . '">Unduh</a>';
@@ -767,6 +768,8 @@ class Admin extends CI_Controller
       'tipe_assesmen' => $this->input->post('tipe_assesmen'),
       'kode_unit' => $this->input->post('kode_unit'),
       'judul_unit_kompetensi' => $this->input->post('judul_unit_kompetensi'),
+      'rekomendasi' => $this->input->post('tahap_rekomendasi'),
+      'akses' => $this->input->post('akses'),
       'assignments' => $this->input->post('assignments'),
     );
     $config['upload_path'] = FCPATH . 'uploads/file/'; // Ensure this directory exists
@@ -799,6 +802,8 @@ class Admin extends CI_Controller
       'tipe_assesmen' => $this->input->post('tipe_assesmen'),
       'kode_unit' => $this->input->post('kode_unit'),
       'judul_unit_kompetensi' => $this->input->post('judul_unit_kompetensi'),
+      'rekomendasi' => $this->input->post('tahap_rekomendasi'),
+      'akses' => $this->input->post('akses'),
       'assignments' => $this->input->post('assignments'),
     );
 
@@ -819,7 +824,7 @@ class Admin extends CI_Controller
     // exit;
 
     $this->Admin_model->update_assesmen($uid, $data); // Save to database
-    redirect('admin/detail_course/' . $uid);
+    redirect('admin/detail_course/' . $this->input->post('id_url'));
   }
   public function deleteassesmen($uid)
   {

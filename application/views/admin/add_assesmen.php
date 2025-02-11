@@ -41,6 +41,17 @@
               <input type="text" class="form-control" id="judul_unit_kompetensi" name="judul_unit_kompetensi" value="">
             </div>
             <div class="form-group">
+              <label for="name" class='control-label'>Tahap Rekomendasi</label>
+              <input type="number" class="form-control" id="tahap_rekomendasi" name="tahap_rekomendasi" value="">
+            </div>
+            <div class="form-group">
+              <label for="name" class='control-label'>Akses</label>
+              <select style="color: black;" name="akses" id="akses" class="form-select">
+                <option value="2">Assesor</option>
+                <option value="3">Assesi</option>
+              </select>
+            </div>
+            <div class="form-group">
               <label for="name" class='control-label'>Assignment</label>
               <input type="text" class="form-control" id="assignments" name="assignments" value="">
             </div>

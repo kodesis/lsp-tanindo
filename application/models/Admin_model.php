@@ -206,9 +206,9 @@ class Admin_model extends CI_Model
 
 
   var $table4 = 'assesmen';
-  var $column_order4 = array('assesmen.uid', 'assesment_metode', 'tipe_assesmen', 'kode_unit', 'judul_unit_kompetensi', 'assignments', 'file'); //set column field database for datatable orderable
-  var $column_search4 = array('assesmen.uid', 'assesment_metode', 'tipe_assesmen', 'kode_unit', 'judul_unit_kompetensi', 'assignments', 'file'); //set column field database for datatable searchable 
-  var $order4 = array('assesmen.uid' => 'asc'); // default order 
+  var $column_order4 = array('assesmen.uid', 'assesment_metode', 'tipe_assesmen', 'kode_unit', 'judul_unit_kompetensi', 'rekomendasi', 'assignments', 'file'); //set column field database for datatable orderable
+  var $column_search4 = array('assesmen.uid', 'assesment_metode', 'tipe_assesmen', 'kode_unit', 'judul_unit_kompetensi', 'rekomendasi', 'assignments', 'file'); //set column field database for datatable searchable 
+  var $order4 = array('assesmen.uid' => 'asc', 'assesmen.rekomendasi' => 'DESC'); // default order 
 
   function _get_datatables_query4()
   {

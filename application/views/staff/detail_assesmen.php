@@ -63,6 +63,15 @@
                   <iframe src="<?= base_url('uploads/answer/' . $data_soal->answer) ?>" width="800" height="500" frameborder="0"></iframe>
                 <?php
                 }
+
+                if ($data_soal->akses == 2) {
+                ?>
+                  <div class="custom-file" <?php if ($data_soal->status == 3) echo 'hidden' ?>>
+                    <input class="custom-file-input" type="file" name="answer" id="answer">
+                    <label for="answer" class="custom-file-label"><?= $data_soal->answer ?></label>
+                  </div>
+                <?php
+                }
                 ?>
                 <!-- <div class="custom-file">
                   <input class="custom-file-input" type="file" name="answer" id="answer">

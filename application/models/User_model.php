@@ -218,7 +218,7 @@ class User_model extends CI_Model
   }
   public function get_data_detail_assesmen($uid)
   {
-    $this->db->select('a.*, b.course_uid, b.kode_unit, b.judul_unit_kompetensi, b.assignments, b.file');
+    $this->db->select('a.*, b.course_uid, b.kode_unit, b.judul_unit_kompetensi, b.assignments, b.file, b.akses');
     $this->db->from('grades a');
     $this->db->join('assesmen b', 'a.assesment_uid = b.uid', '');
     $this->db->where('a.uid', $uid); // Ganti $user_id dengan ID user yang diinginkan
@@ -242,7 +242,7 @@ class User_model extends CI_Model
   }
   public function get_data_assesmen_pra_assesmen_staff($uid, $course_uid)
   {
-    $this->db->select('a.*, b.kode_unit, b.judul_unit_kompetensi, b.assignments');
+    $this->db->select('a.*, b.kode_unit, b.judul_unit_kompetensi, b.assignments, b.akses');
     $this->db->from('grades a');
     $this->db->join('assesmen b', 'a.assesment_uid = b.uid', '');
     $this->db->where('b.tipe_assesmen', 1); // Ganti $user_id dengan ID user yang diinginkan
@@ -250,13 +250,14 @@ class User_model extends CI_Model
     // $this->db->group_start();
     // $this->db->where('a.status', '1');
     $this->db->where('a.user_uid', $uid);
+    $this->db->order_by('b.rekomendasi', 'ASC');
     // $this->db->group_end();
     $query = $this->db->get();
     return $query->result_array();
   }
   public function get_data_assesmen_uji_kompetensi_staff($uid, $course_uid)
   {
-    $this->db->select('a.*, b.kode_unit, b.judul_unit_kompetensi, b.assignments');
+    $this->db->select('a.*, b.kode_unit, b.judul_unit_kompetensi, b.assignments, b.akses');
     $this->db->from('grades a');
     $this->db->join('assesmen b', 'a.assesment_uid = b.uid', '');
     $this->db->where('b.tipe_assesmen', 2); // Ganti $user_id dengan ID user yang diinginkan
@@ -264,6 +265,7 @@ class User_model extends CI_Model
     // $this->db->group_start();
     // $this->db->where('a.status', '1');
     $this->db->where('a.user_uid', $uid);
+    $this->db->order_by('b.rekomendasi', 'ASC');
     // $this->db->group_end();
     $query = $this->db->get();
     return $query->result_array();
