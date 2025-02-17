@@ -89,25 +89,26 @@
                 <input type="text" class="form-control" name="course_name" id="course_choise" value="<?= $cour->course_name ?>">
               </div>
               <div class="form-group">
-                <label for="foto">Foto:</label>
-                <input type="file" name="foto" size="20" class="form-control">
-              </div>
-              <div class="form-group">
-                <label for="foto_ktp">Foto KTP:</label>
-                <input type="file" name="foto_ktp" size="20" class="form-control">
-              </div>
-              <div class="form-group">
-                <label for="ijasah">Ijasah:</label>
+                <label for="ijasah">Ijasah Terakhir:</label>
                 <input type="file" name="ijasah" size="20" class="form-control">
               </div>
               <div class="form-group">
-                <label for="sertifikat">Sertifikat:</label>
+                <label for="sertifikat">Sertifikat bidang Penyuluhan :</label>
                 <input type="file" name="sertifikat" size="20" class="form-control">
               </div>
               <div class="form-group">
-                <label for="surat_ijin">Surat Ijin:</label>
+                <label for="surat_ijin">Surat Keterangan sebagai Penyuluh :</label>
                 <input type="file" name="surat_ijin" size="20" class="form-control">
               </div>
+              <div class="form-group">
+                <label for="foto">Foto 3x4 :</label>
+                <input type="file" name="foto" size="20" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="foto_ktp">Fotokopi KTP :</label>
+                <input type="file" name="foto_ktp" size="20" class="form-control">
+              </div>
+
             </div>
             <div class="modal-footer">
               <button type="submit" class="btn btn-success">Submit</button>
