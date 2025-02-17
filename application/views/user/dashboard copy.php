@@ -173,7 +173,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="course_choise">Selected programme</label>
+                <label for="course_choise">Selected Skema</label>
                 <input type="hidden" class="form-control" name="course_uid" id="course_choise" value="<?= $cour->uid ?>">
                 <input type="text" class="form-control" name="course_name" id="course_choise" value="<?= $cour->course_name ?>">
               </div>
