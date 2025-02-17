@@ -61,25 +61,25 @@
               </div>
               <div class="form-group row">
                 <div class="col">
-                  <label for="phone">Phone Number</label>
+                  <label for="phone">Nomor Telpon</label>
                   <input type="text" class="form-control" name="phone" id="phone" value="<?= $users->mobile_number ?>" readonly>
                 </div>
                 <div class="col">
-                  <label for="gender">Gender</label>
+                  <label for="gender">Jenis Kelamin</label>
                   <input type="text" class="form-control" name="gender" id="gender" value="<?= $users->gender ?>" readonly>
                 </div>
               </div>
               <div class="form-group">
-                <label for="address">Address</label>
+                <label for="address">Alamat</label>
                 <input type="text" class="form-control" name="address" id="address" value="<?= $users->home_address ?>" readonly>
               </div>
               <div class="form-group row">
                 <div class="col">
-                  <label for="city">City</label>
+                  <label for="city">Kota</label>
                   <input type="text" class="form-control" name="city" id="city" value="<?= $users->city ?>" readonly>
                 </div>
                 <div class="col">
-                  <label for="province">Province</label>
+                  <label for="province">Provinsi</label>
                   <input type="text" class="form-control" name="province" id="province" value="<?= $users->province ?>" readonly>
                 </div>
               </div>
