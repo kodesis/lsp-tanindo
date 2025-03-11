@@ -12,7 +12,7 @@
       <div class="col-md-4 grid-margin grid-margin-md-0 stretch-card mb-3">
         <div class="card">
           <div class="card-body text-center">
-            <i class="fas fa-certificate"></i> &nbsp; Sertifikasi
+            <i class="fas fa-certificate"></i> &nbsp; Skema
             <h4 class="mt-2 card-text">
               <?= $cour->course_name ?>
             </h4>
