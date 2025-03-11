@@ -13,9 +13,9 @@
         <div class="card">
           <div class="card-body text-center">
             <i class="fas fa-certificate"></i> &nbsp; Sertifikasi
-            <h4 class="mt-2 card-text text-justify">
+            <h5 class="mt-2 card-text">
               <?= $cour->course_name ?>
-            </h4>
+            </h5>
             <?php
             $this->db->from('user_courses');
             $this->db->where('user_uid', $this->session->userdata('user_id'));
