@@ -20,7 +20,7 @@
       <div class="col-md-4 grid-margin grid-margin-md-0 stretch-card">
         <div class="card">
           <div class="card-body text-center">
-            <i class="fas fa-certificate"></i> &nbsp; Sertifikasi
+            <i class="fas fa-certificate"></i> &nbsp; Skema
             <h5 class="mt-2 card-text">
               <?= $cour->course_name ?>
             </h5>
@@ -240,7 +240,7 @@
                   <div class="col-12">
                     <br>
                     <h5>
-                      Data Sertifikasi
+                      Data Skema
                     </h5>
                   </div>
                   <div class="col-12">

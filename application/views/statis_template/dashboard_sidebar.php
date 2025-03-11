@@ -102,7 +102,7 @@
       <li class="nav-item <?php echo ($this->uri->segment(2) == 'course') ? 'active' : ''; ?>">
         <a class="nav-link" href="<?= base_url('user/course') ?>">
           <i class="fas fa-book menu-icon"></i> &nbsp; &nbsp;
-          <span class="menu-title">Skema</span>
+          <span class="menu-title">Pilihan Skema</span>
         </a>
       </li>
       <li class="nav-item <?php echo ($this->uri->segment(2) == 'sertifikasi') ? 'active' : ''; ?>">
