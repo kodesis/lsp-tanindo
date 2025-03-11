@@ -82,7 +82,7 @@
             <!-- <div class="g-recaptcha" data-sitekey="6LeSjj8qAAAAABzGtdWlW550-Ne7IR4rcCOwgvxy" data-callback='onSubmit' data-action='submit'>Submit</div> -->
             <br>
             <div class="text-center d-grid gap-2">
-              <button type="submit" class="btn btn-outline-success btn-fw">Registration</button>
+              <button type="submit" class="btn btn-outline-success btn-fw">Pendaftaran</button>
             </div>
             <br>
             <p class="sign-up text-center">Sudah Punya Akun ?<a href="<?= base_url('auth') ?>"> Login</a></p>
