@@ -1,16 +1,21 @@
 RewriteOptions inherit
 RewriteEngine on
-RewriteCond $1 !^(index\.php|public|\.txt)
+
+# Ensure index.php handles all requests except static files
+RewriteCond %{REQUEST_URI} !^(index\.php|public|\.txt) [NC]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php?$1
+RewriteRule ^(.*)$ index.php?$1 [L]
 
+# Block .git folder access
 RewriteRule ^(.*/)?\.git(/|$) - [F,L]
 
-# Block all access to assets/ except CSS, JS, images
-RewriteCond %{REQUEST_URI} !\.(css|js|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|otf)$
-RewriteRule ^assets(/|$) - [F,L]
+# Block access to assets/ except CSS, JS, and images
+RewriteCond %{REQUEST_URI} ^/assets/ [NC]
+RewriteCond %{REQUEST_URI} !\.(css|js|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|otf)$ [NC]
+RewriteRule .* - [F,L]
 
-# Allow only images, videos, PDFs, and text files in uploads/
+# Allow only specific file types in uploads/
+RewriteCond %{REQUEST_URI} ^/uploads/ [NC]
 RewriteCond %{REQUEST_URI} !\.(jpg|jpeg|png|gif|svg|webp|mp4|avi|mov|pdf|txt|doc|docx|xls|xlsx|zip|rar)$ [NC]
-RewriteRule ^uploads/ - [F,L]
+RewriteRule .* - [F,L]

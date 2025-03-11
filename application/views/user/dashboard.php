@@ -48,7 +48,7 @@
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title" id="exampleModalLabel"><?= $cour->course_name ?></h4>
+              <h4 class="modal-title" id="exampleModalLabel">FR.APL.01. PERMOHONAN SERTIFIKASI KOMPETENSI</h4>
             </div>
             <form action="<?= base_url('user/save_program_choise') ?>" method="post" enctype="multipart/form-data">
               <div class="modal-body">
@@ -270,134 +270,295 @@
                           <th>Standar Kompetensi Kerja</th>
                         </tr>
                       </thead>
-                      <tbody>
-                        <tr>
-                          <td>1</td>
-                          <td>M.74PPP01.001.01</td>
-                          <td>Melaksanakan Komunikasi Efektif</td>
-                          <td>SKKNI 162 / 2021</td>
-                        </tr>
-                        <tr>
-                          <td>2</td>
-                          <td>M.74PPP01.002.01</td>
-                          <td>Mengorganisasikan Pekerjaan</td>
-                          <td>SKKNI 162 / 2021</td>
-                        </tr>
-                        <tr>
-                          <td>3</td>
-                          <td>M.74PPP01.004.01</td>
-                          <td>Memecahkan Permasalahan (Problem Solving)</td>
-                          <td>SKKNI 162 / 2021</td>
-                        </tr>
-                        <tr>
-                          <td>4</td>
-                          <td>M.74PPP01.005.01</td>
-                          <td>Menerapkan Teknologi Informasi Komunikasi</td>
-                          <td>SKKNI 162 / 2021</td>
-                        </tr>
-                        <tr>
-                          <td>5</td>
-                          <td>M.74PPP01.006.01</td>
-                          <td>Menerapkan Prosedur Keselamatan dan Kesehatan Kerja (K3)</td>
-                          <td>SKKNI 162 / 2021</td>
-                        </tr>
-                        <tr>
-                          <td>6</td>
-                          <td>M.74PPP01.008.01</td>
-                          <td>Menyusun Data Potensi Wilayah</td>
-                          <td>SKKNI 162 / 2021</td>
-                        </tr>
-                        <tr>
-                          <td>7</td>
-                          <td>M.74PPP01.009.03</td>
-                          <td>Menyusun Programa Penyuluhan Pertanian</td>
-                          <td>SKKNI 162 / 2021</td>
-                        </tr>
-                        <tr>
-                          <td>8</td>
-                          <td>M.74PPP01.010.01</td>
-                          <td>Memfasilitasi Proses Pembelajaran</td>
-                          <td>SKKNI 162 / 2021</td>
-                        </tr>
-                        <tr>
-                          <td>9</td>
-                          <td>M.74PPP01.011.01</td>
-                          <td>Melakukan Penumbuhan Kelembagaan Petani</td>
-                          <td>SKKNI 162 / 2021</td>
-                        </tr>
-                        <tr>
-                          <td>10</td>
-                          <td>M.74PPP01.012.01</td>
-                          <td>Menumbuhkembangkan Kelembagaan Ekonomi Petani</td>
-                          <td>SKKNI 162 / 2021</td>
-                        </tr>
-                        <tr>
-                          <td>11</td>
-                          <td>M.74PPP01.013.01</td>
-                          <td>Memfasilitasi Penerapan Teknologi</td>
-                          <td>SKKNI 162 / 2021</td>
-                        </tr>
-                        <tr>
-                          <td>12</td>
-                          <td>M.74PPP01.014.01</td>
-                          <td>Memfasilitasi Peningkatan Produktivitas Usaha Tani</td>
-                          <td>SKKNI 162 / 2021</td>
-                        </tr>
-                        <tr>
-                          <td>13</td>
-                          <td>M.74PPP01.015.01</td>
-                          <td>Menumbuh kembangkan Pos Penyuluhan Desa</td>
-                          <td>SKKNI 162 / 2021</td>
-                        </tr>
-                        <tr>
-                          <td>14</td>
-                          <td>M.74PPP01.016.01</td>
-                          <td>Menumbuhkembangkan Penyuluh Pertanian Swadaya</td>
-                          <td>SKKNI 162 / 2021</td>
-                        </tr>
-                        <tr>
-                          <td>15</td>
-                          <td>M.74PPP01.007.01</td>
-                          <td>Membangun Jejaring Kerjasama</td>
-                          <td>SKKNI 162 / 2021</td>
-                        </tr>
-                        <tr>
-                          <td>16</td>
-                          <td>M.74PPP01.017.03</td>
-                          <td>Mengevaluasi Pelaksanaan Kegiatan Penyuluhan Pertanian</td>
-                          <td>SKKNI 162 / 2021</td>
-                        </tr>
-                        <tr>
-                          <td>17</td>
-                          <td>M.74PPP01.023.01</td>
-                          <td>Memfasilitasi Pengelolaan Subsistem Agroinput</td>
-                          <td>SKKNI 162 / 2021</td>
-                        </tr>
-                        <tr>
-                          <td>18</td>
-                          <td>M.74PPP01.024.01</td>
-                          <td>Memfasilitasi Pengelolaan Subsistem Agroproduksi</td>
-                          <td>SKKNI 162 / 2021</td>
-                        </tr>
-                        <tr>
-                          <td>19</td>
-                          <td>M.74PPP01.025.01</td>
-                          <td>Memfasilitasi Pengelolaan Subsistem Agroprocessing</td>
-                          <td>SKKNI 162 / 2021</td>
-                        </tr>
-                        <tr>
-                          <td>20</td>
-                          <td>M.74PPP01.026.01</td>
-                          <td>Memfasilitasi Pengelolaan Subsistem Agroniaga</td>
-                          <td>SKKNI 162 / 2021</td>
-                        </tr>
-                        <tr>
-                          <td>21</td>
-                          <td>M.74PPP01.027.01</td>
-                          <td>Memfasilitasi Perencanaan Usaha Agribisnis</td>
-                          <td>SKKNI 162 / 2021</td>
-                        </tr>
-                      </tbody>
+                      <?php
+                      if ($cour->uid == '1') {
+                      ?>
+                        <tbody>
+                          <tr>
+                            <td>1</td>
+                            <td>M.74PPP01.001.01</td>
+                            <td>Melaksanakan Komunikasi Efektif</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>2</td>
+                            <td>M.74PPP01.002.01</td>
+                            <td>Mengorganisasikan Pekerjaan</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>3</td>
+                            <td>M.74PPP01.003.01</td>
+                            <td>Menerapkan Kepemimpinan Dalam Penyuluhan</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>4</td>
+                            <td>M.74PPP01.005.01</td>
+                            <td>Menerapkan Teknologi Informasi Komunikasi</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>5</td>
+                            <td>M.74PPP01.006.01</td>
+                            <td>Menerapkan Prosedur Keselamatan dan Kesehatan Kerja (K3)</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>6</td>
+                            <td>M.74PPP01.007.01</td>
+                            <td>Membangun Jejaring Kerjasama</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>7</td>
+                            <td>M.74PPP01.008.01</td>
+                            <td>Menyusun Data Potensi Wilayah</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>8</td>
+                            <td>M.74PPP01.009.03</td>
+                            <td>Menyusun Programa Penyuluhan Pertanian</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>9</td>
+                            <td>M.74PPP01.010.01</td>
+                            <td>Memfasilitasi Proses Pembelajaran</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>10</td>
+                            <td>M.74PPP01.011.01</td>
+                            <td>Melakukan Penumbuhan Kelembagaan Petani</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>11</td>
+                            <td>M.74PPP01.012.01</td>
+                            <td>Menumbuhkembangkan Kelembagaan Ekonomi Petani</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>12</td>
+                            <td>M.74PPP01.013.01</td>
+                            <td>Memfasilitasi Penerapan Teknologi</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>13</td>
+                            <td>M.74PPP01.014.01</td>
+                            <td>Memfasilitasi Peningkatan Produktivitas Usahatani</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>14</td>
+                            <td>M.74PPP01.015.01</td>
+                            <td>Menumbuhkembangkan Pos Penyuluhan Desa</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>15</td>
+                            <td>M.74PPP01.017.03</td>
+                            <td>Mengevaluasi Pelaksanaan Kegiatan Penyuluhan Pertanian</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>16</td>
+                            <td>M.74PPP01.020.03</td>
+                            <td>Melaksanakan Pengkajian Bidang Penyuluhan Pertanian</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>17</td>
+                            <td>M.74PPP01.021.03</td>
+                            <td>Melaksanakan Jasa Konsultasi Agribisnis</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>18</td>
+                            <td>M.74PPP01.022.01</td>
+                            <td>Menyusun Norma Standar Pedoman dan Kriteria (NSPK) Bidang Pertanian</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>19</td>
+                            <td>M.74PPP01.004.01</td>
+                            <td>Memecahkan Permasalahan (Problem Solving)</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>20</td>
+                            <td>M.74PPP01.016.01</td>
+                            <td>Menumbuhkembangkan Penyuluh Pertanian Swadaya</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>21</td>
+                            <td>M.74PPP01.023.01</td>
+                            <td>Memfasilitasi Pengelolaan Subsistem Agroinput</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>22</td>
+                            <td>M.74PPP01.024.01</td>
+                            <td>Memfasilitasi Pengelolaan Subsistem Agroproduksi</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>23</td>
+                            <td>M.74PPP01.025.01</td>
+                            <td>Memfasilitasi Pengelolaan Subsistem Agroprocessing</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>24</td>
+                            <td>M.74PPP01.026.01</td>
+                            <td>Memfasilitasi Pengelolaan Subsistem Agroniaga</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>25</td>
+                            <td>M.74PPP01.027.01</td>
+                            <td>Memfasilitasi Perencanaan Usaha Agribisnis</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                        </tbody>
+                      <?php
+                      } else {
+                      ?>
+                        <tbody>
+                          <tr>
+                            <td>1</td>
+                            <td>M.74PPP01.001.01</td>
+                            <td>Melaksanakan Komunikasi Efektif</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>2</td>
+                            <td>M.74PPP01.002.01</td>
+                            <td>Mengorganisasikan Pekerjaan</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>3</td>
+                            <td>M.74PPP01.004.01</td>
+                            <td>Memecahkan Permasalahan (Problem Solving)</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>4</td>
+                            <td>M.74PPP01.005.01</td>
+                            <td>Menerapkan Teknologi Informasi Komunikasi</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>5</td>
+                            <td>M.74PPP01.006.01</td>
+                            <td>Menerapkan Prosedur Keselamatan dan Kesehatan Kerja (K3)</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>6</td>
+                            <td>M.74PPP01.008.01</td>
+                            <td>Menyusun Data Potensi Wilayah</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>7</td>
+                            <td>M.74PPP01.009.03</td>
+                            <td>Menyusun Programa Penyuluhan Pertanian</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>8</td>
+                            <td>M.74PPP01.010.01</td>
+                            <td>Memfasilitasi Proses Pembelajaran</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>9</td>
+                            <td>M.74PPP01.011.01</td>
+                            <td>Melakukan Penumbuhan Kelembagaan Petani</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>10</td>
+                            <td>M.74PPP01.012.01</td>
+                            <td>Menumbuhkembangkan Kelembagaan Ekonomi Petani</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>11</td>
+                            <td>M.74PPP01.013.01</td>
+                            <td>Memfasilitasi Penerapan Teknologi</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>12</td>
+                            <td>M.74PPP01.014.01</td>
+                            <td>Memfasilitasi Peningkatan Produktivitas Usaha Tani</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>13</td>
+                            <td>M.74PPP01.015.01</td>
+                            <td>Menumbuh kembangkan Pos Penyuluhan Desa</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>14</td>
+                            <td>M.74PPP01.016.01</td>
+                            <td>Menumbuhkembangkan Penyuluh Pertanian Swadaya</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>15</td>
+                            <td>M.74PPP01.007.01</td>
+                            <td>Membangun Jejaring Kerjasama</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>16</td>
+                            <td>M.74PPP01.017.03</td>
+                            <td>Mengevaluasi Pelaksanaan Kegiatan Penyuluhan Pertanian</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>17</td>
+                            <td>M.74PPP01.023.01</td>
+                            <td>Memfasilitasi Pengelolaan Subsistem Agroinput</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>18</td>
+                            <td>M.74PPP01.024.01</td>
+                            <td>Memfasilitasi Pengelolaan Subsistem Agroproduksi</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>19</td>
+                            <td>M.74PPP01.025.01</td>
+                            <td>Memfasilitasi Pengelolaan Subsistem Agroprocessing</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>20</td>
+                            <td>M.74PPP01.026.01</td>
+                            <td>Memfasilitasi Pengelolaan Subsistem Agroniaga</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                          <tr>
+                            <td>21</td>
+                            <td>M.74PPP01.027.01</td>
+                            <td>Memfasilitasi Perencanaan Usaha Agribisnis</td>
+                            <td>SKKNI 162 / 2021</td>
+                          </tr>
+                        </tbody>
+                      <?php
+                      }
+                      ?>
                     </table>
                   </div>
                   <div class="col-12">
