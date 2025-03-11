@@ -39,7 +39,9 @@ class Staff extends CI_Controller
 
   public function metode_dit($uid)
   {
-    $data['assesment'] = $this->Staff_model->get_metode_dit();
+    $user_course = $this->db->from('user_courses')->where('uid', $uid)->get()->row();
+
+    $data['assesment'] = $this->Staff_model->get_metode_dit($user_course->course_uid);
     $data['username'] = $this->Staff_model->get_user_name($uid);
     // $data['checklist'] = $this->Staff_model->get_status_assesment($uid);
 
@@ -54,7 +56,9 @@ class Staff extends CI_Controller
 
   public function obser($uid)
   {
-    $data['assesment'] = $this->Staff_model->get_metode_obser();
+    $user_course = $this->db->from('user_courses')->where('uid', $uid)->get()->row();
+
+    $data['assesment'] = $this->Staff_model->get_metode_obser($user_course->course_uid);
     $data['username'] = $this->Staff_model->get_user_name($uid);
     // $data['checklist'] = $this->Staff_model->get_status_assesment($uid);
 
@@ -68,7 +72,8 @@ class Staff extends CI_Controller
 
   public function port($uid)
   {
-    $data['assesment'] = $this->Staff_model->get_metode_port();
+    $user_course = $this->db->from('user_courses')->where('uid', $uid)->get()->row();
+    $data['assesment'] = $this->Staff_model->get_metode_port($user_course->course_uid);
     $data['username'] = $this->Staff_model->get_user_name($uid);
     // $data['checklist'] = $this->Staff_model->get_status_assesment($uid);
 
@@ -284,9 +289,12 @@ class Staff extends CI_Controller
   public function save_rekomendasi($id_user)
   {
     $id = $this->input->post('id_assesmen');
+    $alasan = $this->input->post('alasan');
+
     $data_update = [
       'status' => 3,
       'correct' => $this->input->post('correct'),
+      'alasan' => $alasan,
     ];
     $config['upload_path'] = FCPATH . 'uploads/answer/'; // Same as the config file
     $config['allowed_types'] = 'docx|word|pdf';
@@ -301,6 +309,39 @@ class Staff extends CI_Controller
       $imgdata = file_get_contents($image_data['full_path']);
       $thumbnail = $image_data['file_name'];
       $data_update['answer'] = $thumbnail;
+    }
+
+    $folderPath = FCPATH . "uploads/tanda_tangan/asesor/"; // Full path to the folder
+
+    // Ensure the directory exists
+    if (!is_dir($folderPath)) {
+      mkdir($folderPath, 0777, true);
+      echo ('nyasar');
+    }
+    $signatureData = $this->input->post('signed2'); // Get Base64 signature
+    // var_dump($signatureData);
+
+    if (!empty($signatureData) && strpos($signatureData, 'data:image/') === 0) {
+      $image_parts = explode(";base64,", $signatureData);
+      $image_type_aux = explode("image/", $image_parts[0]);
+      $image_type = isset($image_type_aux[1]) ? $image_type_aux[1] : 'png';
+
+      // Decode Base64
+      $image_base64 = base64_decode($image_parts[1]);
+
+      // Generate unique filename
+      $fileName = uniqid() . '.' . $image_type;
+      $filePath = $folderPath . $fileName;
+      file_put_contents($filePath, $image_base64);
+      // Save the image
+
+      $data_update['signature'] = $fileName;
+      echo ('nyasar');
+    } else {
+      $error = array('error' => $this->upload->display_errors());
+      echo ('nyasar di error');
+      echo ($this->upload->display_errors());
+      return;
     }
 
     // echo ($id);

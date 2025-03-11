@@ -14,6 +14,10 @@
               <input type="text" class="form-control form-control-lg" name="full_name" value="<?php echo set_value('full_name'); ?>" placeholder="Nama Lengkap">
             </div>
             <div class="form-group">
+              <label>Nomor KTP: </label>
+              <input type="number" class="form-control form-control-lg" name="no_ktp" value="<?php echo set_value('no_ktp'); ?>" placeholder="Nomor KTP">
+            </div>
+            <div class="form-group">
               <label>Email: </label>
               <input type="email" class="form-control form-control-lg" name="email" value="<?php echo set_value('email'); ?>" placeholder="Email">
             </div>
@@ -28,12 +32,28 @@
               </div>
             </div>
             <div class="form-group">
-              <label>Nomor HP: </label>
-              <input type="number" min="0" class="form-control form-control-lg" name="mobile_number" value="<?php echo set_value('mobile_number'); ?>" placeholder="Nomor Telepon">
+              <div class="col">
+                <label>Nomor HP Rumah: </label>
+                <input type="number" min="0" class="form-control form-control-lg" name="home_mobile_number" value="<?php echo set_value('home_mobile_number'); ?>" placeholder="Nomor Telepon Rumah">
+              </div>
+              <div class="col">
+                <label>Nomor HP Kantor: </label>
+                <input type="number" min="0" class="form-control form-control-lg" name="mobile_number" value="<?php echo set_value('mobile_number'); ?>" placeholder="Nomor Telepon Kantor">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col">
+                <label>Nomor HP Pribadi: </label>
+                <input type="number" min="0" class="form-control form-control-lg" name="mobile_number" value="<?php echo set_value('mobile_number'); ?>" placeholder="Nomor Telepon Rumah">
+              </div>
             </div>
             <div class="form-group">
               <label>Alamat Rumah: </label>
               <textarea class="form-control form-control-lg" name="home_address" placeholder="Alamat Rumah Anda."><?php echo set_value('home_address'); ?></textarea>
+              <div class="col">
+                <label>Kode Pos: </label>
+                <input type="number" class="form-control form-control-lg" name="kode_pos" value="<?php echo set_value('kode_pos'); ?>" value="0">
+              </div>
             </div>
             <div class="form-group row">
               <div class="col">
@@ -75,6 +95,10 @@
                 <label>Tanggal Lahir: </label>
                 <input type="date" class="form-control form-control-lg" name="date_of_birth" value="<?php echo set_value('date_of_birth'); ?>">
               </div>
+            </div>
+            <div class="form-group">
+              <label>Kualifikasi Pendidikan: </label>
+              <input type="text" class="form-control form-control-lg" name="kualifikasi_pendidikan" value="<?php echo set_value('kualifikasi_pendidikan'); ?>">
             </div>
 
             <!-- captcha google -->

@@ -111,16 +111,16 @@
                       <td><?php echo $dc['assignments']; ?></td>
                       <td>
                         <?php
-                        if ($dc['correct'] == "Kompeten") {
+                        if ($dc['correct'] == "Asesmen Dapat Di Lanjutkan") {
                           $kompeten_pra++;
                         ?>
-                          <button class="btn btn-success">Kompeten</button>
+                          <button class="btn btn-success">Asesmen Dapat Di Lanjutkan</button>
                         <?php
-                        } else if ($dc['correct'] == "Belum Kompeten") {
+                        } else if ($dc['correct'] == "Asesmen Tidak Dapat Di Lanjutkan") {
                           $belum_kompeten_pra++;
 
                         ?>
-                          <button class="btn btn-danger">Belum Kompeten</button>
+                          <button class="btn btn-danger">Asesmen Tidak Dapat Di Lanjutkan</button>
                         <?php
                         } else {
                           $belum_cek_pra++;

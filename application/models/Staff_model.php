@@ -13,6 +13,7 @@ class Staff_model extends CI_Model
     $this->db->join('courses c', 'c.uid = uc.course_uid');
     $this->db->join('users u', 'u.uid = uc.user_uid');
     $this->db->where('c.teacher_uid', $mentor_uid);
+    $this->db->where('uc.status <', 3);
     $query = $this->db->get();
     return $query->result_array();
 
@@ -38,31 +39,31 @@ class Staff_model extends CI_Model
     // exit;
   }
 
-  public function get_metode_dit()
+  public function get_metode_dit($uid)
   {
     $this->db->select('*');
     $this->db->from('assesmen');
-    $this->db->where('course_uid =', 1);
+    $this->db->where('course_uid', $uid);
     $this->db->where('assesment_metode =', 1);
     $query = $this->db->get();
     return $query->result_array();
   }
 
-  public function get_metode_obser()
+  public function get_metode_obser($uid)
   {
     $this->db->select('*');
     $this->db->from('assesmen');
-    $this->db->where('course_uid =', 1);
+    $this->db->where('course_uid', $uid);
     $this->db->where('assesment_metode =', 2);
     $query = $this->db->get();
     return $query->result_array();
   }
 
-  public function get_metode_port()
+  public function get_metode_port($uid)
   {
     $this->db->select('*');
     $this->db->from('assesmen');
-    $this->db->where('course_uid =', 1);
+    $this->db->where('course_uid', $uid);
     $this->db->where('assesment_metode =', 3);
     $query = $this->db->get();
     return $query->result_array();

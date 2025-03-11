@@ -43,6 +43,7 @@ class Auth extends CI_Controller
           $this->session->unset_userdata('login_attempts');
           $this->session->set_userdata([
             'user_id' => $user->uid, // untuk memanggil uid user diganti jadi user_uid
+            'register_num' => $user->register_num, // untuk memanggil uid user diganti jadi user_uid
             'email' => $user->email,
             'username' => $user->full_name,
             'status' => $user->status
@@ -108,6 +109,7 @@ class Auth extends CI_Controller
   public function process()
   {
     $this->form_validation->set_rules('full_name', 'Full Name', 'required');
+    $this->form_validation->set_rules('no_ktp', 'Nomor KTP', 'required|exact_length[16]');
     $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[users.email]');
     $this->form_validation->set_rules('password', 'Password', 'required|min_length[8]');
     $this->form_validation->set_rules('password_confirm', 'Password Confirmation', 'required|matches[password]');
@@ -148,6 +150,7 @@ class Auth extends CI_Controller
 
       $user_data = array(
         'full_name' => $this->input->post('full_name'),
+        'no_ktp' => $this->input->post('no_ktp'),
         'email' => $this->input->post('email'),
         'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
         'mobile_number' => $this->input->post('mobile_number'),
@@ -160,6 +163,7 @@ class Auth extends CI_Controller
         'nationality' => $this->input->post('nationality'),
         'place_of_birth' => $this->input->post('place_of_birth'),
         'date_of_birth' => $this->input->post('date_of_birth'),
+        'kualifikasi_pendidikan' => $this->input->post('kualifikasi_pendidikan'),
         'status' => '3',
         'verification_code' => $verification_code,
         'is_verified' => 0,

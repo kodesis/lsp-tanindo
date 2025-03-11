@@ -436,4 +436,33 @@ class Admin_model extends CI_Model
     $this->db->where('uid', $id);
     $this->db->delete('assesmen');
   }
+  public function get_user_courses()
+  {
+    $this->db->select('uc.*,c.*,u.*, uc.uid as uc_uid');
+    $this->db->from('user_courses uc');
+    $this->db->join('courses c', 'c.uid = uc.course_uid');
+    $this->db->join('users u', 'u.uid = uc.user_uid');
+    // $this->db->join('documents d', 'd.user_uid = uc.user_uid');
+    $this->db->where('uc.status >', 2);
+    $query = $this->db->get();
+    return $query->result_array();
+
+    // echo '<pre>';
+    // print_r($query->result_array());
+    // echo '</pre>';
+    // exit;
+  }
+
+  public function save_status($data)
+  {
+    // Cek apakah id ada, jika ada berarti update, jika tidak ada maka insert baru
+    if (isset($data['uid']) && !empty($data['uid'])) {
+      // Update status
+      $this->db->where('uid', $data['uid']);
+      return $this->db->update('user_courses', $data);
+    } else {
+      // Insert new status
+      return $this->db->insert('user_courses', $data);
+    }
+  }
 }

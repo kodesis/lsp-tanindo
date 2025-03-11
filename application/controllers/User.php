@@ -31,44 +31,8 @@ class User extends CI_Controller
     $course_name = $this->input->post('course_name');
     $user_uid = $this->session->userdata('user_id');
     $user_email = $this->session->userdata('email');
+    $tujuan_asesmen = $this->input->post('tujuan_asesmen');
 
-    $file_fields = ['foto', 'foto_ktp', 'ijasah', 'sertifikat', 'surat_ijin'];
-    $file_names = [];
-
-    // Cek apakah user sudah memiliki file yang diupload sebelumnya
-    $existing_files = $this->User_model->check_existing_files($user_uid);
-    if ($existing_files) {
-      // Hapus file lama sebelum upload baru
-      $files_to_delete = [
-        $existing_files->image,
-        $existing_files->ktp,
-        $existing_files->ijasah,
-        $existing_files->sertifikat,
-        $existing_files->sk_pertanian
-      ];
-      $this->User_model->delete_old_files($files_to_delete);
-    }
-
-    // Proses upload untuk setiap file
-    foreach ($file_fields as $field) {
-      // Konfigurasi upload untuk setiap file
-      $config['upload_path'] = './uploads/';
-      $config['allowed_types'] = 'jpg|jpeg|png|pdf';
-      $config['max_size'] = 5120; // Maksimal 5 MB
-      $config['file_name'] = $field . '_' . time(); // Nama file unik dengan timestamp
-      $this->upload->initialize($config);
-
-      if (!$this->upload->do_upload($field)) {
-        // Jika salah satu upload gagal
-        $error = array('error' => $this->upload->display_errors());
-        $this->load->view('upload_multiple_files', $error);
-        return;
-      } else {
-        // Jika upload berhasil
-        $upload_data = $this->upload->data();
-        $file_names[$field] = $upload_data['file_name'];
-      }
-    }
 
     // Bagian pertama dan kedua selalu REGPPP
     $bagian1 = "74909";
@@ -96,8 +60,101 @@ class User extends CI_Controller
       'user_uid' => $user_uid,
       'course_uid' => $course_uid,
       'certificate_number' => $nomorsertifikat,
-      'number' => $bagian4
+      'number' => $bagian4,
+      'status' => 3,
+      'tujuan_asesmen' => $tujuan_asesmen,
     ];
+
+    $file_fields = ['foto', 'foto_ktp', 'ijasah', 'sertifikat', 'surat_ijin'];
+    $file_names = [];
+
+    // Cek apakah user sudah memiliki file yang diupload sebelumnya
+    $existing_files = $this->User_model->check_existing_files($user_uid);
+    if ($existing_files) {
+      // Hapus file lama sebelum upload baru
+      $files_to_delete = [
+        $existing_files->image,
+        $existing_files->ktp,
+        $existing_files->ijasah,
+        $existing_files->sertifikat,
+        $existing_files->sk_pertanian,
+      ];
+      $this->User_model->delete_old_files($files_to_delete);
+    }
+
+    // Proses upload untuk setiap file
+    foreach ($file_fields as $field) {
+      // Konfigurasi upload untuk setiap file
+      $config['upload_path'] = './uploads/';
+      $config['allowed_types'] = 'jpg|jpeg|png|pdf';
+      $config['max_size'] = 5120; // Maksimal 5 MB
+      $config['file_name'] = $field . '_' . time(); // Nama file unik dengan timestamp
+      $this->upload->initialize($config);
+
+      if (!$this->upload->do_upload($field)) {
+        // Jika salah satu upload gagal
+        $error = array('error' => $this->upload->display_errors());
+        $this->load->view('user', $error);
+        return;
+      } else {
+        // Jika upload berhasil
+        $upload_data = $this->upload->data();
+        $file_names[$field] = $upload_data['file_name'];
+        $data[$field] = $upload_data['file_name'];
+      }
+    }
+    $folderPath = FCPATH . "uploads/tanda_tangan/"; // Full path to the folder
+
+    // Ensure the directory exists
+    if (!is_dir($folderPath)) {
+      mkdir($folderPath, 0777, true);
+    }
+    $signatureData = $this->input->post('signed'); // Get Base64 signature
+    // var_dump($signatureData);
+
+    if (!empty($signatureData) && strpos($signatureData, 'data:image/') === 0) {
+      $image_parts = explode(";base64,", $signatureData);
+      $image_type_aux = explode("image/", $image_parts[0]);
+      $image_type = isset($image_type_aux[1]) ? $image_type_aux[1] : 'png';
+
+      // Decode Base64
+      $image_base64 = base64_decode($image_parts[1]);
+
+      // Generate unique filename
+      $fileName = uniqid() . '.' . $image_type;
+      $filePath = $folderPath . $fileName;
+      file_put_contents($filePath, $image_base64);
+      // Save the image
+
+      $file_names['signature'] = $fileName;
+      $data['signature'] = $fileName;
+    } else {
+      $error = array('error' => $this->upload->display_errors());
+      return;
+    }
+
+
+
+    $institute = $this->input->post('institute');
+    $jabatan = $this->input->post('jabatan');
+    $alamat_kantor = $this->session->userdata('alamat_kantor');
+    $kode_pos_kantor = $this->session->userdata('kode_pos_kantor');
+    $mobile_number_kantor = $this->session->userdata('mobile_number_kantor');
+    $fax_kantor = $this->session->userdata('fax_kantor');
+    $email_kantor = $this->session->userdata('email_kantor');
+    $data_update_user = [
+      'institute' => $institute,
+      'jabatan' => $jabatan,
+      'alamat_kantor' => $alamat_kantor,
+      'kode_pos_kantor' => $kode_pos_kantor,
+      'mobile_number_kantor' => $mobile_number_kantor,
+      'fax_kantor' => $fax_kantor,
+      'email_kantor' => $email_kantor,
+    ];
+    $this->db->where('uid', $user_uid);
+    $this->db->update('users', $data_update_user);
+
+
 
     // var_dump($data);
     // exit;

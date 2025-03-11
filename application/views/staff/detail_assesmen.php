@@ -12,6 +12,21 @@
     cursor: pointer;
     text-align: center;
   }
+
+  .signature-pad {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    height: 260px;
+  }
+
+  .square-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    border-radius: 5px !important;
+    /* Optional: for rounded corners */
+  }
 </style>
 <div class="content-wrapper">
   <?php if ($this->session->flashdata('success')): ?>
@@ -80,20 +95,72 @@
               </td>
             </tr>
             <tr>
+              <td colspan="2"><b>Ditinjau Oleh Assesor</b></td>
+            </tr>
+            <tr>
+              <td><b>Nomor Reg</b></td>
+              <td><?= $this->session->userdata('register_num') ?></td>
+            </tr>
+            <tr>
+              <td><b>Nama</b></td>
+              <td><?= $this->session->userdata('username') ?></td>
+            </tr>
+            <tr>
               <td><b>Rekomendasi</b></td>
               <td>
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" name="correct" id="correct" value="Kompeten" <?php if ($data_soal->correct = "Kompeten") echo "checked" ?>>
+                  <input class="form-check-input" type="radio" name="correct" id="correct" value="Asesmen Dapat Di Lanjutkan" <?php if ($data_soal->correct == "Asesmen Dapat Di Lanjutkan") echo "checked" ?>>
                   <label class="form-check-label" for="flexRadioDefault1">
-                    Kompeten
+                    Asesmen Dapat Di Lanjutkan
                   </label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" name="correct" id="correct" value="Belum Kompeten" <?php if ($data_soal->correct = "Belum Kompeten") echo "checked" ?>>
+                  <input class="form-check-input" type="radio" name="correct" id="correct" value="Asesmen Tidak Dapat Di Lanjutkan" <?php if ($data_soal->correct == "Asesmen Tidak Dapat Di Lanjutkan") echo "checked" ?>>
                   <label class="form-check-label" for="flexRadioDefault2">
-                    Belum Kompeten
+                    Asesmen Tidak Dapat Di Lanjutkan
                   </label>
                 </div>
+              </td>
+            </tr>
+            <tr>
+              <td><b>Alasan</b></td>
+              <td>
+                <div class="form-group">
+                  <input type="text" class="form-control" name="alasan" id="alasan" value="<?= $data_soal->alasan ?>">
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><b>Alasan</b></td>
+              <td>
+                <?php
+                if ($data_soal->signature == null) {
+                ?>
+                  <div class="text-right">
+                    <button type="button" class="btn btn-default btn-sm" id="undo"><i class="fa fa-undo"></i> Undo</button>
+                    <button type="button" class="btn btn-danger btn-sm" id="clear"><i class="fa fa-eraser"></i> Clear</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="resize-canvas"><i class="fa fa-refresh"></i> Refresh</button>
+                  </div>
+                  <br>
+                  <div class="wrapper">
+                    <canvas id="signature-pad" class="signature-pad"></canvas>
+                  </div>
+                  <br>
+                  <input type="hidden" name="signed2" id="signed2">
+                  <button type="button" class="btn btn-primary btn-sm" id="save-png">Simpan Tanda Tangan</button>
+                  <div id="tes_signature">
+                    <div class="disini">
+
+                    </div>
+                  </div>
+                <?php
+                } else {
+                ?>
+                  <img src="<?= base_url('uploads/tanda_tangan/asesor/' . $data_soal->signature) ?>" alt="" class="square-img">
+
+                <?php
+                }
+                ?>
               </td>
             </tr>
           </table>

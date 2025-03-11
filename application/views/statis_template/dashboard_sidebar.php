@@ -49,6 +49,12 @@
           <span class="menu-title">Manage Course</span>
         </a>
       </li>
+      <li class="nav-item <?php echo ($this->uri->segment(1) == 'manage_asesment') ? 'active' : ''; ?>">
+        <a class="nav-link" href="<?= base_url('admin/manage_asesment') ?>">
+          <i class="fas fa-file-signature menu-icon"></i> &nbsp; &nbsp;
+          <span class="menu-title">Manage Asesment</span>
+        </a>
+      </li>
       <li class="nav-item <?php echo ($this->uri->segment(1) == 'manage_artikel') ? 'active' : ''; ?>">
         <a class="nav-link" href="<?= base_url('admin/manage_artikel') ?>">
           <i class="fas fa-newspaper menu-icon"></i> &nbsp; &nbsp;

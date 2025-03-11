@@ -831,4 +831,77 @@ class Admin extends CI_Controller
     $this->Admin_model->delete_assesmen($uid);
     redirect('admin/manage_course');
   }
+  public function manage_asesment()
+  {
+    // Ambil ID mentor dari session
+
+    // Ambil data kursus berdasarkan mentor_id
+    $data['user_courses'] = $this->Admin_model->get_user_courses();
+
+    $data['title'] = 'Data Assesment';
+    $data['active_menu'] = 'manage_assesment'; // nanti ganti jadi username 
+    $this->load->view('statis_template/dashboard_header', $data);
+    $this->load->view('statis_template/dashboard_sidebar', $data);
+    $this->load->view('admin/manage_assesment');
+    $this->load->view('statis_template/dashboard_footer');
+  }
+  public function status_asesmen()
+  {
+    $status = $this->input->post('status');
+    $user_course_uid = $this->input->post('user_course');
+    $alasan = $this->input->post('alasan');
+
+    // buat query untuk update datanya
+    $data = [
+      'uid' => $user_course_uid,
+      'status' => $status,
+      'alasan' => $alasan,
+      'accepted_time' => (new DateTime())->format('Y-m-d H:i:s')
+    ];
+
+
+    $folderPath = FCPATH . "uploads/tanda_tangan/admin/"; // Full path to the folder
+
+    // Ensure the directory exists
+    if (!is_dir($folderPath)) {
+      mkdir($folderPath, 0777, true);
+      echo ('nyasar');
+    }
+    $signatureData = $this->input->post('signed2'); // Get Base64 signature
+    // var_dump($signatureData);
+
+    if (!empty($signatureData) && strpos($signatureData, 'data:image/') === 0) {
+      $image_parts = explode(";base64,", $signatureData);
+      $image_type_aux = explode("image/", $image_parts[0]);
+      $image_type = isset($image_type_aux[1]) ? $image_type_aux[1] : 'png';
+
+      // Decode Base64
+      $image_base64 = base64_decode($image_parts[1]);
+
+      // Generate unique filename
+      $fileName = uniqid() . '.' . $image_type;
+      $filePath = $folderPath . $fileName;
+      file_put_contents($filePath, $image_base64);
+      // Save the image
+
+      $data['signature_admin'] = $fileName;
+      echo ('nyasar');
+    } else {
+      $error = array('error' => $this->upload->display_errors());
+      echo ('nyasar di error');
+      echo ($this->upload->display_errors());
+      return;
+    }
+
+    // buat pengkondisian untuk mencek apakah data sudah ada atau kosong jika kosong maka langsung insert
+    // Panggil model untuk menyimpan atau memperbaharui status
+    if ($this->Admin_model->save_status($data)) {
+      $this->session->set_flashdata('success', '<div class="alert alert-success" role="alert">Data assessment berhasil disimpan.</div>');
+      redirect('admin/manage_asesment');
+    } else {
+      // Jika gagal
+      $this->session->set_flashdata('error', '<div class="alert alert-danger" role="alert">Terjadi kesalahan saat menyimpan data.<?div>');
+      redirect('admin/manage_asesment');
+    }
+  }
 }
