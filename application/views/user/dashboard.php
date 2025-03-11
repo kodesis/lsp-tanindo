@@ -31,11 +31,11 @@
             $cek_course_user = $this->db->get()->row();
             if ($cek_course_user) {
             ?>
-              <button class="btn btn-inverse-secondary btn-sm mt-3 mb-4">Sudah Join Program</button>
+              <button class="btn btn-inverse-secondary btn-sm mt-3 mb-4">Sudah Join Skema</button>
             <?php
             } else {
             ?>
-              <button type="submit" class="btn btn-inverse-success btn-sm mt-3 mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal<?= $cour->uid ?>">Join Program</button>
+              <button type="submit" class="btn btn-inverse-success btn-sm mt-3 mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal<?= $cour->uid ?>">Join Skema</button>
             <?php
             }
             ?>
@@ -319,7 +319,7 @@
                           <tr>
                             <td>8</td>
                             <td>M.74PPP01.009.03</td>
-                            <td>Menyusun Programa Penyuluhan Pertanian</td>
+                            <td>Menyusun Skemaa Penyuluhan Pertanian</td>
                             <td>SKKNI 162 / 2021</td>
                           </tr>
                           <tr>
@@ -468,7 +468,7 @@
                           <tr>
                             <td>7</td>
                             <td>M.74PPP01.009.03</td>
-                            <td>Menyusun Programa Penyuluhan Pertanian</td>
+                            <td>Menyusun Skemaa Penyuluhan Pertanian</td>
                             <td>SKKNI 162 / 2021</td>
                           </tr>
                           <tr>
