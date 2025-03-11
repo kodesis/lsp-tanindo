@@ -265,7 +265,7 @@
                       <thead class="thead-dark">
                         <tr>
                           <th>No.</th>
-                          <th>Kode Unit</th>
+                          <th>Kode Form</th>
                           <th>Judul Unit</th>
                           <th>Standar Kompetensi Kerja</th>
                         </tr>

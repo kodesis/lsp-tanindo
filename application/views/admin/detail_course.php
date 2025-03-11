@@ -33,10 +33,10 @@
                   <th>No.</th>
                   <th>Assesment Method</th>
                   <th>Tipe Assesment</th>
-                  <th>Kode Unit</th>
-                  <th>Judul Unit Kompetensi</th>
+                  <th>Kode Form</th>
+                  <th>Judul Form</th>
                   <th>Tahap Rekomendasi</th>
-                  <th>Assignment</th>
+                  <th>Petunjuk Pengerjaan</th>
                   <th>File</th>
                   <th>Actions</th>
                 </tr>
@@ -74,11 +74,11 @@
                               </select>
                             </div>
                             <div class="form-group">
-                              <label for="name" class='control-label'>Kode Unit</label>
+                              <label for="name" class='control-label'>Kode Form</label>
                               <input type="text" class="form-control" id="kode_unit" name="kode_unit" value="<?= $c['kode_unit'] ?>">
                             </div>
                             <div class="form-group">
-                              <label for="name" class='control-label'>Judul Unit Kompetensi</label>
+                              <label for="name" class='control-label'>Judul Form</label>
                               <input type="text" class="form-control" id="judul_unit_kompetensi" name="judul_unit_kompetensi" value="<?= $c['judul_unit_kompetensi'] ?>">
                             </div>
                             <div class="form-group">
@@ -93,7 +93,7 @@
                               </select>
                             </div>
                             <div class="form-group">
-                              <label for="name" class='control-label'>Assignments</label>
+                              <label for="name" class='control-label'>Petunjuk Pengerjaan</label>
                               <input type="text" class="form-control" id="assignments" name="assignments" value="<?= $c['assignments'] ?>">
                             </div>
                             <div class="form-group">

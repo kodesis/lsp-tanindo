@@ -33,11 +33,11 @@
               </select>
             </div>
             <div class="form-group">
-              <label for="name" class='control-label'>Kode Unit</label>
+              <label for="name" class='control-label'>Kode Form</label>
               <input type="text" class="form-control" id="kode_unit" name="kode_unit" value="">
             </div>
             <div class="form-group">
-              <label for="name" class='control-label'>Judul Unit Kompetensi</label>
+              <label for="name" class='control-label'>Judul Form</label>
               <input type="text" class="form-control" id="judul_unit_kompetensi" name="judul_unit_kompetensi" value="">
             </div>
             <div class="form-group">
@@ -52,7 +52,7 @@
               </select>
             </div>
             <div class="form-group">
-              <label for="name" class='control-label'>Assignment</label>
+              <label for="name" class='control-label'>Petunjuk Pengerjaan</label>
               <input type="text" class="form-control" id="assignments" name="assignments" value="">
             </div>
             <div class="form-group">

@@ -30,9 +30,9 @@
                   <tr>
                     <th>No.</th>
                     <th>Tipe Assesmen</th>
-                    <th>Kode Unit</th>
-                    <th>Judul Unit Kompetensi</th>
-                    <th>Assignment</th>
+                    <th>Kode Form</th>
+                    <th>Judul Form</th>
+                    <th>Petunjuk Pengerjaan</th>
                     <th>Detail</th>
                     <th style="text-align: center;">Status</th>
                   </tr>

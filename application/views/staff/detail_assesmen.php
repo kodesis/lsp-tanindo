@@ -43,13 +43,13 @@
         <div class="form-group">
           <table class="table table-hover">
             <tr>
-              <td><b>Kode Unit</b></td>
+              <td><b>Kode Form</b></td>
               <td><?= $data_soal->kode_unit ?></td>
               <input type="hidden" name="id_assesmen" value="<?= $data_soal->uid ?>">
               <input type="hidden" name="course_uid" value="<?= $data_soal->course_uid ?>">
             </tr>
             <tr>
-              <td><b>Judul Unit Kompetensi</b></td>
+              <td><b>Judul Form</b></td>
               <td><?= $data_soal->judul_unit_kompetensi ?></td>
             </tr>
             <tr>

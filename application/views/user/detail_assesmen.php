@@ -28,16 +28,16 @@
         <div class="form-group">
           <table class="table table-hover">
             <tr>
-              <td><b>Kode Unit</b></td>
+              <td><b>Kode Form</b></td>
               <td><?= $data_soal->kode_unit ?></td>
               <input type="hidden" name="id_assesmen" value="<?= $data_soal->uid ?>">
             </tr>
             <tr>
-              <td><b>Judul Unit Kompetensi</b></td>
+              <td><b>Judul Form</b></td>
               <td><?= $data_soal->judul_unit_kompetensi ?></td>
             </tr>
             <tr>
-              <td><b>Assignmen</b></td>
+              <td><b>Petunjuk Pengerjaan</b></td>
               <td><?= $data_soal->assignments ?></td>
             </tr>
             <tr>

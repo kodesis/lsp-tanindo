@@ -88,9 +88,9 @@
               <thead>
                 <tr>
                   <th>No.</th>
-                  <th>Kode Unit</th>
-                  <th>Judul Unit Kompetensi</th>
-                  <th>Assignment</th>
+                  <th>Kode Form</th>
+                  <th>Judul Form</th>
+                  <th>Petunjuk Pengerjaan</th>
                   <th>Rekomendasi</th>
                   <!-- <th>Eligibility status</th> -->
                   <th>#</th>
@@ -213,9 +213,9 @@
               <thead>
                 <tr>
                   <th>No.</th>
-                  <th>Kode Unit</th>
-                  <th>Judul Unit Kompetensi</th>
-                  <th>Assignment</th>
+                  <th>Kode Form</th>
+                  <th>Judul Form</th>
+                  <th>Petunjuk Pengerjaan</th>
                   <th>Rekomendasi</th>
                   <!-- <th>Eligibility status</th> -->
                   <th>#</th>
