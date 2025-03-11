@@ -31,11 +31,11 @@
             $cek_course_user = $this->db->get()->row();
             if ($cek_course_user) {
             ?>
-              <button class="btn btn-inverse-secondary btn-sm mt-3 mb-4">Sudah Join Skema</button>
+              <button class="btn btn-inverse-secondary btn-sm mt-3 mb-4">Sudah Pilihan Skema</button>
             <?php
             } else {
             ?>
-              <button type="submit" class="btn btn-inverse-success btn-sm mt-3 mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal<?= $cour->uid ?>">Join Skema</button>
+              <button type="submit" class="btn btn-inverse-success btn-sm mt-3 mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal<?= $cour->uid ?>">Pilihan Skema</button>
             <?php
             }
             ?>
