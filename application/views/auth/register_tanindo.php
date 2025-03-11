@@ -6,7 +6,7 @@
           <img src="<?= base_url('assets/') ?>images\auth\lsp_tanindo_baru.jpg" alt="logo" width="100%">
           <?php echo validation_errors(); ?>
           <small class="text-muted">
-            <h3 align='center'>Registration</h3>
+            <h3 align='center'>Pendaftaran</h3>
           </small>
           <form action="<?= base_url('auth/process') ?>" method="post" class="pt-3 register" id="register_tanindo">
             <div class="form-group">
@@ -23,7 +23,7 @@
                 <input type="password" class="form-control form-control-lg" name="password" placeholder="Password">
               </div>
               <div class="col">
-                <label>Confirm Password: </label>
+                <label>Konfirmasi Password: </label>
                 <input type="password" class="form-control form-control-lg" name="password_confirm" placeholder="Confirm password">
               </div>
             </div>
@@ -56,7 +56,7 @@
               </div>
             </div>
             <div class="form-group">
-              <label>Gender: </label>
+              <label>Jenis Kelamin: </label>
               <select name="gender" class="form-control form-control-lg text-black">
                 <option value="Male" <?php echo set_select('gender', 'Male'); ?>>Male / Pria</option>
                 <option value="Female" <?php echo set_select('gender', 'Female'); ?>>Female / Wanita</option>
@@ -85,7 +85,7 @@
               <button type="submit" class="btn btn-outline-success btn-fw">Registration</button>
             </div>
             <br>
-            <p class="sign-up text-center">Already have an Account ?<a href="<?= base_url('auth') ?>"> Login</a></p>
+            <p class="sign-up text-center">Sudah Punya Akun ?<a href="<?= base_url('auth') ?>"> Login</a></p>
           </form>
         </div>
       </div>

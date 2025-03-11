@@ -28,8 +28,8 @@
             </div>
           </form>
           <div class="text-center mt-4 fw-light">
-            Don't have an account? <a href="<?= base_url('auth/register_tanindo') ?>" class="text-primary">Create</a> <br>
-            You'r Forgot Password ! <a href="<?= base_url('auth/forgotpassword') ?>" class="text-primary">Forgot password?</a>
+            Tidak Punya Akun? <a href="<?= base_url('auth/register_tanindo') ?>" class="text-primary">Buat</a> <br>
+            Lupa Password ! <a href="<?= base_url('auth/forgotpassword') ?>" class="text-primary">Lupa password?</a>
           </div>
         </div>
       </div>
