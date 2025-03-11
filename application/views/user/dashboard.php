@@ -13,7 +13,7 @@
         <div class="card">
           <div class="card-body text-center">
             <i class="fas fa-certificate"></i> &nbsp; Sertifikasi
-            <h4 class="mt-2 card-text">
+            <h4 class="mt-2 card-text text-justify">
               <?= $cour->course_name ?>
             </h4>
             <?php
