@@ -49,8 +49,10 @@ if (!defined('CALCULATION_REGEXP_CELLREF')) {
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt    LGPL
  * @version    ##VERSION##, ##DATE##
  */
+#[AllowDynamicProperties]
 class PHPExcel_Calculation
 {
+    private $_debugLog;
     /** Constants                */
     /** Regular Expressions        */
     //    Numeric operand
@@ -128,10 +130,22 @@ class PHPExcel_Calculation
      * @var array
      */
     private static $operators = array(
-        '+' => true,    '-' => true,    '*' => true,    '/' => true,
-        '^' => true,    '&' => true,    '%' => false,    '~' => false,
-        '>' => true,    '<' => true,    '=' => true,    '>=' => true,
-        '<=' => true,    '<>' => true,    '|' => true,    ':' => true
+        '+' => true,
+        '-' => true,
+        '*' => true,
+        '/' => true,
+        '^' => true,
+        '&' => true,
+        '%' => false,
+        '~' => false,
+        '>' => true,
+        '<' => true,
+        '=' => true,
+        '>=' => true,
+        '<=' => true,
+        '<>' => true,
+        '|' => true,
+        ':' => true
     );
 
     /**
@@ -141,10 +155,20 @@ class PHPExcel_Calculation
      * @var array
      */
     private static $binaryOperators = array(
-        '+' => true,    '-' => true,    '*' => true,    '/' => true,
-        '^' => true,    '&' => true,    '>' => true,    '<' => true,
-        '=' => true,    '>=' => true,    '<=' => true,    '<>' => true,
-        '|' => true,    ':' => true
+        '+' => true,
+        '-' => true,
+        '*' => true,
+        '/' => true,
+        '^' => true,
+        '&' => true,
+        '>' => true,
+        '<' => true,
+        '=' => true,
+        '>=' => true,
+        '<=' => true,
+        '<>' => true,
+        '|' => true,
+        ':' => true
     );
 
     /**
@@ -3105,11 +3129,19 @@ class PHPExcel_Calculation
     //    Array key is the operator, the value indicates whether this is a left or right associative operator
     private static $operatorAssociativity    = array(
         '^' => 0,                                                            //    Exponentiation
-        '*' => 0, '/' => 0,                                                 //    Multiplication and Division
-        '+' => 0, '-' => 0,                                                    //    Addition and Subtraction
+        '*' => 0,
+        '/' => 0,                                                 //    Multiplication and Division
+        '+' => 0,
+        '-' => 0,                                                    //    Addition and Subtraction
         '&' => 0,                                                            //    Concatenation
-        '|' => 0, ':' => 0,                                                    //    Intersect and Range
-        '>' => 0, '<' => 0, '=' => 0, '>=' => 0, '<=' => 0, '<>' => 0        //    Comparison
+        '|' => 0,
+        ':' => 0,                                                    //    Intersect and Range
+        '>' => 0,
+        '<' => 0,
+        '=' => 0,
+        '>=' => 0,
+        '<=' => 0,
+        '<>' => 0        //    Comparison
     );
 
     //    Comparison (Boolean) Operators
@@ -3125,10 +3157,17 @@ class PHPExcel_Calculation
         '~' => 6,                                                                //    Negation
         '%' => 5,                                                                //    Percentage
         '^' => 4,                                                                //    Exponentiation
-        '*' => 3, '/' => 3,                                                     //    Multiplication and Division
-        '+' => 2, '-' => 2,                                                        //    Addition and Subtraction
+        '*' => 3,
+        '/' => 3,                                                     //    Multiplication and Division
+        '+' => 2,
+        '-' => 2,                                                        //    Addition and Subtraction
         '&' => 1,                                                                //    Concatenation
-        '>' => 0, '<' => 0, '=' => 0, '>=' => 0, '<=' => 0, '<>' => 0            //    Comparison
+        '>' => 0,
+        '<' => 0,
+        '=' => 0,
+        '>=' => 0,
+        '<=' => 0,
+        '<>' => 0            //    Comparison
     );
 
     // Convert infix to postfix notation
@@ -3548,7 +3587,7 @@ class PHPExcel_Calculation
 
                 //    Process the operation in the appropriate manner
                 switch ($token) {
-                        //    Comparison (Boolean) Operators
+                    //    Comparison (Boolean) Operators
                     case '>':            //    Greater than
                     case '<':            //    Less than
                     case '>=':            //    Greater than or Equal to
@@ -3557,7 +3596,7 @@ class PHPExcel_Calculation
                     case '<>':            //    Inequality
                         $this->executeBinaryComparisonOperation($cellID, $operand1, $operand2, $token, $stack);
                         break;
-                        //    Binary Operators
+                    //    Binary Operators
                     case ':':            //    Range
                         $sheet1 = $sheet2 = '';
                         if (strpos($operand1Data['reference'], '!') !== false) {
@@ -4017,7 +4056,7 @@ class PHPExcel_Calculation
 
         //    execute the necessary operation
         switch ($operation) {
-                //    Greater than
+            //    Greater than
             case '>':
                 if ($useLowercaseFirstComparison) {
                     $result = $this->strcmpLowercaseFirst($operand1, $operand2) > 0;
@@ -4025,7 +4064,7 @@ class PHPExcel_Calculation
                     $result = ($operand1 > $operand2);
                 }
                 break;
-                //    Less than
+            //    Less than
             case '<':
                 if ($useLowercaseFirstComparison) {
                     $result = $this->strcmpLowercaseFirst($operand1, $operand2) < 0;
@@ -4033,7 +4072,7 @@ class PHPExcel_Calculation
                     $result = ($operand1 < $operand2);
                 }
                 break;
-                //    Equality
+            //    Equality
             case '=':
                 if (is_numeric($operand1) && is_numeric($operand2)) {
                     $result = (abs($operand1 - $operand2) < $this->delta);
@@ -4041,7 +4080,7 @@ class PHPExcel_Calculation
                     $result = strcmp($operand1, $operand2) == 0;
                 }
                 break;
-                //    Greater than or equal
+            //    Greater than or equal
             case '>=':
                 if (is_numeric($operand1) && is_numeric($operand2)) {
                     $result = ((abs($operand1 - $operand2) < $this->delta) || ($operand1 > $operand2));
@@ -4051,7 +4090,7 @@ class PHPExcel_Calculation
                     $result = strcmp($operand1, $operand2) >= 0;
                 }
                 break;
-                //    Less than or equal
+            //    Less than or equal
             case '<=':
                 if (is_numeric($operand1) && is_numeric($operand2)) {
                     $result = ((abs($operand1 - $operand2) < $this->delta) || ($operand1 < $operand2));
@@ -4061,7 +4100,7 @@ class PHPExcel_Calculation
                     $result = strcmp($operand1, $operand2) <= 0;
                 }
                 break;
-                //    Inequality
+            //    Inequality
             case '<>':
                 if (is_numeric($operand1) && is_numeric($operand2)) {
                     $result = (abs($operand1 - $operand2) > 1E-14);
@@ -4128,19 +4167,19 @@ class PHPExcel_Calculation
             } else {
                 //    If we're dealing with non-matrix operations, execute the necessary operation
                 switch ($operation) {
-                        //    Addition
+                    //    Addition
                     case '+':
                         $result = $operand1 + $operand2;
                         break;
-                        //    Subtraction
+                    //    Subtraction
                     case '-':
                         $result = $operand1 - $operand2;
                         break;
-                        //    Multiplication
+                    //    Multiplication
                     case '*':
                         $result = $operand1 * $operand2;
                         break;
-                        //    Division
+                    //    Division
                     case '/':
                         if ($operand2 == 0) {
                             //    Trap for Divide by Zero error
@@ -4151,7 +4190,7 @@ class PHPExcel_Calculation
                             $result = $operand1 / $operand2;
                         }
                         break;
-                        //    Power
+                    //    Power
                     case '^':
                         $result = pow($operand1, $operand2);
                         break;
