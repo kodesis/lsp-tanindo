@@ -60,8 +60,10 @@
 // *    License along with this library; if not, write to the Free Software
 // *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 // */
+#[AllowDynamicProperties]
 class PHPExcel_Writer_Excel5_Worksheet extends PHPExcel_Writer_Excel5_BIFFwriter
 {
+    private $_preCalculateFormulas; // Fix for PHP 8.2
     /**
      * Formula parser
      *
