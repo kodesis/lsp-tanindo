@@ -49,8 +49,10 @@
 // *    License along with this library; if not, write to the Free Software
 // *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 // */
+#[AllowDynamicProperties]
 class PHPExcel_Writer_Excel5_Parser
 {
+    private $ptg; // Fix for PHP 8.2
     /**    Constants                */
     // Sheet title in unquoted form
     // Invalid sheet title characters cannot occur in the sheet title:
