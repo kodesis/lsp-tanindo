@@ -266,6 +266,7 @@ class User extends CI_Controller
     $id = $this->input->post('id_assesmen');
     $data_update = [
       'status' => 2,
+      'asesi_upload_time' => date('Y-m-d H:i:s') // Current date and time
     ];
 
     $config['upload_path'] = FCPATH . 'uploads/answer/'; // Same as the config file

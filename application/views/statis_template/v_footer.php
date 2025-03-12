@@ -60,6 +60,14 @@
 
                   </li>
                   <li class="mb-3">
+                    <a href="tel:02159585665" target="_blank"><i class="bi bi-phone"></i>&nbsp;Telp : 021-5958 5665</a>
+
+                  </li>
+                  <li class="mb-3">
+                    <a href="https://wa.me/+628176322965" target="_blank"><i class="bi bi-whatsapp"></i>&nbsp;Whatsap : 0817 6322 965</a>
+
+                  </li>
+                  <li class="mb-3">
                     <a href="mailto:admin@lsptanindo.com " target="_blank"><i class="bi bi-envelope"></i>&nbsp;admin@lsptanindo.com</a>
 
                   </li>
