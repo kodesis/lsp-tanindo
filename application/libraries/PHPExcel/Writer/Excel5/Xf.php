@@ -60,8 +60,10 @@
 // *    License along with this library; if not, write to the Free Software
 // *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 // */
+#[AllowDynamicProperties]
 class PHPExcel_Writer_Excel5_Xf
 {
+    private $_diag; // Fix for PHP 8.2
     /**
      * Style XF or a cell XF ?
      *
@@ -112,9 +114,9 @@ class PHPExcel_Writer_Excel5_Xf
     private $topBorderColor;
 
     /**
-    * Color of the left border of the cell.
-    * @var integer
-    */
+     * Color of the left border of the cell.
+     * @var integer
+     */
     private $leftBorderColor;
 
     /**
@@ -149,7 +151,6 @@ class PHPExcel_Writer_Excel5_Xf
         $this->rightBorderColor    = 0x40;
         $this->_diag_color     = 0x40;
         $this->_style = $style;
-
     }
 
 
@@ -169,18 +170,18 @@ class PHPExcel_Writer_Excel5_Xf
         }
 
         // Flags to indicate if attributes have been set.
-        $atr_num     = ($this->numberFormatIndex != 0)?1:0;
-        $atr_fnt     = ($this->fontIndex != 0)?1:0;
+        $atr_num     = ($this->numberFormatIndex != 0) ? 1 : 0;
+        $atr_fnt     = ($this->fontIndex != 0) ? 1 : 0;
         $atr_alc     = ((int) $this->_style->getAlignment()->getWrapText()) ? 1 : 0;
         $atr_bdr     = (self::mapBorderStyle($this->_style->getBorders()->getBottom()->getBorderStyle())   ||
-                        self::mapBorderStyle($this->_style->getBorders()->getTop()->getBorderStyle())      ||
-                        self::mapBorderStyle($this->_style->getBorders()->getLeft()->getBorderStyle())     ||
-                        self::mapBorderStyle($this->_style->getBorders()->getRight()->getBorderStyle()))?1:0;
+            self::mapBorderStyle($this->_style->getBorders()->getTop()->getBorderStyle())      ||
+            self::mapBorderStyle($this->_style->getBorders()->getLeft()->getBorderStyle())     ||
+            self::mapBorderStyle($this->_style->getBorders()->getRight()->getBorderStyle())) ? 1 : 0;
         $atr_pat     = (($this->foregroundColor != 0x40) ||
-                        ($this->backgroundColor != 0x41) ||
-                        self::mapFillType($this->_style->getFill()->getFillType()))?1:0;
+            ($this->backgroundColor != 0x41) ||
+            self::mapFillType($this->_style->getFill()->getFillType())) ? 1 : 0;
         $atr_prot    = self::mapLocked($this->_style->getProtection()->getLocked())
-                        | self::mapHidden($this->_style->getProtection()->getHidden());
+            | self::mapHidden($this->_style->getProtection()->getHidden());
 
         // Zero the default border colour if the border has not been set.
         if (self::mapBorderStyle($this->_style->getBorders()->getBottom()->getBorderStyle()) == 0) {
@@ -229,9 +230,9 @@ class PHPExcel_Writer_Excel5_Xf
 
         $diagonalDirection = $this->_style->getBorders()->getDiagonalDirection();
         $diag_tl_to_rb = $diagonalDirection == PHPExcel_Style_Borders::DIAGONAL_BOTH
-                            || $diagonalDirection == PHPExcel_Style_Borders::DIAGONAL_DOWN;
+            || $diagonalDirection == PHPExcel_Style_Borders::DIAGONAL_DOWN;
         $diag_tr_to_lb = $diagonalDirection == PHPExcel_Style_Borders::DIAGONAL_BOTH
-                            || $diagonalDirection == PHPExcel_Style_Borders::DIAGONAL_UP;
+            || $diagonalDirection == PHPExcel_Style_Borders::DIAGONAL_UP;
         $border1 |= $diag_tl_to_rb        << 30;
         $border1 |= $diag_tr_to_lb        << 31;
 
@@ -251,7 +252,7 @@ class PHPExcel_Writer_Excel5_Xf
         $data .= pack("CCC", self::mapTextRotation($this->_style->getAlignment()->getTextRotation()), $biff8_options, $used_attrib);
         $data .= pack("VVv", $border1, $border2, $icv);
 
-        return($header . $data);
+        return ($header . $data);
     }
 
     /**
