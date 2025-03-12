@@ -65,7 +65,7 @@
                                 <div class="col-12">
                                   <h5>Data Pribadi</h5>
                                 </div>
-                                <input type="hidden" name="user_course" value="<?= $uc['uc_uid'] ?>">
+                                <input type="text" name="user_course" value="<?= $uc['uc_uid'] ?>">
                                 <div class="col-12">
                                   <div class="form-group">
                                     <label for="user_number">Nomor Pendaftaran Peserta</label>

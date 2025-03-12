@@ -65,7 +65,7 @@ class User extends CI_Controller
       'tujuan_asesmen' => $tujuan_asesmen,
     ];
 
-    $file_fields = ['foto', 'foto_ktp', 'ijasah', 'sertifikat', 'surat_ijin'];
+    $file_fields = ['image', 'ktp', 'ijasah', 'sertifikat', 'sk_pertanian', 'bukti_bayar'];
     $file_names = [];
 
     // Cek apakah user sudah memiliki file yang diupload sebelumnya
@@ -78,6 +78,7 @@ class User extends CI_Controller
         $existing_files->ijasah,
         $existing_files->sertifikat,
         $existing_files->sk_pertanian,
+        $existing_files->bukti_bayar,
       ];
       $this->User_model->delete_old_files($files_to_delete);
     }
@@ -130,6 +131,7 @@ class User extends CI_Controller
       $data['signature'] = $fileName;
     } else {
       $error = array('error' => $this->upload->display_errors());
+      var_dump($error);
       return;
     }
 
@@ -137,11 +139,11 @@ class User extends CI_Controller
 
     $institute = $this->input->post('institute');
     $jabatan = $this->input->post('jabatan');
-    $alamat_kantor = $this->session->userdata('alamat_kantor');
-    $kode_pos_kantor = $this->session->userdata('kode_pos_kantor');
-    $mobile_number_kantor = $this->session->userdata('mobile_number_kantor');
-    $fax_kantor = $this->session->userdata('fax_kantor');
-    $email_kantor = $this->session->userdata('email_kantor');
+    $alamat_kantor = $this->input->post('alamat_kantor');
+    $kode_pos_kantor = $this->input->post('kode_pos_kantor');
+    $mobile_number_kantor = $this->input->post('mobile_number_kantor');
+    $fax_kantor = $this->input->post('fax_kantor');
+    $email_kantor = $this->input->post('email_kantor');
     $data_update_user = [
       'institute' => $institute,
       'jabatan' => $jabatan,
@@ -162,7 +164,7 @@ class User extends CI_Controller
     // Simpan ke database
     if ($this->User_model->save_user_course($data)) {
       // Simpan informasi file ke database
-      $this->User_model->save_multiple_files($user_uid, $file_names);
+      // $this->User_model->save_multiple_files($user_uid, $file_names);
       $data = array('upload_data' => $file_names);
 
       // Send verification email

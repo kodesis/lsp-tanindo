@@ -87,34 +87,35 @@ class User_model extends CI_Model
   {
     // Cek apakah user sudah memiliki file di database
     $this->db->where('user_uid', $user_uid);
-    $query = $this->db->get('documents');
+    $query = $this->db->get('user_courses');
     return $query->row(); // Mengembalikan row jika ditemukan, null jika tidak
   }
 
   public function delete_old_files($files)
   {
-    // Hapus semua file lama dari direktori jika file ada
     foreach ($files as $file) {
       $file_path = './uploads/' . $file;
-      if (file_exists($file_path)) {
+      if (is_file($file_path) && file_exists($file_path)) {
         unlink($file_path); // Hapus file
       }
     }
   }
+
 
   public function save_multiple_files($user_uid, $file_names)
   {
     // Simpan info file
     $data = array(
       'user_uid' => $user_uid,
-      'image' => $file_names['foto'],
-      'ktp' => $file_names['foto_ktp'],
+      'image' => $file_names['image'],
+      'ktp' => $file_names['ktp'],
       'ijasah' => $file_names['ijasah'],
       'sertifikat' => $file_names['sertifikat'],
-      'sk_pertanian' => $file_names['surat_ijin'],
+      'sk_pertanian' => $file_names['sk_pertanian'],
+      'bukti_bayar' => $file_names['bukti_bayar'],
       'upload_time' => date("Y-m-d H:i:s")
     );
-    $this->db->replace('documents', $data); // replace jika sudah ada data
+    $this->db->replace('user_courses', $data); // replace jika sudah ada data
   }
 
   // ambil data user course berdasarkan user uid yang aktif dan mecek apakah user tersebut sudah lulus atau belum 

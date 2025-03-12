@@ -401,8 +401,8 @@ class Admin_model extends CI_Model
   {
     $this->db->select('u.*,uc.course_uid,uc.status,cs.course_name');
     $this->db->from('user_ktna u');
-    $this->db->join('user_courses uc', 'uc.user_uid = u.uid');
-    $this->db->join('courses cs', 'uc.course_uid = cs.uid');
+    $this->db->join('user_courses uc', 'uc.user_uid = u.uid', 'left');
+    $this->db->join('courses cs', 'uc.course_uid = cs.uid', 'left');
     // $this->db->where('u.status', 3);
     $query = $this->db->get();
     return $query->result_array();

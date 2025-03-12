@@ -222,19 +222,25 @@
                   <div class="col-6">
                     <div class="form-group">
                       <label for="surat_ijin">Surat Keterangan sebagai Penyuluh :</label>
-                      <input type="file" name="surat_ijin" size="20" class="form-control">
+                      <input type="file" name="sk_pertanian" size="20" class="form-control">
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="form-group">
                       <label for="foto">Foto 3x4 :</label>
-                      <input type="file" name="foto" size="20" class="form-control">
+                      <input type="file" name="image" size="20" class="form-control">
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="form-group">
                       <label for="foto_ktp">Fotokopi KTP :</label>
-                      <input type="file" name="foto_ktp" size="20" class="form-control">
+                      <input type="file" name="ktp" size="20" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label for="foto_ktp">Bukti Pembayaran :</label>
+                      <input type="file" name="bukti_bayar" size="20" class="form-control">
                     </div>
                   </div>
                   <div class="col-12">
@@ -565,31 +571,28 @@
                     <div class="row">
                       <div class="col-md-12">
                         <hr>
-                        <h4>Pemohon <?= $users->full_name ?></h4>
+                        <h4>Pemohon <?= $this->session->userdata('username'); ?></h4>
                         <h4>Tanda Tangan</h4>
                         <div class="text-right">
-                          <button type="button" class="btn btn-default btn-sm" id="undo"><i class="fa fa-undo"></i> Undo</button>
-                          <button type="button" class="btn btn-danger btn-sm" id="clear"><i class="fa fa-eraser"></i> Clear</button>
-                          <button type="button" class="btn btn-primary btn-sm" id="resize-canvas"><i class="fa fa-refresh"></i> Mulai</button>
+                          <button type="button" class="btn btn-default btn-sm undo" data-target="<?= $cour->uid ?>"><i class="fa fa-undo"></i> Undo</button>
+                          <button type="button" class="btn btn-danger btn-sm clear" data-target="<?= $cour->uid ?>"><i class="fa fa-eraser"></i> Clear</button>
+                          <button type="button" class="btn btn-primary btn-sm resize-canvas" data-target="<?= $cour->uid ?>"><i class="fa fa-refresh"></i> Mulai</button>
                         </div>
+
                         <br>
                         <div class="wrapper">
-                          <canvas id="signature-pad" class="signature-pad"></canvas>
+                          <canvas id="signature-pad-<?= $cour->uid ?>" class="signature-pad"></canvas>
                         </div>
                         <br>
-                        <input type="hidden" name="signed2" id="signed2">
-                        <button type="button" class="btn btn-primary btn-sm" id="save-png">Simpan Tanda Tangan</button>
-                        <!-- <button type="button" class="btn btn-info btn-sm" id="save-jpeg">Save as JPEG</button>
-                        <button type="button" class="btn btn-default btn-sm" id="save-svg">Save as SVG</button> -->
-                        <!-- Modal untuk tampil preview tanda tangan-->
+                        <input type="hidden" name="signed" id="signed2-<?= $cour->uid ?>">
 
+                        <button type="button" class="btn btn-primary btn-sm save-png" data-target="<?= $cour->uid ?>">Simpan Tanda Tangan</button>
+                        <br>
                       </div>
                     </div>
                   </div>
-                  <div class="col-12" id="tes_signature">
-                    <div class="disini">
-
-                    </div>
+                  <div class="col-12" id="tes_signature_<?= $cour->uid ?>">
+                    <div class="disini"></div>
                   </div>
                 </div>
               </div>
@@ -667,3 +670,111 @@
     </div>
   </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/signature_pad"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var signaturePads = {};
+
+    function initSignaturePad(uid) {
+      var canvas = document.getElementById("signature-pad-" + uid);
+      if (!canvas) {
+        console.error("Canvas not found for UID: " + uid);
+        return;
+      }
+
+      var signaturePad = new SignaturePad(canvas, {
+        backgroundColor: "rgb(255,255,255)"
+      });
+
+      function resizeCanvas() {
+        // When zoomed out to less than 100%, for some very strange reason,
+        // some browsers report devicePixelRatio as less than 1
+        // and only part of the canvas is cleared then.
+        var ratio = Math.max(window.devicePixelRatio || 1, 1);
+        canvas.width = canvas.offsetWidth * ratio;
+        canvas.height = canvas.offsetHeight * ratio;
+        canvas.getContext("2d").scale(ratio, ratio);
+      }
+      // setTimeout(resizeCanvas, 100);
+
+      window.onload = function() {
+        var canvas = document.getElementById('signature-pad');
+        if (!canvas) {
+          console.error("Canvas not found!");
+          return;
+        }
+
+        function resizeCanvas() {
+          var ratio = Math.max(window.devicePixelRatio || 1, 1);
+          canvas.width = canvas.offsetWidth * ratio;
+          canvas.height = canvas.offsetHeight * ratio;
+          canvas.getContext("2d").scale(ratio, ratio);
+        }
+
+        resizeCanvas(); // Ensure it runs once after the page loads
+        window.addEventListener("resize", resizeCanvas); // Resize when the window is resized
+
+        var signaturePad = new SignaturePad(canvas, {
+          backgroundColor: 'rgb(255, 255, 255)' // Required for JPEG format
+        });
+      };
+      window.onresize = resizeCanvas;
+      resizeCanvas();
+
+      signaturePads[uid] = signaturePad;
+    }
+
+    // Handle "Mulai" (Resize Canvas & Activate Signature Pad)
+    document.addEventListener("click", function(event) {
+      if (event.target.classList.contains("resize-canvas")) {
+        var uid = event.target.getAttribute("data-target");
+        initSignaturePad(uid);
+      }
+    });
+
+    // Save Signature
+    document.addEventListener("click", function(event) {
+      if (event.target.classList.contains("save-png")) {
+        var uid = event.target.getAttribute("data-target");
+        var signaturePad = signaturePads[uid];
+
+        if (!signaturePad || signaturePad.isEmpty()) {
+          alert("Tanda Tangan Kosong!");
+          return;
+        }
+
+        var data = signaturePad.toDataURL("image/png");
+        document.getElementById("signed2-" + uid).value = data;
+        document.getElementById("tes_signature_" + uid).innerHTML =
+          `<h4>Format .PNG</h4><img src="${data}">`;
+      }
+    });
+
+    // Clear Signature
+    document.addEventListener("click", function(event) {
+      if (event.target.classList.contains("clear")) {
+        var uid = event.target.getAttribute("data-target");
+        if (signaturePads[uid]) {
+          signaturePads[uid].clear();
+        }
+      }
+    });
+
+    // Undo Last Stroke
+    document.addEventListener("click", function(event) {
+      if (event.target.classList.contains("undo")) {
+        var uid = event.target.getAttribute("data-target");
+        var signaturePad = signaturePads[uid];
+        if (!signaturePad) return;
+
+        var data = signaturePad.toData();
+        if (data.length > 0) {
+          data.pop(); // remove last stroke
+          signaturePad.fromData(data);
+        }
+      }
+    });
+
+  });
+</script>

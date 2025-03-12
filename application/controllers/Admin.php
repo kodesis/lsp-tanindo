@@ -616,14 +616,14 @@ class Admin extends CI_Controller
 
     $excel = new PHPExcel();
 
-    // Set properties
+    // Set document properties
     $excel->getProperties()->setCreator('Your Name')
       ->setLastModifiedBy('Your Name')
       ->setTitle('User Report')
       ->setSubject('User Report')
       ->setDescription('Report generated for users with courses.');
 
-    // Add header
+    // Set header row
     $excel->setActiveSheetIndex(0)
       ->setCellValue('A1', 'No')
       ->setCellValue('B1', 'Nomor Register')
@@ -636,12 +636,11 @@ class Admin extends CI_Controller
       ->setCellValue('I1', 'Course')
       ->setCellValue('J1', 'Status');
 
-    // Ambil data dari model
+    // Fetch data from model
     $users = $this->Admin_model->get_data_report();
-
-    // Isi data
     $row = 2;
     $no = 1;
+
     foreach ($users as $user) {
       $status = ($user['status'] == 1) ? 'Lulus' : 'Tidak Lulus';
 
@@ -665,15 +664,16 @@ class Admin extends CI_Controller
     // Set active sheet index to the first sheet
     $excel->setActiveSheetIndex(0);
 
-    // Buat file Excel
+    // Export file
     $filename = 'User_Report.xls';
-    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Type: application/vnd.ms-excel');
     header('Content-Disposition: attachment;filename="' . $filename . '"');
     header('Cache-Control: max-age=0');
 
-    $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
+    $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
     $writer->save('php://output');
   }
+
 
 
 
@@ -706,7 +706,7 @@ class Admin extends CI_Controller
 
     // Ambil data dari model
     $users = $this->Admin_model->get_data_report_ktna();
-
+    // var_dump($users);
     // Isi data
     $row = 2;
     $no = 1;
@@ -715,7 +715,7 @@ class Admin extends CI_Controller
 
       $excel->setActiveSheetIndex(0)
         ->setCellValue('A' . $row, $no++)
-        ->setCellValue('B' . $row, $user['NIK'])
+        ->setCellValue('B' . $row, $user['nik'])
         ->setCellValue('C' . $row, $user['username'])
         ->setCellValue('D' . $row, $user['email'])
         ->setCellValue('E' . $row, $user['alamat'])
@@ -735,11 +735,11 @@ class Admin extends CI_Controller
 
     // Buat file Excel
     $filename = 'User_Report.xls';
-    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Type: application/vnd.ms-excel');
     header('Content-Disposition: attachment;filename="' . $filename . '"');
     header('Cache-Control: max-age=0');
 
-    $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
+    $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
     $writer->save('php://output');
   }
 
