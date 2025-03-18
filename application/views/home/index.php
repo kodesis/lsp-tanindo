@@ -85,11 +85,11 @@
           <img src="<?= base_url('template/tanindo/') ?>assets/img/partners/logo-bnsp.png" class="img-fluid" alt="Badan Nasional Standarisasi Profesi" />
         </div>
         <div class="col-6 col-md-3 col-lg-2 mb-4">
-          <img src="<?= base_url('template/tanindo/') ?>assets/img/partners/logo-ktna.png" class="img-fluid" alt="Kelompok Tani Andalan Indonesia" />
+          <img src="<?= base_url('template/tanindo/') ?>assets/img/partners/ktna.png" class="img-fluid" alt="Kelompok Tani Andalan Indonesia" />
         </div>
-        <div class="col-6 col-md-3 col-lg-2 mb-4">
+        <!-- <div class="col-6 col-md-3 col-lg-2 mb-4">
           <img src="<?= base_url('template/tanindo/') ?>assets/img/partners/logo-pppsi-old.png" class="img-fluid" alt="Kelompok Tani Andalan Indonesia" />
-        </div>
+        </div> -->
         <div class="col-6 col-md-3 col-lg-2 mb-4">
           <img src="<?= base_url('template/tanindo/') ?>assets/img/gallery/logo-tanindo.png" class="img-fluid" alt="LSP Tanindo" />
         </div>
