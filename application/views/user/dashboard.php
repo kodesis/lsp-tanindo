@@ -50,7 +50,7 @@
             <div class="modal-header">
               <h4 class="modal-title" id="exampleModalLabel">FR.APL.01. PERMOHONAN SERTIFIKASI KOMPETENSI</h4>
             </div>
-            <form action="<?= base_url('user/save_program_choise') ?>" method="post" enctype="multipart/form-data">
+            <form id="MyForm" action="<?= base_url('user/save_program_choise') ?>" method="post" enctype="multipart/form-data">
               <div class="modal-body">
                 <div class="row">
                   <div class="col-12">
@@ -237,12 +237,12 @@
                       <input type="file" name="ktp" size="20" class="form-control">
                     </div>
                   </div>
-                  <div class="col-6">
+                  <!-- <div class="col-6">
                     <div class="form-group">
                       <label for="foto_ktp">Bukti Pembayaran :</label>
                       <input type="file" name="bukti_bayar" size="20" class="form-control">
                     </div>
-                  </div>
+                  </div> -->
                   <div class="col-12">
                     <br>
                     <h5>
@@ -597,7 +597,7 @@
                 </div>
               </div>
               <div class=" modal-footer">
-                <button type="submit" class="btn btn-success">Submit</button>
+                <button type="button" class="btn btn-success btn-confirm" data-uid="<?= $cour->uid ?>">Submit</button>
                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
               </div>
             </form>
@@ -620,9 +620,10 @@
               <thead>
                 <tr>
                   <th>No.</th>
-                  <th>Course</th>
-                  <th>Eligibility status</th>
+                  <th>Skema</th>
+                  <th>status</th>
                   <th>Sertifikat</th>
+                  <th>Tangga/Waktu</th>
                 </tr>
               </thead>
               <tbody>
@@ -635,9 +636,14 @@
                       <td>
                         <?php if ($dc['status'] == '1') { ?>
                           <label class='btn btn-success'>Lulus</label>
+                        <?php } else if ($dc['status'] == '2') { ?>
+                          <label class='btn btn-danger'>Gagal</label>
+                        <?php } else if ($dc['status'] == '3') { ?>
+                          <label class='btn btn-warning'>Proses Verifikasi</label>
+                        <?php } else if ($dc['status'] == '4') { ?>
+                          <label class='btn btn-danger'>Tidak Diterima</label>
                         <?php } else { ?>
                           <a href="<?= base_url('user/Assesmen/') . $dc['course_uid'] ?>" type="button" class="btn btn-outline-warning btn-icon-text">
-                            <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
                             Ikuti Assesmen
                           </a>
                         <?php } ?>
@@ -654,6 +660,11 @@
                             Belum Selesai!
                           </a>
                         <?php } ?>
+                      </td>
+                      <td>
+                        <?=
+                        $dc['accepted_time'];
+                        ?>
                       </td>
                     </tr>
                   <?php endforeach; ?>
@@ -776,5 +787,34 @@
       }
     });
 
+  });
+
+  $(".btn-confirm").on("click", function(e) {
+    e.preventDefault();
+    const form = $(this).parents("form");
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, confirm!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $(".btn-confirm").attr("disabled", true);
+        $(".btn-confirm").html("Processing...");
+        form.submit();
+        Swal.fire({
+          title: "Loading...",
+          timerProgressBar: true,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
+      }
+    });
   });
 </script>

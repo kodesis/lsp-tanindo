@@ -61,11 +61,11 @@ class User extends CI_Controller
       'course_uid' => $course_uid,
       'certificate_number' => $nomorsertifikat,
       'number' => $bagian4,
-      'status' => 3,
+      'status' => '3',
       'tujuan_asesmen' => $tujuan_asesmen,
     ];
 
-    $file_fields = ['image', 'ktp', 'ijasah', 'sertifikat', 'sk_pertanian', 'bukti_bayar'];
+    $file_fields = ['image', 'ktp', 'ijasah', 'sertifikat', 'sk_pertanian'];
     $file_names = [];
 
     // Cek apakah user sudah memiliki file yang diupload sebelumnya
@@ -78,7 +78,6 @@ class User extends CI_Controller
         $existing_files->ijasah,
         $existing_files->sertifikat,
         $existing_files->sk_pertanian,
-        $existing_files->bukti_bayar,
       ];
       $this->User_model->delete_old_files($files_to_delete);
     }
@@ -92,10 +91,13 @@ class User extends CI_Controller
       $config['file_name'] = $field . '_' . time(); // Nama file unik dengan timestamp
       $this->upload->initialize($config);
 
+      // return;
       if (!$this->upload->do_upload($field)) {
         // Jika salah satu upload gagal
         $error = array('error' => $this->upload->display_errors());
-        $this->load->view('user', $error);
+        // $this->load->view('user', $error);
+        var_dump($error);
+        echo $field;
         return;
       } else {
         // Jika upload berhasil
@@ -171,10 +173,26 @@ class User extends CI_Controller
       $this->send_email($user_email, $course_uid, $course_name);
 
       $this->session->set_flashdata('success', '<div class="alert alert-success" role="alert">Data berhasil disimpan.</div>');
+
+      $apl01 = $this->db->from('assesmen')->where('course_uid', $course_uid)->where('kode_unit', 'FR.APL01')->get()->row();
+      $data = [
+        'user_uid' => $user_uid,
+        'assesment_uid' => $apl01->uid,
+        'status' => '3',
+        'correct' => 'Asesmen Dapat Di Lanjutkan'
+      ];
+      $this->db->insert('grades', $data);
+      $apl02 = $this->db->from('assesmen')->where('course_uid', $course_uid)->where('kode_unit', 'FR.APL02')->get()->row();
+      $data = [
+        'user_uid' => $user_uid,
+        'assesment_uid' => $apl02->uid,
+        'status' => '1'
+      ];
+      $this->db->insert('grades', $data);
     } else {
       $this->session->set_flashdata('error', '<div class="alert alert-danger" role="alert">Terjadi kesalahan saat menyimpan data.</div>');
     }
-    redirect('user');
+    redirect('user/');
   }
 
   public function send_email($email, $course_uid, $course_name)
@@ -272,6 +290,7 @@ class User extends CI_Controller
     $config['upload_path'] = FCPATH . 'uploads/answer/'; // Same as the config file
     $config['allowed_types'] = 'docx|word|pdf';
     // $config['file_name'] = 'thumbnail_' . $title;
+    $config['max_size']      = 5120; // Limit file size to 5MB (in KB)
 
 
     $this->load->library('upload', $config);
@@ -313,6 +332,85 @@ class User extends CI_Controller
     $this->load->view('user/course');
     $this->load->view('statis_template/dashboard_footer');
   }
+  public function apl02($uid)
+  {
+    // $data['sertifikasi'] = $this->User_model->get_sertifikasi();
+    $cek_selesai = $this->db->from('grades')->where('uid', $uid)->get()->row();
+    if ($cek_selesai->status == '2' || $cek_selesai->status == '3') {
+      redirect('user/apl02_view/' . $uid);
+    }
+
+    // var_dump($cek_selesai);
+    // echo $cek_selesai->assesment_uid;
+    $data['users'] = $this->User_model->get_user($this->session->userdata('email'));
+    $data['data_course'] = $this->User_model->get_data_course_all($this->session->userdata('user_id'));
+
+    $cek_course = $this->db->from('assesmen')->where('uid', $cek_selesai->assesment_uid)->get()->row();
+
+
+    $data['title'] = 'APL02';
+    $data['active_menu'] = 'User'; // nanti ganti jadi username
+    $this->load->view('statis_template/dashboard_header', $data);
+    $this->load->view('statis_template/dashboard_sidebar', $data);
+    if ($cek_course->course_uid == '1') {
+      $this->load->view('user/apl02_1');
+    } else if ($cek_course->course_uid == '2') {
+      $this->load->view('user/apl02_2');
+    }
+    $this->load->view('statis_template/dashboard_footer');
+  }
+  public function apl02_view($uid)
+  {
+    // $data['sertifikasi'] = $this->User_model->get_sertifikasi();
+    $cek_selesai = $this->db->from('grades')->where('uid', $uid)->get()->row();
+    if ($cek_selesai->status == '1') {
+      redirect('user/apl02/' . $uid);
+    }
+    $cek_course = $this->db->from('assesmen')->where('uid', $cek_selesai->assesment_uid)->get()->row();
+    $cek_user = $this->db->select('full_name')->from('users')->where('users.uid', $cek_selesai->user_uid)->get()->row();
+
+
+    $data['users'] = $this->User_model->get_user($this->session->userdata('email'));
+    $data['data_course'] = $this->User_model->get_data_course_all($this->session->userdata('user_id'));
+    $data['data_asesi'] = $cek_user;
+    $data['data_grades'] = $cek_selesai;
+    $jawaban = $this->db->from('apl02')->where('grades_uid', $uid)->get()->result();
+    $groupedData = [];
+
+    foreach ($jawaban as $item) {
+      $kode_unit = $item->kode_unit;
+      $elemen = $item->elemen;
+
+      // Initialize kode_unit if not exists
+      if (!isset($groupedData[$kode_unit])) {
+        $groupedData[$kode_unit] = [];
+      }
+
+      // Initialize elemen if not exists
+      if (!isset($groupedData[$kode_unit][$elemen])) {
+        $groupedData[$kode_unit][$elemen] = [];
+      }
+
+      // Add item to the appropriate group
+      $groupedData[$kode_unit][$elemen][] = $item;
+    }
+
+    // Debug output
+    // echo "<pre>";
+    // print_r($groupedData);
+    // echo "</pre>";
+    $data['jawaban'] = $groupedData;
+    $data['title'] = 'APL02';
+    $data['active_menu'] = 'User'; // nanti ganti jadi username
+    $this->load->view('statis_template/dashboard_header', $data);
+    $this->load->view('statis_template/dashboard_sidebar', $data);
+    if ($cek_course->course_uid == '1') {
+      $this->load->view('user/apl02_1_v');
+    } else if ($cek_course->course_uid == '2') {
+      $this->load->view('user/apl02_2_v');
+    }
+    $this->load->view('statis_template/dashboard_footer');
+  }
   public function sertifikasi()
   {
     // $data['sertifikasi'] = $this->User_model->get_sertifikasi();
@@ -325,5 +423,185 @@ class User extends CI_Controller
     $this->load->view('statis_template/dashboard_sidebar', $data);
     $this->load->view('user/sertifikasi');
     $this->load->view('statis_template/dashboard_footer');
+  }
+
+  public function save_apl02($grades_uid)
+  {
+    // echo "<pre>";
+    // print_r($_POST['elemen']);
+    // echo "</pre>";
+
+    // if (isset($_POST['elemen']) && !empty($_POST['elemen'])) {
+    //   echo "✅ POST Data Exists<br>";
+
+    //   foreach (array_keys($_POST['elemen']) as $kode_unit) {
+    //     echo "🔍 Found Kode Unit: $kode_unit<br>";
+
+    //     if (!is_string($kode_unit)) {
+    //       echo "❌ Skipped Non-String Kode Unit<br>";
+    //       continue; // Skip if PHP converted the key to an integer
+    //     }
+
+    //     foreach ($_POST['elemen'][$kode_unit] as $elemen => $kompeten_value) {
+    //       echo "<b>Kode Unit:</b> $kode_unit <br>";
+    //       echo "<b>Elemen:</b> $elemen <br>";
+    //       echo "<b>Kompeten:</b> $kompeten_value <br><br>";
+    //     }
+    //   }
+    // } else {
+    //   echo "❌ No POST Data Received<br>";
+    // }
+
+
+    if (!isset($_POST['elemen']) || !is_array($_POST['elemen'])) {
+      die("Error: elemen is not an array.");
+    }
+    foreach ($_POST['elemen'] as $kode_unit => $elemen_values) {
+      if (!is_array($elemen_values)) {
+        die("Error: elemen_values for $kode_unit is not an array.");
+      }
+      // echo "Kode Unit = $kode_unit";
+
+      foreach ($elemen_values as $elemen_key => $kompeten) {
+        if (!is_string($kompeten) && !is_numeric($kompeten)) {
+          die("Error: kompeten value for $kode_unit elemen $elemen_key is invalid.");
+        }
+        // echo "<br>";
+        // echo "Elemen Key = $elemen_key";
+        // Extract elemen number (1, 2, 3)
+        $elemen = intval($elemen_key);
+
+        // Fetch `ijazah`, `sertifikat`, `sk` from `user_courses`
+        $user_courses = $this->User_model->get_user_courses($this->session->userdata('user_id'));
+        // echo ($this->session->userdata('user_id'));
+        // var_dump($user_courses);
+
+        $ijazah = !empty($user_courses['ijasah']) ? $user_courses['ijasah'] : '[]';
+        $sertifikat = !empty($user_courses['sertifikat']) ? $user_courses['sertifikat'] : '[]';
+        $sk = !empty($user_courses['sk_pertanian']) ? $user_courses['sk_pertanian'] : '[]';
+        // Get `dokumen_digital`
+        $dokumen_digital = isset($_POST['link'][$kode_unit][$elemen]) ? $_POST['link'][$kode_unit][$elemen] : '';
+
+        // Process uploaded files
+        $files_uploaded = $this->upload_files($kode_unit, $elemen);
+
+        // Insert into database
+        $data = [
+          'grades_uid'       => $grades_uid,
+          'kode_unit'       => $kode_unit,
+          'elemen'          => $elemen,
+          'kompeten'        => $kompeten,
+          'ijazah'          => $ijazah,
+          'sertifikat'      => $sertifikat,
+          'sk'              => $sk,
+          'dokumen_digital' => $dokumen_digital,
+          'files'           => json_encode($files_uploaded)
+        ];
+
+        $this->User_model->insert_apl02($data);
+      }
+    }
+
+    $folderPath = FCPATH . "uploads/tanda_tangan/"; // Full path to the folder
+
+    // Ensure the directory exists
+    if (!is_dir($folderPath)) {
+      mkdir($folderPath, 0777, true);
+    }
+    $signatureData = $this->input->post('signed'); // Get Base64 signature
+    // var_dump($signatureData);
+
+    if (!empty($signatureData) && strpos($signatureData, 'data:image/') === 0) {
+      $image_parts = explode(";base64,", $signatureData);
+      $image_type_aux = explode("image/", $image_parts[0]);
+      $image_type = isset($image_type_aux[1]) ? $image_type_aux[1] : 'png';
+
+      // Decode Base64
+      $image_base64 = base64_decode($image_parts[1]);
+
+      // Generate unique filename
+      $fileName = uniqid() . '.' . $image_type;
+      $filePath = $folderPath . $fileName;
+      file_put_contents($filePath, $image_base64);
+      // Save the image
+
+      $file_names['signature'] = $fileName;
+      $data = array(
+        'signature_asesi' => $fileName, // Replace with actual value
+        'asesi_upload_time' => date('Y-m-d H:i:s'),
+        'status' => 2,
+      );
+
+      $this->db->where('uid', $grades_uid); // Replace $grades_uid with the actual UID
+      $this->db->update('grades', $data);
+    } else {
+      $error = array('error' => $this->upload->display_errors());
+      var_dump($error);
+      return;
+    }
+
+
+    redirect('user/apl02/' . $grades_uid);
+  }
+
+  private function upload_files($kode_unit, $elemen)
+  {
+    // if (isset($_FILES['files']['name'][$kode_unit][$elemen]) && !empty($_FILES['files']['name'][$kode_unit][$elemen][0])) {
+    //   $files = $_FILES['files']['name'][$kode_unit][$elemen];
+
+    //   foreach ($files as $key => $filename) {
+    //     if (!empty($filename)) {
+    //       echo "Processing file: " . $filename . "<br>";
+    //       return;
+    //     } else {
+    //       echo 'nyasar';
+    //     }
+    //   }
+    // } else {
+    //   echo "<br>";
+
+    //   echo "No files uploaded for $kode_unit - $elemen.";
+    //   return;
+    // }
+    $files = $_FILES['files']['name'][$kode_unit];
+    $uploaded_files = [];
+
+    // var_dump($files);
+
+    if (!empty(array_filter($files))) { // Checks if any non-empty file exists
+      foreach ($files as $elemen_key => $file_names) { // Loop through each elemen_key (1, 2, etc.)
+        foreach ($file_names as $index => $file_name) { // Loop through each file inside elemen_key
+          if (empty($file_name)) {
+            continue; // Skip empty file inputs
+          }
+
+          $_FILES['file_upload']['name'] = $_FILES['files']['name'][$kode_unit][$elemen_key][$index];
+          $_FILES['file_upload']['type'] = $_FILES['files']['type'][$kode_unit][$elemen_key][$index];
+          $_FILES['file_upload']['tmp_name'] = $_FILES['files']['tmp_name'][$kode_unit][$elemen_key][$index];
+          $_FILES['file_upload']['error'] = $_FILES['files']['error'][$kode_unit][$elemen_key][$index];
+          $_FILES['file_upload']['size'] = $_FILES['files']['size'][$kode_unit][$elemen_key][$index];
+
+          $config['upload_path'] = './uploads/';
+          $config['allowed_types'] = 'jpg|jpeg|png|pdf|docx';
+          $config['file_name'] = time() . '_' . $file_name;
+          $config['overwrite'] = FALSE;
+
+          $this->upload->initialize($config);
+
+          if ($this->upload->do_upload('file_upload')) {
+            $uploaded_files[] = $this->upload->data('file_name');
+            echo "✅ Uploaded: " . $_FILES['file_upload']['name'] . "<br>";
+            // echo  $_FILES['file_upload']['name'];
+            // return $_FILES['file_upload']['name'];
+          } else {
+            // echo "❌ Upload failed for: " . $_FILES['file_upload']['name'] . " - " . $this->upload->display_errors() . "<br>";
+          }
+        }
+      }
+    } else {
+      // echo "❌ No valid files uploaded for Kode Unit: $kode_unit<br>";
+    }
+    return $uploaded_files; // ✅ Return all uploaded file names
+
   }
 }

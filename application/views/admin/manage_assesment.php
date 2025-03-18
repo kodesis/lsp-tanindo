@@ -57,7 +57,8 @@
                       <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
                           <div class="modal-header">
-                            <h4 class="modal-title" id="exampleModalLabel"><?= $uc['course_name'] ?></h4>
+                            <!-- <h4 class="modal-title" id="exampleModalLabel"><?= $uc['course_name'] ?></h4> -->
+                            <h4 class="modal-title" id="exampleModalLabel">FR.APL.01. PERMOHONAN SERTIFIKASI KOMPETENSI</h4>
                           </div>
                           <form action="<?= base_url('admin/status_asesmen') ?>" method="post" enctype="multipart/form-data">
                             <div class="modal-body">

@@ -26,7 +26,7 @@
       <li class="nav-item <?php echo ($this->uri->segment(1) == 'user' && $this->uri->segment(2) == null) ? 'active' : ''; ?>">
         <a class="nav-link" href="<?= base_url('user') ?>">
           <i class="fas fa-tachometer-alt menu-icon"></i> &nbsp; &nbsp;
-          <span class="menu-title">Dashboard</span>
+          <span class="menu-title">Pendaftaran</span>
         </a>
       </li>
     <?php } ?>
@@ -55,6 +55,14 @@
           <span class="menu-title">Manage Asesment</span>
         </a>
       </li>
+      <li class="nav-item <?php echo ($this->uri->segment(1) == 'live_chat_panel') ? 'active' : ''; ?>">
+        <a class="nav-link" href="<?= base_url('admin/live_chat_panel') ?>">
+          <i class="fas fa-chat menu-icon"></i> &nbsp; &nbsp;
+          <span class="menu-title">Live Chat Panel</span>
+          <span id="chatNotification" class="badge badge-danger ml-2 d-none"></span> <!-- 🔴 Notification Badge -->
+        </a>
+      </li>
+
       <li class="nav-item <?php echo ($this->uri->segment(1) == 'manage_artikel') ? 'active' : ''; ?>">
         <a class="nav-link" href="<?= base_url('admin/manage_artikel') ?>">
           <i class="fas fa-newspaper menu-icon"></i> &nbsp; &nbsp;

@@ -1,5 +1,6 @@
 <!-- content-wrapper ends -->
 <!-- partial:../../partials/_footer.html -->
+
 <footer class="footer">
   <div class="card">
     <div class="card-body">
@@ -47,6 +48,29 @@
 <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
 
 <script>
+  function updateChatNotification() {
+    fetch("<?= base_url('chat/get_unread_count') ?>") // ✅ Replace with your actual API endpoint
+      .then(response => response.json())
+      .then(data => {
+        let unreadCount = data.unread_count || 0;
+        let badge = document.getElementById("chatNotification");
+
+        if (unreadCount > 0) {
+          badge.textContent = unreadCount;
+          badge.classList.remove("d-none"); // ✅ Show the badge
+        } else {
+          badge.classList.add("d-none"); // ✅ Hide if no unread messages
+        }
+      })
+      .catch(error => console.error("Error fetching unread messages:", error));
+  }
+
+  // ✅ Refresh unread count every 3 seconds
+  setInterval(updateChatNotification, 3000);
+
+  // ✅ Run on page load
+  updateChatNotification();
+
   var canvas = document.getElementById('signature-pad');
 
   // Adjust canvas coordinate space taking into account pixel ratio,

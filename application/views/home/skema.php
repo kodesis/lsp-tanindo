@@ -193,12 +193,8 @@
                         </h6>
                         <p class="mt-3 mb-md-0 mb-lg-2">
                           1. LSP Tani Andalan Nasional Indonesia menginformasikan kepada pemohon persyaratan sertifikasi sesuai skema sertifikasi, jenis bukti, aturan bukti, proses sertifikasi, hak pemohon dan kewajiban pemohon, biaya sertifikasi dan kewajiban pemegang sertifikat kompetensi. <br>
-                          2. Pemohon mengisi formulir Permohonan Sertifikasi (FR.APL.01) yang dilengkapi dengan bukti: <br>
-                          a. Fotokopi Ijazah minimal Sekolah Menengah Atas/sederajat <br>
-                          b. Fotokopi sertifikat mengikuti pendidikan dan pelatihan berbasis kompetensi bidang penyuluhan pertanian dari lembaga/instansi di bidang pertanian yang terakreditasi/kredibel <br>
-                          c. Fotokopi Surat Keterangan sebagai penyuluh pertanian yang dikeluarkan oleh pimpinan dari lembaga/balai/instansi di bidang pertanian; <br>
-                          d. Pasfoto 3 x 4 (3 lembar) latar belakang warna merah <br>
-                          e. Fotokopi Kartu Tanda Penduduk (KTP). <br>
+                          2. Pemohon mengisi formulir Permohonan Sertifikasi (FR.APL.01) melalui <a href="https://lsptanindo.com" target="_blank">LSPTanindo</a>
+                          <br>
                           3. Pemohon mengisi Formulir Asesmen Mandiri (FR.APL.02) dan dilengkapi dengan bukti pendukung yang relevan (jika ada). <br>
                           4. LSP Tani Andalan Nasional Indonesia menelaah berkas pendaftaran untuk mengkonfirmasi bahwa peserta sertifikasi memenuhi persyaratan yang ditetapkan dalam skema sertifikasi. <br>
                           5. Pemohon yang memenuhi persyaratan dasar sertifikasi dinyatakan sebagai peserta sertifikasi <br>
@@ -213,13 +209,17 @@
                       <img class="ps-3 icons" src="<?= base_url('template/tanindo/') ?>assets/img/icons/value.svg" height="60" alt="Icon Nilai Sertifikat" />
                       <div class="card-body">
                         <h6 class="fw-bold fs-1 heading-color">
-                          Persyaratan Dasar Pemohon Sertifikasi
+                          Persyaratan Pemohon Sertifikasi
                         </h6>
                         <p class="mt-3 mb-md-0 mb-lg-2">
-                          1. Pendidikan minimal Sekolah Menengah Atas/sederajat <br>
-                          2. Telah mengikuti pendidikan dan pelatihan berbasis kompetensi bidang penyuluhan pertanian dari lembaga/instansi di bidang pertanian yang terakreditasi/kredibel <br>
-                          3. Memiliki pengalaman sebagai penyuluh pertanian yang dikeluarkan oleh pimpinan dari lembaga/balai/instansi di bidang pertanian. <br>
-
+                          <!-- 1. Ijasah minimal Sekolah Menengah Atas/sederajat <br><br>
+                          2. Telah mengikuti pendidikan dan pelatihan berbasis kompetensi bidang penyuluhan pertanian dari lembaga/instansi di bidang pertanian yang terakreditasi/kredibel <br><br>
+                          3. Memiliki pengalaman sebagai penyuluh pertanian yang dikeluarkan oleh pimpinan dari lembaga/balai/instansi di bidang pertanian. <br> -->
+                          1. Memiliki Ijazah minimal Sekolah Menengah Atas/sederajat <br><br>
+                          2. Memiliki sertifikat pelatihan bidang pertanian <br><br>
+                          3. Memiliki Surat Keterangan sebagai penyuluh pertanian <br><br>
+                          <!-- 4. Foto 3 x 4 (3 lembar) latar belakang warna merah <br><br>
+                          5. Memiliki Kartu Tanda Penduduk (KTP). <br> -->
                         </p>
                       </div>
                     </div>

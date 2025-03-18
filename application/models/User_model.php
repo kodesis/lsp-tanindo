@@ -121,15 +121,15 @@ class User_model extends CI_Model
   // ambil data user course berdasarkan user uid yang aktif dan mecek apakah user tersebut sudah lulus atau belum 
   public function get_data_course($user_uid)
   {
-    $this->db->select('uc.user_uid, uc.course_uid, c.course_name, uc.certificate_number, uc.status');
+    $this->db->select('uc.user_uid, uc.course_uid, c.course_name, uc.certificate_number, uc.status, uc.accepted_time');
     $this->db->from('user_courses uc');
     $this->db->join('courses c', 'uc.course_uid = c.uid');
     $this->db->where('uc.user_uid', $user_uid); // Ganti $user_id dengan ID user yang diinginkan
-    $this->db->group_start();
-    $this->db->where('uc.status', 1);
+    // $this->db->group_start();
+    // $this->db->where('uc.status', 1);
     // $this->db->where('uc.status', 1);
     // $this->db->or_where('uc.status !=', 1);
-    $this->db->group_end();
+    // $this->db->group_end();
     $this->db->order_by('uc.uid');
     $query = $this->db->get();
     return $query->result_array();
@@ -270,5 +270,17 @@ class User_model extends CI_Model
     // $this->db->group_end();
     $query = $this->db->get();
     return $query->result_array();
+  }
+  public function insert_apl02($data)
+  {
+    return $this->db->insert('apl02', $data);
+  }
+
+  public function get_user_courses($user_courses)
+  {
+    $this->db->where('user_uid', $user_courses);
+    $this->db->order_by('uid', 'DESC');
+    $query = $this->db->get('user_courses');
+    return $query->row_array();
   }
 }

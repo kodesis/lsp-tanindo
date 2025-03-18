@@ -8,7 +8,7 @@
           <small class="text-muted">
             <h3 align='center'>Pendaftaran</h3>
           </small>
-          <form action="<?= base_url('auth/process') ?>" method="post" class="pt-3 register" id="register_tanindo">
+          <form action="<?= base_url('auth/process') ?>" method="post" class="pt-3 register" id="register_tanindo" enctype="multipart/form-data">
             <div class="form-group">
               <label>Nama Lengkap: </label>
               <input type="text" class="form-control form-control-lg" name="full_name" value="<?php echo set_value('full_name'); ?>" placeholder="Nama Lengkap">
@@ -99,6 +99,10 @@
             <div class="form-group">
               <label>Kualifikasi Pendidikan: </label>
               <input type="text" class="form-control form-control-lg" name="kualifikasi_pendidikan" value="<?php echo set_value('kualifikasi_pendidikan'); ?>">
+            </div>
+            <div class="form-group">
+              <label>Bukti Pembayaran: </label>
+              <input type="file" class="form-control" name="bukti_bayar" value="<?php echo set_value('bukti_bayar'); ?>">
             </div>
 
             <!-- captcha google -->

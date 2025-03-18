@@ -59,14 +59,17 @@ class Admin extends CI_Controller
       $row[] = $cat->home_address;
 
       if ($cat->status == 2) {
-        $row[] = '<label type="text" class="btn btn-primary btn-rounded btn-fw btn-sm">Staff</label>';
+        $row[] = '<label type="text" class="btn btn-primary btn-rounded btn-fw btn-sm mt-3 mb-4">Staff</label>';
       } else if ($cat->status == 3) {
-        $row[] = '<label type="text" class="btn btn-info btn-rounded btn-fw btn-sm">Users</label>';
+        $row[] = '<label type="text" class="btn btn-info btn-rounded btn-fw btn-sm mt-3 mb-4">Users</label>';
       }
+
+      $row[] = '<button class="btn btn-inverse-secondary btn-sm mt-3 mb-4" onclick="cekDetail(' . $cat->uid . ')">Detail</button>';
+
       if ($cat->is_verified == '0'):
-        $row[] = '<a href="' . base_url('admin/update_status/' . $cat->uid . '/1') . '" class="btn btn-success">Aktifkan</a>';
+        $row[] = '<a href="' . base_url('admin/update_status/' . $cat->uid . '/1') . '" class="btn btn-success mt-3 mb-4">Aktifkan</a>';
       else :
-        $row[] = '<a href="' . base_url('admin/update_status/' . $cat->uid . '/0') . '" class="btn btn-danger">Nonaktifkan</a>';
+        $row[] = '<a href="' . base_url('admin/update_status/' . $cat->uid . '/0') . '" class="btn btn-danger mt-3 mb-4">Nonaktifkan</a> ';
       endif;
 
 
@@ -409,7 +412,7 @@ class Admin extends CI_Controller
       $config['upload_path'] = FCPATH . 'uploads/artikel/'; // Same as the config file
       $config['allowed_types'] = 'gif|jpg|jpeg|png';
       $config['file_name'] = 'thumbnail_' . $title;
-
+      $config['max_size']      = 5120; // Limit file size to 5MB (in KB)
       $this->load->library('upload', $config);
       $this->upload->initialize($config);
 
@@ -463,7 +466,7 @@ class Admin extends CI_Controller
     $config['upload_path'] = FCPATH . 'uploads/artikel/'; // Same as the config file
     $config['allowed_types'] = 'gif|jpg|jpeg|png';
     $config['file_name'] = 'thumbnail_' . $title;
-
+    $config['max_size']      = 5120; // Limit file size to 5MB (in KB)
 
     $this->load->library('upload', $config);
     $this->upload->initialize($config);
@@ -775,6 +778,7 @@ class Admin extends CI_Controller
     $config['upload_path'] = FCPATH . 'uploads/file/'; // Ensure this directory exists
     $config['allowed_types'] = 'pdf|doc|docx';
     $config['file_name'] = 'file_' . preg_replace('/[^a-zA-Z0-9_-]/', '_', $this->input->post('assignments'));
+    $config['max_size']      = 5120; // Limit file size to 5MB (in KB)
 
     $this->load->library('upload', $config);
     $this->upload->initialize($config);
@@ -810,6 +814,7 @@ class Admin extends CI_Controller
     $config['upload_path'] = FCPATH . 'uploads/file/'; // Ensure this directory exists
     $config['allowed_types'] = 'pdf|doc|docx';
     $config['file_name'] = 'file_' . preg_replace('/[^a-zA-Z0-9_-]/', '_', $this->input->post('assignments'));
+    $config['max_size']      = 5120; // Limit file size to 5MB (in KB)
 
     $this->load->library('upload', $config);
     $this->upload->initialize($config);
@@ -903,5 +908,24 @@ class Admin extends CI_Controller
       $this->session->set_flashdata('error', '<div class="alert alert-danger" role="alert">Terjadi kesalahan saat menyimpan data.<?div>');
       redirect('admin/manage_asesment');
     }
+  }
+
+  public function detailUser($id)
+  {
+    $data = $this->db->from('users')->where('uid', $id)->get()->row();
+    echo json_encode($data);
+  }
+
+  public function live_chat_panel()
+  {
+    cek_akses('1');  // Periksa akses lagi jika dibutuhkan untuk method tertentu
+
+
+    $data['title'] = 'Live Chat';
+    $data['active_menu'] = 'live_chat_panel';
+    $this->load->view('statis_template/dashboard_header', $data);
+    $this->load->view('statis_template/dashboard_sidebar', $data);
+    $this->load->view('admin/live_chat');
+    $this->load->view('statis_template/dashboard_footer');
   }
 }

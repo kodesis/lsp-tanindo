@@ -219,6 +219,7 @@ class Staff extends CI_Controller
     $config['upload_path'] = FCPATH . 'uploads/detail_assesmen/'; // Same as the config file
     $config['allowed_types'] = 'docx|word|pdf';
     $config['file_name'] = 'file_soal_' . $title;
+    $config['max_size']      = 5120; // Limit file size to 5MB (in KB)
 
     $this->load->library('upload', $config);
     $this->upload->initialize($config);
@@ -299,6 +300,7 @@ class Staff extends CI_Controller
     $config['upload_path'] = FCPATH . 'uploads/answer/'; // Same as the config file
     $config['allowed_types'] = 'docx|word|pdf';
     // $config['file_name'] = 'thumbnail_' . $title;
+    $config['max_size']      = 5120; // Limit file size to 5MB (in KB)
 
 
     $this->load->library('upload', $config);
@@ -360,5 +362,304 @@ class Staff extends CI_Controller
 
 
     redirect('staff/jawaban_assesi/' . $id_user . '/' . $this->input->post('course_uid'));
+  }
+
+  // public function apl02($uid)
+  // {
+  //   $cek_selesai = $this->db->from('grades')->where('uid', $uid)->get()->row();
+  //   if ($cek_selesai->status == '1') {
+  //     redirect('staff/apl02_view/' . $uid);
+  //   }
+
+
+  //   $data['users'] = $this->User_model->get_user($this->session->userdata('email'));
+  //   $data['data_course'] = $this->User_model->get_data_course_all($this->session->userdata('user_id'));
+
+  //   $cek_course = $this->db->from('assesmen')->where('uid', $cek_selesai->assesment_uid)->get()->row();
+
+
+  //   $data['title'] = 'APL02';
+  //   $data['active_menu'] = 'Staff'; // nanti ganti jadi username
+  //   $this->load->view('statis_template/dashboard_header', $data);
+  //   $this->load->view('statis_template/dashboard_sidebar', $data);
+  //   if ($cek_course->course_uid == '1') {
+  //     $this->load->view('staff/apl02_1');
+  //   } else if ($cek_course->course_uid == '2') {
+  //     $this->load->view('staff/apl02_2');
+  //   }
+  //   $this->load->view('statis_template/dashboard_footer');
+  // }
+  public function apl02($uid)
+  {
+    // $data['sertifikasi'] = $this->User_model->get_sertifikasi();
+    $cek_selesai = $this->db->from('grades')->where('uid', $uid)->get()->row();
+    if ($cek_selesai->status == '3') {
+      redirect('staff/apl02_view/' . $uid);
+    }
+    $cek_course = $this->db->from('assesmen')->where('uid', $cek_selesai->assesment_uid)->get()->row();
+    $cek_user = $this->db->select('full_name')->from('users')->where('users.uid', $cek_selesai->user_uid)->get()->row();
+
+
+    $data['users'] = $this->User_model->get_user($this->session->userdata('email'));
+    $data['data_course'] = $this->User_model->get_data_course_all($this->session->userdata('user_id'));
+    $data['data_asesi'] = $cek_user;
+    $data['ttd_asesi'] = $cek_selesai->signature_asesi;
+    $jawaban = $this->db->from('apl02')->where('grades_uid', $uid)->get()->result();
+    $groupedData = [];
+
+    foreach ($jawaban as $item) {
+      $kode_unit = $item->kode_unit;
+      $elemen = $item->elemen;
+
+      // Initialize kode_unit if not exists
+      if (!isset($groupedData[$kode_unit])) {
+        $groupedData[$kode_unit] = [];
+      }
+
+      // Initialize elemen if not exists
+      if (!isset($groupedData[$kode_unit][$elemen])) {
+        $groupedData[$kode_unit][$elemen] = [];
+      }
+
+      // Add item to the appropriate group
+      $groupedData[$kode_unit][$elemen][] = $item;
+    }
+
+    // Debug output
+    // echo "<pre>";
+    // print_r($groupedData);
+    // echo "</pre>";
+    $data['jawaban'] = $groupedData;
+    $data['title'] = 'APL02';
+    $data['active_menu'] = 'Staff'; // nanti ganti jadi username
+    $this->load->view('statis_template/dashboard_header', $data);
+    $this->load->view('statis_template/dashboard_sidebar', $data);
+    if ($cek_course->course_uid == '1') {
+      $this->load->view('staff/apl02_1');
+    } else if ($cek_course->course_uid == '2') {
+      $this->load->view('staff/apl02_2');
+    }
+    $this->load->view('statis_template/dashboard_footer');
+  }
+  public function apl02_view($uid)
+  {
+    // $data['sertifikasi'] = $this->User_model->get_sertifikasi();
+    $cek_selesai = $this->db->from('grades')->where('uid', $uid)->get()->row();
+    if ($cek_selesai->status == '2') {
+      redirect('staff/apl02/' . $uid);
+    }
+    $cek_course = $this->db->from('assesmen')->where('uid', $cek_selesai->assesment_uid)->get()->row();
+    $cek_user = $this->db->select('full_name')->from('users')->where('users.uid', $cek_selesai->user_uid)->get()->row();
+
+
+    $data['users'] = $this->User_model->get_user($this->session->userdata('email'));
+    $data['data_course'] = $this->User_model->get_data_course_all($this->session->userdata('user_id'));
+    $data['data_asesi'] = $cek_user;
+    $data['data_grades'] = $cek_selesai;
+    $jawaban = $this->db->from('apl02')->where('grades_uid', $uid)->get()->result();
+    $groupedData = [];
+
+    foreach ($jawaban as $item) {
+      $kode_unit = $item->kode_unit;
+      $elemen = $item->elemen;
+
+      // Initialize kode_unit if not exists
+      if (!isset($groupedData[$kode_unit])) {
+        $groupedData[$kode_unit] = [];
+      }
+
+      // Initialize elemen if not exists
+      if (!isset($groupedData[$kode_unit][$elemen])) {
+        $groupedData[$kode_unit][$elemen] = [];
+      }
+
+      // Add item to the appropriate group
+      $groupedData[$kode_unit][$elemen][] = $item;
+    }
+
+    // Debug output
+    // echo "<pre>";
+    // print_r($groupedData);
+    // echo "</pre>";
+    $data['jawaban'] = $groupedData;
+    $data['title'] = 'APL02';
+    $data['active_menu'] = 'Staff'; // nanti ganti jadi username
+    $this->load->view('statis_template/dashboard_header', $data);
+    $this->load->view('statis_template/dashboard_sidebar', $data);
+    if ($cek_course->course_uid == '1') {
+      $this->load->view('staff/apl02_1_v');
+    } else if ($cek_course->course_uid == '2') {
+      $this->load->view('staff/apl02_2_v');
+    }
+    $this->load->view('statis_template/dashboard_footer');
+  }
+  public function save_apl02($grades_uid)
+  {
+
+    $alasan = $this->input->post('alasan');
+
+    $data_update = [
+      'status' => 3,
+      'correct' => $this->input->post('correct'),
+      'alasan' => $alasan,
+      'asesor_upload_time' => date('Y-m-d H:i:s')
+    ];
+
+
+    $folderPath = FCPATH . "uploads/tanda_tangan/asesor/"; // Full path to the folder
+
+    // Ensure the directory exists
+    if (!is_dir($folderPath)) {
+      mkdir($folderPath, 0777, true);
+    }
+    $signatureData = $this->input->post('signed'); // Get Base64 signature
+    // var_dump($signatureData);
+
+    if (!empty($signatureData) && strpos($signatureData, 'data:image/') === 0) {
+      $image_parts = explode(";base64,", $signatureData);
+      $image_type_aux = explode("image/", $image_parts[0]);
+      $image_type = isset($image_type_aux[1]) ? $image_type_aux[1] : 'png';
+
+      // Decode Base64
+      $image_base64 = base64_decode($image_parts[1]);
+
+      // Generate unique filename
+      $fileName = uniqid() . '.' . $image_type;
+      $filePath = $folderPath . $fileName;
+      file_put_contents($filePath, $image_base64);
+      // Save the image
+
+      $file_names['signature'] = $fileName;
+      $data = array(
+        'signature' => $fileName // Replace with actual value
+      );
+
+      $this->db->where('uid', $grades_uid); // Replace $grades_uid with the actual UID
+      $this->db->update('grades', $data);
+    } else {
+      $error = array('error' => $this->upload->display_errors());
+      var_dump($error);
+      return;
+    }
+
+    $this->User_model->update_grades(
+      $data_update,
+      array('uid' => $grades_uid)
+    );
+    redirect('staff/apl02_view/' . $grades_uid);
+  }
+  public function export_apl02($uid)
+  {
+    $cek_selesai = $this->db->from('grades')->where('uid', $uid)->get()->row();
+    if ($cek_selesai->status == '2') {
+      redirect('staff/apl02/' . $uid);
+    }
+    $cek_course = $this->db->from('assesmen')->where('uid', $cek_selesai->assesment_uid)->get()->row();
+    $cek_user = $this->db->select('full_name')->from('users')->where('users.uid', $cek_selesai->user_uid)->get()->row();
+
+
+    $data['users'] = $this->User_model->get_user($this->session->userdata('email'));
+    $data['data_course'] = $this->User_model->get_data_course_all($this->session->userdata('user_id'));
+    $data['data_asesi'] = $cek_user;
+    $data['data_grades'] = $cek_selesai;
+    $jawaban = $this->db->from('apl02')->where('grades_uid', $uid)->get()->result();
+    $groupedData = [];
+
+    foreach ($jawaban as $item) {
+      $kode_unit = $item->kode_unit;
+      $elemen = $item->elemen;
+
+      // Initialize kode_unit if not exists
+      if (!isset($groupedData[$kode_unit])) {
+        $groupedData[$kode_unit] = [];
+      }
+
+      // Initialize elemen if not exists
+      if (!isset($groupedData[$kode_unit][$elemen])) {
+        $groupedData[$kode_unit][$elemen] = [];
+      }
+
+      // Add item to the appropriate group
+      $groupedData[$kode_unit][$elemen][] = $item;
+    }
+    $data['jawaban'] = $groupedData;
+
+
+    $this->load->library('pdfgenerator');
+    $data['title'] = "Jawaban";
+
+    // Load view as HTML
+    if ($cek_course->course_uid == '1') {
+      $course = '1';
+      $html = $this->load->view('staff/apl02_1_pdf', $data, true);
+    } else if ($cek_course->course_uid == '2') {
+      $course = '2';
+      $html = $this->load->view('staff/apl02_2_pdf', $data, true);
+    }
+
+    // PDF settings
+    $file_pdf = 'Apl02_' . $course . '_' . $uid;
+    $paper = 'A4';
+    $orientation = "portrait";
+
+    // Generate PDF
+    // $this->pdfgenerator->generate($html, $file_pdf, $paper, $orientation);
+    $this->pdfgenerator->generate($html, $file_pdf, $paper, $orientation, TRUE);
+  }
+  public function export_preview($uid)
+  {
+    $cek_selesai = $this->db->from('grades')->where('uid', $uid)->get()->row();
+    if ($cek_selesai->status == '2') {
+      redirect('staff/apl02/' . $uid);
+    }
+    $cek_course = $this->db->from('assesmen')->where('uid', $cek_selesai->assesment_uid)->get()->row();
+    $cek_user = $this->db->select('full_name')->from('users')->where('users.uid', $cek_selesai->user_uid)->get()->row();
+
+
+    $data['users'] = $this->User_model->get_user($this->session->userdata('email'));
+    $data['data_course'] = $this->User_model->get_data_course_all($this->session->userdata('user_id'));
+    // $data['data_asesis'] = $cek_course;
+    $data['data_asesi'] = $cek_user;
+    $data['data_grades'] = $cek_selesai;
+    $jawaban = $this->db->from('apl02')->where('grades_uid', $uid)->get()->result();
+    $groupedData = [];
+
+    foreach ($jawaban as $item) {
+      $kode_unit = $item->kode_unit;
+      $elemen = $item->elemen;
+
+      // Initialize kode_unit if not exists
+      if (!isset($groupedData[$kode_unit])) {
+        $groupedData[$kode_unit] = [];
+      }
+
+      // Initialize elemen if not exists
+      if (!isset($groupedData[$kode_unit][$elemen])) {
+        $groupedData[$kode_unit][$elemen] = [];
+      }
+
+      // Add item to the appropriate group
+      $groupedData[$kode_unit][$elemen][] = $item;
+    }
+    $data['jawaban'] = $groupedData;
+
+
+    $this->load->library('pdfgenerator');
+    $data['title'] = "Jawaban";
+
+    // Load view as HTML
+    // Load view as HTML
+    if ($cek_course->course_uid == '1') {
+      $course = '1';
+      $this->load->view('staff/apl02_1_pdf', $data);
+    } else if ($cek_course->course_uid == '2') {
+      $course = '2';
+      $this->load->view('staff/apl02_2_pdf', $data);
+    }
+
+    // PDF settings
+    $file_pdf = 'Apl02_' . $course . '_' . $uid;
+    $paper = 'A4';
+    $orientation = "portrait";
   }
 }

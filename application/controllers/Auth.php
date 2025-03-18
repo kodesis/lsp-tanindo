@@ -164,6 +164,12 @@ class Auth extends CI_Controller
         'place_of_birth' => $this->input->post('place_of_birth'),
         'date_of_birth' => $this->input->post('date_of_birth'),
         'kualifikasi_pendidikan' => $this->input->post('kualifikasi_pendidikan'),
+        'kualifikasi_pendidikan' => $this->input->post('kualifikasi_pendidikan'),
+        'kualifikasi_pendidikan' => $this->input->post('kualifikasi_pendidikan'),
+        'kualifikasi_pendidikan' => $this->input->post('kualifikasi_pendidikan'),
+        'kualifikasi_pendidikan' => $this->input->post('kualifikasi_pendidikan'),
+        'kualifikasi_pendidikan' => $this->input->post('kualifikasi_pendidikan'),
+        'kualifikasi_pendidikan' => $this->input->post('kualifikasi_pendidikan'),
         'status' => '3',
         'verification_code' => $verification_code,
         'is_verified' => 0,
@@ -171,6 +177,22 @@ class Auth extends CI_Controller
         'user_number' => $bagian3,
         'years' => $bagian4
       );
+
+      $config['upload_path'] = FCPATH . 'uploads/bukti_bayar/'; // Same as the config file
+      $config['allowed_types'] = 'docx|word|pdf|png|jpg';
+      $config['file_name'] = 'bukti_bayar_' . $this->input->post('no_ktp');
+      $config['max_size']      = 5120; // Limit file size to 5MB (in KB)
+
+      $this->load->library('upload', $config);
+      $this->upload->initialize($config);
+
+      if ($this->upload->do_upload('bukti_bayar')) {
+        $image_data = $this->upload->data();
+        $imgdata = file_get_contents($image_data['full_path']);
+        $thumbnail = $image_data['file_name'];
+        $user_data['bukti_bayar'] = $thumbnail;
+        echo ('selesai');
+      }
 
       // print_r($user_data);
       // exit;

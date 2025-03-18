@@ -1,9 +1,27 @@
+<!-- Floating Action Button -->
+<button id="chatToggle" class="chat-btn">
+  💬
+</button>
+
+<!-- Chat Window -->
+<div id="chatWindow" class="chat-box">
+  <div class="chat-header">
+    <span>Live Chat</span>
+    <button id="closeChat" class="btn-close"></button>
+  </div>
+  <div class="chat-body">
+    <p>👋 Hello! How can I help you?</p>
+    <div id="chatMessages"></div>
+  </div>
+  <div class="chat-footer">
+    <input type="text" id="chatInput" class="form-control" placeholder="Type a message...">
+    <button id="sendChat" class="btn btn-primary" style="background-color: #28a745; border-color: #28a745;">Send</button>
+  </div>
+</div>
+
+
 <section class="py-5" id="kontak">
-  <div class="bg-holder" style="
-                  background-image: url(<?= base_url('template/tanindo/') ?>assets/img/illustrations/footer-bg.png);
-                  background-position: center;
-                  background-size: cover;
-               "></div>
+  <div class="bg-holder" style=" background-image: url(<?= base_url('template/tanindo/') ?>assets/img/illustrations/footer-bg.png);background-position: center;background-size: cover;"></div>
   <!--/.bg-holder-->
 
   <div class="container">
@@ -116,6 +134,108 @@
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  }
+  let lastMessageCount = 0;
+  let newMessageAlert = new Audio("<?= base_url('assets/sounds/notification.mp3') ?>"); // Ensure this file exists
+
+  document.getElementById("chatToggle").addEventListener("click", function() {
+    document.getElementById("chatWindow").style.display = "flex";
+    document.getElementById("chatToggle").classList.remove("new-message"); // Remove 🔴 alert
+    document.title = "Live Chat"; // Reset title
+    loadMessages();
+  });
+
+  document.getElementById("closeChat").addEventListener("click", function() {
+    document.getElementById("chatWindow").style.display = "none";
+  });
+
+  document.getElementById("sendChat").addEventListener("click", function() {
+    sendMessage();
+  });
+
+  document.getElementById("chatInput").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+      sendMessage();
+    }
+  });
+
+  function sendMessage() {
+    let input = document.getElementById("chatInput");
+    let message = input.value.trim();
+    if (message !== "") {
+      let chatMessages = document.getElementById("chatMessages");
+
+      let newMessage = document.createElement("div");
+      newMessage.classList.add("chat-bubble", "guest-message");
+      newMessage.innerHTML = `<strong>You:</strong> ${message}`;
+      chatMessages.appendChild(newMessage);
+
+      let xhr = new XMLHttpRequest();
+      xhr.open("POST", "<?= base_url('chat/send_message') ?>", true);
+      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      xhr.send("message=" + encodeURIComponent(message));
+
+      input.value = "";
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+  }
+
+  function loadMessages() {
+    let xhr = new XMLHttpRequest();
+    xhr.open("GET", "<?= base_url('chat/get_messages') ?>", true);
+    xhr.onload = function() {
+      if (xhr.status == 200) {
+        let messages = JSON.parse(xhr.responseText);
+        let chatMessages = document.getElementById("chatMessages");
+
+        if (messages.length > lastMessageCount && messages[messages.length - 1].sender_type === "admin") {
+          // if (document.getElementById("chatWindow").style.display === "none") {
+          document.getElementById("chatToggle").classList.add("new-message"); // Add 🔴 alert
+          newMessageAlert.play(); // Play sound
+          flashTitle(); // Flash title
+          // }
+        }
+
+        chatMessages.innerHTML = "";
+        messages.forEach(function(msg) {
+          let messageDiv = document.createElement("div");
+          messageDiv.classList.add("chat-bubble");
+
+          if (msg.sender_type === "admin") {
+            messageDiv.classList.add("admin-message");
+            messageDiv.innerHTML = `<strong>Admin:</strong> ${msg.message}`;
+          } else {
+            messageDiv.classList.add("guest-message");
+            messageDiv.innerHTML = `<strong>You:</strong> ${msg.message}`;
+          }
+
+          chatMessages.appendChild(messageDiv);
+        });
+
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        lastMessageCount = messages.length; // Update message count
+      }
+    };
+    xhr.send();
+  }
+
+  // Auto refresh chat every 3 seconds
+  setInterval(loadMessages, 3000);
+
+  // Flash Title Notification
+  function flashTitle() {
+    let isFlashing = true;
+    let originalTitle = "Live Chat";
+    let newTitle = "🔴 New Message!";
+    let interval = setInterval(() => {
+      document.title = isFlashing ? newTitle : originalTitle;
+      isFlashing = !isFlashing;
+    }, 1000);
+
+    setTimeout(() => {
+      clearInterval(interval);
+      document.title = originalTitle;
+    }, 5000); // Stop flashing after 5 seconds
   }
 </script>
 </body>
