@@ -164,7 +164,7 @@ class User extends CI_Controller
     // exit;
 
     // Simpan ke database
-    if ($this->User_model->save_user_course($data)) {
+    if ($user_courses_uid = $this->User_model->save_user_course($data)) {
       // Simpan informasi file ke database
       // $this->User_model->save_multiple_files($user_uid, $file_names);
       $data = array('upload_data' => $file_names);
@@ -178,10 +178,22 @@ class User extends CI_Controller
       $data = [
         'user_uid' => $user_uid,
         'assesment_uid' => $apl01->uid,
-        'status' => '3',
+        'status' => '2',
         'correct' => 'Asesmen Dapat Di Lanjutkan'
       ];
+
       $this->db->insert('grades', $data);
+
+      $data_riwayat = [
+        'user_uid' => $user_uid,
+        'user_courses_uid' => $user_courses_uid,
+        'assesment_uid' => $apl01->uid,
+        'status' => '2',
+        'text' => 'Menunggu Acc dari Admin'
+      ];
+      $this->db->insert('riwayat_asesment', $data);
+
+
       $apl02 = $this->db->from('assesmen')->where('course_uid', $course_uid)->where('kode_unit', 'FR.APL02')->get()->row();
       $data = [
         'user_uid' => $user_uid,
@@ -312,6 +324,17 @@ class User extends CI_Controller
       $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
         Update Data Successfully Added please check in the table.
         </div>');
+
+      $uc = $this->db->select('uid')->from('user_courses')->where('user_uid', $assesmen->user_uid)->where('course_uid', $assesmen->course_uid)->get()->row();
+
+      $data_riwayat = [
+        'user_uid' => $assesmen->user_uid,
+        'user_courses_uid' => $uc->uid,
+        'assesment_uid' => $assesmen->assesment_uid,
+        'status' => '2',
+        'text' => 'Menunggu Acc dari Staff'
+      ];
+      $this->db->insert('riwayat_asesment', $data_riwayat);
     } else {
       echo 'error';
     }
@@ -427,31 +450,6 @@ class User extends CI_Controller
 
   public function save_apl02($grades_uid)
   {
-    // echo "<pre>";
-    // print_r($_POST['elemen']);
-    // echo "</pre>";
-
-    // if (isset($_POST['elemen']) && !empty($_POST['elemen'])) {
-    //   echo "✅ POST Data Exists<br>";
-
-    //   foreach (array_keys($_POST['elemen']) as $kode_unit) {
-    //     echo "🔍 Found Kode Unit: $kode_unit<br>";
-
-    //     if (!is_string($kode_unit)) {
-    //       echo "❌ Skipped Non-String Kode Unit<br>";
-    //       continue; // Skip if PHP converted the key to an integer
-    //     }
-
-    //     foreach ($_POST['elemen'][$kode_unit] as $elemen => $kompeten_value) {
-    //       echo "<b>Kode Unit:</b> $kode_unit <br>";
-    //       echo "<b>Elemen:</b> $elemen <br>";
-    //       echo "<b>Kompeten:</b> $kompeten_value <br><br>";
-    //     }
-    //   }
-    // } else {
-    //   echo "❌ No POST Data Received<br>";
-    // }
-
 
     if (!isset($_POST['elemen']) || !is_array($_POST['elemen'])) {
       die("Error: elemen is not an array.");
@@ -534,6 +532,18 @@ class User extends CI_Controller
 
       $this->db->where('uid', $grades_uid); // Replace $grades_uid with the actual UID
       $this->db->update('grades', $data);
+
+      $ad = $this->db->select('user_uid,assesment_uid, course_uid')->from('grades')->join('assesmen', 'assesmen.uid = grades.assesment_uid')->where('grades.uid', $grades_uid)->get()->row();
+      $uc = $this->db->select('uid')->from('user_courses')->where('user_uid', $ad->user_uid)->where('course_uid', $ad->course_uid)->get()->row();
+
+      $data_riwayat = [
+        'user_uid' => $ad->user_uid,
+        'user_courses_uid' => $uc->uid,
+        'assesment_uid' => $ad->assesment_uid,
+        'status' => '2',
+        'text' => 'Menunggu Acc dari Staff'
+      ];
+      $this->db->insert('riwayat_asesment', $data_riwayat);
     } else {
       $error = array('error' => $this->upload->display_errors());
       var_dump($error);

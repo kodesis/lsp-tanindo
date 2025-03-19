@@ -134,7 +134,22 @@ class Staff extends CI_Controller
       if (!empty($data)) {
         if ($this->Staff_model->save_assessment($data)) {
           // $this->session->set_flashdata('success', '<div class="alert alert-success" role="alert">Data assessment berhasil disimpan.</div>');
+
+          $ad = $this->db->select('course_uid')->from('assesmen')->where('uid', $assessment_uid)->get()->row();
+
+          $uc = $this->db->select('uid')->from('user_courses')->where('user_uid', $user_uid)->where('course_uid', $ad->course_uid)->get()->row();
+
+          $data_riwayat = [
+            'user_uid' => $user_uid,
+            'user_courses_uid' => $uc->uid,
+            'assesment_uid' => $assessment_uid,
+            'status' => '1',
+            'text' => 'Staff Menginput Soal untuk Asesi'
+          ];
+          $this->db->insert('riwayat_asesment', $data_riwayat);
+
           echo json_encode(array("status" => 'success'));
+
           return;
         } else {
           // $this->session->set_flashdata('error', '<div class="alert alert-danger" role="alert">Terjadi kesalahan saat menyimpan data.<?div>');
@@ -347,7 +362,7 @@ class Staff extends CI_Controller
     }
 
     // echo ($id);
-    // $assesmen = $this->User_model->get_data_detail_assesmen_uid($id);
+    $assesmen = $this->User_model->get_data_detail_assesmen_uid($id);
     // var_dump($assesmen);
     var_dump($data_update);
 
@@ -356,6 +371,29 @@ class Staff extends CI_Controller
       $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
         Update Data Successfully Added please check in the table.
         </div>');
+
+      $uc = $this->db->select('uid')->from('user_courses')->where('user_uid', $assesmen->user_uid)->where('course_uid', $assesmen->course_uid)->get()->row();
+
+
+      if ($this->input->post('correct') == "Asesmen Dapat Di Lanjutkan") {
+        $data_riwayat = [
+          'user_uid' => $assesmen->user_uid,
+          'user_courses_uid' => $uc->uid,
+          'assesment_uid' => $assesmen->assesment_uid,
+          'status' => '3',
+          'text' => 'Di Rekomendasikan Oleh Staff'
+        ];
+        $this->db->insert('riwayat_asesment', $data_riwayat);
+      } else {
+        $data_riwayat = [
+          'user_uid' => $assesmen->user_uid,
+          'user_courses_uid' => $uc->uid,
+          'assesment_uid' => $assesmen->assesment_uid,
+          'status' => '4',
+          'text' => 'Tidak Di Rekomendasi oleh Staff'
+        ];
+        $this->db->insert('riwayat_asesment', $data_riwayat);
+      }
     } else {
       echo 'error';
     }
@@ -441,6 +479,7 @@ class Staff extends CI_Controller
     }
     $this->load->view('statis_template/dashboard_footer');
   }
+
   public function apl02_view($uid)
   {
     // $data['sertifikasi'] = $this->User_model->get_sertifikasi();
@@ -493,6 +532,8 @@ class Staff extends CI_Controller
     }
     $this->load->view('statis_template/dashboard_footer');
   }
+
+
   public function save_apl02($grades_uid)
   {
 
@@ -546,6 +587,29 @@ class Staff extends CI_Controller
       $data_update,
       array('uid' => $grades_uid)
     );
+
+    $ad = $this->db->select('user_uid,assesment_uid, course_uid')->from('grades')->join('assesmen', 'assesmen.uid = grades.assesment_uid')->where('grades.uid', $grades_uid)->get()->row();
+
+    $uc = $this->db->select('uid')->from('user_courses')->where('user_uid', $ad->user_uid)->where('course_uid', $ad->course_uid)->get()->row();
+    if ($this->input->post('correct') == "Asesmen Dapat Di Lanjutkan") {
+      $data_riwayat = [
+        'user_uid' => $ad->user_uid,
+        'user_courses_uid' => $uc->uid,
+        'assesment_uid' => $ad->assesment_uid,
+        'status' => '3',
+        'text' => 'Di Rekomendasi Oleh Staff'
+      ];
+    } else {
+      $data_riwayat = [
+        'user_uid' => $ad->user_uid,
+        'user_courses_uid' => $uc->uid,
+        'assesment_uid' => $ad->assesment_uid,
+        'status' => '4',
+        'text' => 'Tidak Di Rekomendasi Oleh Staff'
+      ];
+    }
+    $this->db->insert('riwayat_asesment', $data_riwayat);
+
     redirect('staff/apl02_view/' . $grades_uid);
   }
   public function export_apl02($uid)

@@ -80,7 +80,7 @@ class User_model extends CI_Model
 
   public function save_user_course($data)
   {
-    return $this->db->insert('user_courses', $data);
+    return $this->db->insert_id('user_courses', $data);
   }
 
   public function check_existing_files($user_uid)
@@ -229,7 +229,7 @@ class User_model extends CI_Model
   }
   public function get_data_detail_assesmen_uid($uid)
   {
-    $this->db->select('b.course_uid');
+    $this->db->select('b.course_uid, a.assesment_uid, a.user_uid');
     $this->db->from('grades a');
     $this->db->join('assesmen b', 'a.assesment_uid = b.uid', '');
     $this->db->where('a.uid', $uid); // Ganti $user_id dengan ID user yang diinginkan

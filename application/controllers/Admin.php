@@ -853,6 +853,7 @@ class Admin extends CI_Controller
   public function status_asesmen()
   {
     $status = $this->input->post('status');
+    $user_uid = $this->input->post('user_uid');
     $user_course_uid = $this->input->post('user_course');
     $alasan = $this->input->post('alasan');
 
@@ -863,6 +864,35 @@ class Admin extends CI_Controller
       'alasan' => $alasan,
       'accepted_time' => (new DateTime())->format('Y-m-d H:i:s')
     ];
+
+    if ($status == '0') {
+      $data_riwayat = [
+        'user_uid' => $user_uid,
+        'user_courses_uid' => $user_course_uid,
+        'assesment_uid' => 25,
+        'status' => '3',
+        'text' => 'Diterima'
+      ];
+      $this->db->insert('riwayat_asesment', $data_riwayat);
+
+      $data_riwayat = [
+        'user_uid' => $user_uid,
+        'user_courses_uid' => $user_course_uid,
+        'assesment_uid' => 26,
+        'status' => '1',
+        'text' => 'Asesi Dapat Melanjutkan Asesmen'
+      ];
+      $this->db->insert('riwayat_asesment', $data_riwayat);
+    } else if ($status == '4') {
+      $data_riwayat = [
+        'user_uid' => $user_uid,
+        'user_courses_uid' => $user_course_uid,
+        'assesment_uid' => 25,
+        'status' => '4',
+        'text' => 'Tidak Memenuhi Syarat'
+      ];
+      $this->db->insert('riwayat_asesment', $data_riwayat);
+    }
 
 
     $folderPath = FCPATH . "uploads/tanda_tangan/admin/"; // Full path to the folder
@@ -927,5 +957,107 @@ class Admin extends CI_Controller
     $this->load->view('statis_template/dashboard_sidebar', $data);
     $this->load->view('admin/live_chat');
     $this->load->view('statis_template/dashboard_footer');
+  }
+
+  public function riwayat_asesment()
+  {
+    cek_akses('1');  // Periksa akses lagi jika dibutuhkan untuk method tertentu
+
+
+    $data['title'] = 'Riwayat Asesment';
+    $data['active_menu'] = 'manage_users';
+    $this->load->view('statis_template/dashboard_header', $data);
+    $this->load->view('statis_template/dashboard_sidebar', $data);
+    $this->load->view('admin/riwayat_asesment');
+    $this->load->view('statis_template/dashboard_footer');
+  }
+
+  public function ajax_list5()
+  {
+    $list = $this->Admin_model->get_datatables5();
+    $data = array();
+    $crs = "";
+    $no = $_POST['start'];
+
+
+
+
+    foreach ($list as $cat) {
+
+      $no++;
+      $row = array();
+      $row[] = $no;
+      $row[] = $cat->full_name;
+      $row[] = $cat->course_name;
+
+      $row[] = '<button class="btn btn-inverse-secondary btn-sm mt-3 mb-4" 
+            onclick="cekDetail(' . $cat->user_uid . ', ' . $cat->uid . ')">Detail</button>';
+
+      $data[] = $row;
+    }
+
+    $output = array(
+      "draw" => $_POST['draw'],
+      "recordsTotal" => $this->Admin_model->count_all5(),
+      "recordsFiltered" => $this->Admin_model->count_filtered5(),
+      "data" => $data,
+    );
+    echo json_encode($output);
+  }
+  public function ajax_list6($user_uid, $uid)
+  {
+    $list = $this->Admin_model->get_datatables6($user_uid, $uid);
+    $data = array();
+    $crs = "";
+    $no = $_POST['start'];
+
+
+
+
+    foreach ($list as $cat) {
+
+      $no++;
+      $row = array();
+      $row[] = $no;
+      $row[] = $cat->kode_unit . ' - ' . $cat->judul_unit_kompetensi;
+
+      if ($cat->assesment_metode == 1) {
+        $row[] = "Metode DIT";
+      } else if ($cat->assesment_metode == 2) {
+        $row[] = "Metode Observasi";
+      } else if ($cat->assesment_metode == 3) {
+        $row[] = "Metode Portofolio";
+      }
+
+      if ($cat->tipe_assesmen == 0) {
+        $row[] = "Belum Di Tentukan";
+      } else if ($cat->tipe_assesmen == 1) {
+        $row[] = "Pra Assesmen";
+      } else if ($cat->tipe_assesmen == 2) {
+        $row[] = "Uji Kompetensi";
+      }
+
+
+      if ($cat->status == "1") {
+        $row[] = '<button class="btn btn-secondary btn-sm mt-3 mb-4">' . $cat->text . '</button>';
+      } else if ($cat->status == "2") {
+        $row[] = '<button class="btn btn-warning btn-sm mt-3 mb-4">' . $cat->text . '</button>';
+      } else if ($cat->status == "3") {
+        $row[] = '<button class="btn btn-success btn-sm mt-3 mb-4">' . $cat->text . '</button>';
+      } else if ($cat->status == "4") {
+        $row[] = '<button class="btn btn-danger btn-sm mt-3 mb-4">' . $cat->text . '</button>';
+      }
+
+      $row[] = date('j M Y, H:i', strtotime($cat->created_at));
+      $data[] = $row;
+    }
+
+    $output = array(
+      "draw" => $_POST['draw'],
+      "recordsTotal" => $this->Admin_model->count_all6($user_uid, $uid),
+      "recordsFiltered" => $this->Admin_model->count_filtered6($user_uid, $uid),
+      "data" => $data,
+    );
+    echo json_encode($output);
   }
 }

@@ -55,6 +55,13 @@
           <span class="menu-title">Manage Asesment</span>
         </a>
       </li>
+
+      <li class="nav-item <?php echo ($this->uri->segment(1) == 'riwayat_asesment') ? 'active' : ''; ?>">
+        <a class="nav-link" href="<?= base_url('admin/riwayat_asesment') ?>">
+          <i class="fas fa-file-signature menu-icon"></i> &nbsp; &nbsp;
+          <span class="menu-title">Riwayat Asesment</span>
+        </a>
+      </li>
       <li class="nav-item <?php echo ($this->uri->segment(1) == 'live_chat_panel') ? 'active' : ''; ?>">
         <a class="nav-link" href="<?= base_url('admin/live_chat_panel') ?>">
           <i class="fas fa-chat menu-icon"></i> &nbsp; &nbsp;

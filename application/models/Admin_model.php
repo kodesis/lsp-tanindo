@@ -465,4 +465,142 @@ class Admin_model extends CI_Model
       return $this->db->insert('user_courses', $data);
     }
   }
+
+  var $table5 = 'user_courses';
+  var $column_order5 = array('user_courses.uid', 'full_name', 'course_name'); //set column field database for datatable orderable
+  var $column_search5 = array('user_courses.uid', 'full_name', 'course_name'); //set column field database for datatable searchable 
+  var $order5 = array('user_courses.uid' => 'asc'); // default order 
+
+  function _get_datatables_query5()
+  {
+
+    $this->db->select('user_courses.*, users.full_name, courses.course_name');
+    $this->db->from('user_courses');
+    $this->db->join('users', 'users.uid = user_courses.user_uid');
+    $this->db->join('courses', 'courses.uid = user_courses.course_uid');
+    // $this->db->where('user_ktna.status >', 1);
+    $i = 0;
+
+    foreach ($this->column_search5 as $item) // loop column 
+    {
+      if ($_POST['search']['value']) // if datatable send POST for search
+      {
+
+        if ($i === 0) // first loop
+        {
+          $this->db->group_start(); // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND.
+          $this->db->like($item, $_POST['search']['value']);
+        } else {
+          $this->db->or_like($item, $_POST['search']['value']);
+        }
+
+        if (count($this->column_search5) - 1 == $i) //last loop
+          $this->db->group_end(); //close bracket
+      }
+      $i++;
+    }
+
+    if (isset($_POST['order'])) // here order processing
+    {
+      $this->db->order_by($this->column_order5[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+    } else if (isset($this->order)) {
+      $order = $this->order5;
+      $this->db->order_by(key($order), $order[key($order)]);
+    }
+  }
+
+  function get_datatables5()
+  {
+    $this->_get_datatables_query5();
+    if ($_POST['length'] != -1)
+      $this->db->limit($_POST['length'], $_POST['start']);
+    $query = $this->db->get();
+    return $query->result();
+  }
+
+  function count_filtered5()
+  {
+    $this->_get_datatables_query5();
+    $query = $this->db->get();
+    return $query->num_rows();
+  }
+
+  function count_all5()
+  {
+
+    $this->_get_datatables_query5();
+    $query = $this->db->get();
+
+    return $this->db->count_all_results();
+  }
+
+
+  var $table6 = 'riwayat_asesment';
+  var $column_order6 = array('riwayat_asesment.uid', 'asesment_metode', 'tipe_asesmen', 'kode_unit', 'status', 'text'); //set column field database for datatable orderable
+  var $column_search6 = array('riwayat_asesment.uid', 'asesment_metode', 'tipe_asesmen', 'kode_unit', 'status', 'text'); //set column field database for datatable searchable 
+  var $order6 = array('riwayat_asesment.uid' => 'asc'); // default order 
+
+  function _get_datatables_query6($user_uid, $uid)
+  {
+
+    $this->db->select('riwayat_asesment.*, assesmen.*');
+    $this->db->from('riwayat_asesment');
+    $this->db->join('assesmen', 'assesmen.uid = riwayat_asesment.assesment_uid');
+    $this->db->where('user_uid', $user_uid);
+    $this->db->where('user_courses_uid', $uid);
+    // $this->db->where('user_ktna.status >', 1);
+    $i = 0;
+
+    foreach ($this->column_search6 as $item) // loop column 
+    {
+      if ($_POST['search']['value']) // if datatable send POST for search
+      {
+
+        if ($i === 0) // first loop
+        {
+          $this->db->group_start(); // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND.
+          $this->db->like($item, $_POST['search']['value']);
+        } else {
+          $this->db->or_like($item, $_POST['search']['value']);
+        }
+
+        if (count($this->column_search6) - 1 == $i) //last loop
+          $this->db->group_end(); //close bracket
+      }
+      $i++;
+    }
+
+    if (isset($_POST['order'])) // here order processing
+    {
+      $this->db->order_by($this->column_order6[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+    } else if (isset($this->order)) {
+      $order = $this->order6;
+      $this->db->order_by(key($order), $order[key($order)]);
+    }
+  }
+
+  function get_datatables6($user_uid, $uid)
+  {
+    $this->_get_datatables_query6($user_uid, $uid);
+    if ($_POST['length'] != -1)
+      $this->db->limit($_POST['length'], $_POST['start']);
+    $query = $this->db->get();
+    return $query->result();
+  }
+
+  function count_filtered6($user_uid, $uid)
+  {
+    $this->_get_datatables_query6($user_uid, $uid);
+    $query = $this->db->get();
+    return $query->num_rows();
+  }
+
+  function count_all6($user_uid, $uid)
+  {
+
+    $this->_get_datatables_query6($user_uid, $uid);
+    $query = $this->db->get();
+
+    return $this->db->count_all_results();
+  }
 }

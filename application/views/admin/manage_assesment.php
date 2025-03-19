@@ -63,6 +63,7 @@
                           <form action="<?= base_url('admin/status_asesmen') ?>" method="post" enctype="multipart/form-data">
                             <div class="modal-body">
                               <div class="row">
+                                <input type="hidden" name="user_uid" value="<?= $uc['uid'] ?>">
                                 <div class="col-12">
                                   <h5>Data Pribadi</h5>
                                 </div>
