@@ -1,28 +1,41 @@
 <style>
+    /* Common chat bubble styles */
     .chat-bubble {
-        max-width: 75%;
+        max-width: 60%;
+        /* Prevents overly wide messages */
         padding: 10px 15px;
         border-radius: 15px;
         margin: 5px;
-        display: inline-block;
         word-wrap: break-word;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
+    /* Guest messages */
     .guest-message {
         background-color: #f1f1f1;
         color: black;
         text-align: left;
-        border-bottom-left-radius: 0px;
+        border-bottom-left-radius: 5px;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
         align-self: flex-start;
+        margin-right: auto;
+        /* Pushes to the left */
     }
 
+    /* Admin messages */
     .admin-message {
         background-color: #28a745;
         color: white;
         text-align: right;
-        border-bottom-right-radius: 0px;
+        border-bottom-right-radius: 5px;
+        border-top-right-radius: 15px;
+        border-top-left-radius: 15px;
         align-self: flex-end;
+        margin-left: auto;
+        /* Pushes to the right */
     }
+
 
     .chat-box {
         display: flex;
@@ -32,19 +45,31 @@
         padding: 10px;
         border: 1px solid #ddd;
         border-radius: 10px;
+        background-color: #f9f9f9;
     }
 
+    /* Message container for alignment */
     .message-container {
         display: flex;
         width: 100%;
     }
 
+    /* Guest messages aligned left */
     .guest-container {
         justify-content: flex-start;
     }
 
+    /* Admin messages aligned right */
     .admin-container {
         justify-content: flex-end;
+    }
+
+    /* Responsive for small screens */
+    @media (max-width: 768px) {
+        .chat-bubble {
+            max-width: 80%;
+            /* Allow more space for smaller screens */
+        }
     }
 </style>
 
@@ -84,6 +109,10 @@
     let selectedGuest = null; // Track selected guest
     let lastAdminMessageCount = 0;
     let adminMessageAlert = new Audio("<?= base_url('assets/sounds/notification.mp3') ?>"); // Ensure this file exists
+    let lastMessageTimestamp = 0;
+    let chatMessages = []; // Stores messages
+    let chatData = {}; // Stores messages per guest
+    let lastMessageTimestamps = {}; // Track last message per guest
 
     function loadGuests() {
         fetch("<?= base_url('chat/get_active_guests') ?>")
@@ -99,20 +128,46 @@
                         guestList.innerHTML = "";
 
                         guests.forEach(guest => {
+                            if (!chatData[guest.guest_id]) {
+                                chatData[guest.guest_id] = []; // Initialize chat storage
+                                lastMessageTimestamps[guest.guest_id] = 0;
+                            }
+
                             let li = document.createElement("li");
                             li.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center");
-                            li.textContent = guest.guest_id;
+                            li.textContent = `Guest ${guest.guest_id}`;
                             li.onclick = function() {
                                 selectedGuest = guest.guest_id;
+                                updateChatUI();
                                 loadMessages();
+
+                                // ✅ Mark messages as read in the database
+                                fetch("<?= base_url('chat/mark_as_read') ?>", {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/x-www-form-urlencoded"
+                                    },
+                                    body: "guest_id=" + guest.guest_id
+                                });
+
+                                // ✅ Remove the unread badge from the UI
+                                let badge = li.querySelector(".badge");
+                                if (badge) badge.remove();
                             };
 
-                            // ✅ Unread message count badge (if any)
+                            // ✅ Show unread messages badge
                             if (unreadMap[guest.guest_id]) {
                                 let badge = document.createElement("span");
                                 badge.classList.add("badge", "bg-danger", "rounded-pill");
-                                badge.textContent = unreadMap[guest.guest_id];
+
+                                // Add exclamation mark (!) instead of number
+                                badge.innerHTML = "&#33;"; // HTML code for "!"
+
                                 li.appendChild(badge);
+
+
+                                flashTitleAdmin();
+                                adminMessageAlert.play(); // 🔊 Play notification sound
                             }
 
                             guestList.appendChild(li);
@@ -121,66 +176,41 @@
             });
     }
 
+
+
     function loadMessages() {
         if (!selectedGuest) return;
 
-        fetch("<?= base_url('chat/get_messages_by_guest') ?>?guest_id=" + selectedGuest)
+        fetch("<?= base_url('chat/get_messages_by_guest') ?>?guest_id=" + selectedGuest + "&last_timestamp=" + lastMessageTimestamps[selectedGuest])
             .then(response => response.json())
             .then(messages => {
-                let chatBox = document.getElementById("chatBox");
-                let newMessageCount = messages.length;
+                let newMessages = messages.filter(msg => msg.timestamp > lastMessageTimestamps[selectedGuest]);
 
-                // ✅ Find the last message in the chat
-                let lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
+                if (newMessages.length > 0) {
+                    chatData[selectedGuest] = [...chatData[selectedGuest], ...newMessages]; // ✅ Store messages per guest
+                    lastMessageTimestamps[selectedGuest] = newMessages[newMessages.length - 1].timestamp;
 
-                // ✅ Check if there are new messages & the last message is from a guest
-                if (newMessageCount > lastAdminMessageCount && lastMessage && lastMessage.sender_type === 'guest') {
-                    adminMessageAlert.play(); // 🔊 Play notification sound
-                    flashTitleAdmin(); // 🔥 Flash title for admin
-                }
-
-                chatBox.innerHTML = ""; // Clear previous messages
-
-                messages.forEach(msg => {
-                    let container = document.createElement("div");
-                    container.classList.add("message-container");
-
-                    let div = document.createElement("div");
-                    div.classList.add("chat-bubble");
-
-                    if (msg.sender_type === 'guest') {
-                        container.classList.add("guest-container");
-                        div.classList.add("guest-message");
-                        div.innerHTML = `<strong>Guest:</strong> ${msg.message}`;
-                    } else {
-                        container.classList.add("admin-container");
-                        div.classList.add("admin-message");
-                        div.innerHTML = `<strong>Admin:</strong> ${msg.message}`;
+                    updateChatUI(); // ✅ Update UI after receiving new messages
+                    if (document.hidden || selectedGuest !== newMessages[0].guest_id) {
+                        flashTitleAdmin();
+                        adminMessageAlert.play();
                     }
-
-                    container.appendChild(div);
-                    chatBox.appendChild(container);
-                });
-
-                // ✅ Scroll to latest message
-                chatBox.scrollTop = chatBox.scrollHeight;
-
-                // ✅ Mark messages as read AFTER loading
+                }
                 fetch("<?= base_url('chat/mark_as_read') ?>", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
                     },
                     body: "guest_id=" + selectedGuest
-                }).then(() => {
-                    loadGuests(); // ✅ Reload guest list to update unread count
                 });
 
-                // ✅ Update lastAdminMessageCount AFTER checking for notifications
-                lastAdminMessageCount = newMessageCount;
+                // ✅ Remove the unread badge from the UI
+                let badge = li.querySelector(".badge");
+                if (badge) badge.remove();
             })
             .catch(error => console.error("Error loading messages:", error));
     }
+
 
 
     // 🔥 Flash Title Notification for Admin
@@ -201,9 +231,55 @@
         }, 5000);
     }
 
+    function updateChatUI() {
+        let chatBox = document.getElementById("chatBox");
+        chatBox.innerHTML = ""; // Clear chat UI
+
+        if (!selectedGuest || !chatData[selectedGuest] || chatData[selectedGuest].length === 0) {
+            chatBox.innerHTML = "<p class='text-muted'>No messages yet.</p>";
+            return;
+        }
+
+        chatData[selectedGuest].forEach(msg => {
+            let container = document.createElement("div");
+            container.classList.add("message-container");
+
+            let div = document.createElement("div");
+            div.classList.add("chat-bubble");
+
+            if (msg.sender === "guest") {
+                container.classList.add("guest-container");
+                div.classList.add("guest-message");
+                div.innerHTML = `<strong>Guest:</strong> ${msg.message}`;
+            } else if (msg.sender === "admin") {
+                container.classList.add("admin-container");
+                div.classList.add("admin-message");
+                div.innerHTML = `<strong>Admin:</strong> ${msg.message}`;
+            }
+
+            container.appendChild(div);
+            chatBox.appendChild(container);
+        });
+
+        chatBox.scrollTop = chatBox.scrollHeight; // ✅ Scroll to latest message
+    }
+
+
+
+
     document.getElementById("sendReply").addEventListener("click", function() {
         if (!selectedGuest) return alert("Select a guest first!");
-        let message = document.getElementById("adminReply").value;
+        let message = document.getElementById("adminReply").value.trim();
+        if (!message) return;
+
+        let newMessage = {
+            sender_type: 'admin',
+            message: message,
+            timestamp: Date.now() // Local timestamp
+        };
+
+        chatData[selectedGuest].push(newMessage); // ✅ Store per guest
+        updateChatUI(); // ✅ Update UI instantly
 
         fetch("<?= base_url('chat/admin_reply') ?>", {
             method: "POST",
@@ -213,9 +289,36 @@
             body: "guest_id=" + selectedGuest + "&message=" + encodeURIComponent(message)
         }).then(() => {
             document.getElementById("adminReply").value = "";
-            loadMessages();
         });
     });
+
+
+
+    let typingTimeout;
+
+    document.getElementById("adminReply").addEventListener("input", function() {
+        if (!selectedGuest) return;
+
+        fetch("<?= base_url('chat/admin_typing') ?>", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: "guest_id=" + selectedGuest
+        });
+
+        clearTimeout(typingTimeout);
+        typingTimeout = setTimeout(() => {
+            fetch("<?= base_url('chat/admin_stopped_typing') ?>", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: "guest_id=" + selectedGuest
+            });
+        }, 3000); // Typing stops after 3 seconds of no input
+    });
+
 
     // Refresh chat every 3 seconds
     setInterval(() => {

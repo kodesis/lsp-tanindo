@@ -107,30 +107,61 @@
                       <td>
                         <?php
                         if ($dc['kode_unit'] == 'FR.APL02') {
-                          if ($dc['status'] == 1) {
+                          if (!$dc['correct']) {
+                            if ($dc['status'] == 1) {
                         ?>
 
-                            <a href="<?= base_url('user/apl02/') . $dc['uid'] ?>" type="button" class="btn btn-secondary btn-icon-text">
-                              <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
-                              Ikuti Assesmen
-                            </a>
+                              <a href="<?= base_url('user/apl02/') . $dc['uid'] ?>" type="button" class="btn btn-secondary btn-icon-text">
+                                <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
+                                Ikuti Assesmen
+                              </a>
+                            <?php
+                            } else if ($dc['status'] == 2) {
+                            ?>
+                              <a href="<?= base_url('user/apl02/') . $dc['uid'] ?>" type="button" class="btn btn-secondary btn-icon-text">
+                                <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
+                                Menunggu Asesor Konfirmasi Assesmen
+                              </a>
+                            <?php
+                            } else if ($dc['status'] == 3) {
+                            ?>
+                              <a href="<?= base_url('user/apl02_view/') . $dc['uid'] . '/' . $this->uri->segment(3) ?>" type="button" class="btn btn-success btn-icon-text">
+                                <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
+                                Assesmen Selesai
+                              </a>
+                            <?php
+                            } else if ($dc['status'] == '5') {
+                            ?>
+                              <button class="btn btn-warning">
+                                <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
+                                Meminta Revisi ke Admin
+                              </button>
+                            <?php
+                            }
+                          } else {
+                            if ($dc['correct'] == "Asesmen Dapat Di Lanjutkan") {
+                            ?>
+                              <a href="<?= base_url('user/apl02_view/') . $dc['uid'] . '/' . $this->uri->segment(3) ?>" class="btn btn-success">
+                                <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
+                                Assesmen Selesai
+                              </a>
+                              <?php
+                            } else {
+                              if ($dc['status'] == '5') {
+                              ?>
+                                <button class="btn btn-warning">
+                                  <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
+                                  Meminta Revisi ke Admin
+                                </button>
+                              <?php
+                              } else {
+                              ?>
+                                <button class="btn btn-danger" onclick="request_revisi(<?= $dc['uid'] ?>,<?= $this->uri->segment(3) ?>)">
+                                  Assesmen Tidak Direkomendasi
+                                </button>
                           <?php
-                          } else if ($dc['status'] == 2) {
-                          ?>
-                            <a href="<?= base_url('user/apl02/') . $dc['uid'] ?>" type="button" class="btn btn-secondary btn-icon-text">
-                              <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
-                              Menunggu Asesor Konfirmasi Assesmen
-                            </a>
-                          <?php
-                          } else if ($dc['status'] == 3) {
-                          ?>
-                            <a href="<?= base_url('user/apl02_view/') . $dc['uid'] . '/' . $this->uri->segment(3) ?>" type="button" class="btn btn-success btn-icon-text">
-                              <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
-                              Assesmen Selesai
-                            </a>
-
-
-                          <?php
+                              }
+                            }
                           }
                         } else if ($dc['kode_unit'] == 'FR.APL01') {
                           $uc = $this->db->from('user_courses')->join('users', 'users.uid = user_courses.user_uid')->where('user_uid', $this->session->userdata('user_id'))->get()->row_array();
@@ -321,27 +352,61 @@
                           </div>
                           <?php
                         } else {
-                          if ($dc['status'] == 1) {
+                          if (!$dc['correct']) {
+                            if ($dc['status'] == 1) {
                           ?>
-                            <a href="<?= base_url('user/detail_assesmen/') . $dc['uid'] ?>" type="button" class="btn btn-secondary btn-icon-text">
-                              <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
-                              Ikuti Assesmen
-                            </a>
-                          <?php
-                          } else if ($dc['status'] == 2) {
-                          ?>
-                            <a href="<?= base_url('user/detail_assesmen/') . $dc['uid'] ?>" type="button" class="btn btn-warning btn-icon-text">
-                              <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
-                              Menunggu Feedback Assessor
-                            </a>
-                          <?php
-                          } else if ($dc['status'] == 3) {
-                          ?>
-                            <a href="<?= base_url('user/detail_assesmen/') . $dc['uid'] ?>" type="button" class="btn btn-success btn-icon-text">
-                              <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
-                              Assesmen Selesai
-                            </a>
+
+                              <a href="<?= base_url('user/apl02/') . $dc['uid'] ?>" type="button" class="btn btn-secondary btn-icon-text">
+                                <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
+                                Ikuti Assesmen
+                              </a>
+                            <?php
+                            } else if ($dc['status'] == 2) {
+                            ?>
+                              <a href="<?= base_url('user/apl02/') . $dc['uid'] ?>" type="button" class="btn btn-secondary btn-icon-text">
+                                <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
+                                Menunggu Asesor Konfirmasi Assesmen
+                              </a>
+                            <?php
+                            } else if ($dc['status'] == 3) {
+                            ?>
+                              <a href="<?= base_url('user/apl02_view/') . $dc['uid'] . '/' . $this->uri->segment(3) ?>" type="button" class="btn btn-success btn-icon-text">
+                                <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
+                                Assesmen Selesai
+                              </a>
+                            <?php
+                            } else if ($dc['status'] == '5') {
+                            ?>
+                              <button class="btn btn-warning">
+                                <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
+                                Meminta Revisi ke Admin
+                              </button>
+                            <?php
+                            }
+                          } else {
+                            if ($dc['correct'] == "Asesmen Dapat Di Lanjutkan") {
+                            ?>
+                              <a href="<?= base_url('user/apl02_view/') . $dc['uid'] . '/' . $this->uri->segment(3) ?>" class="btn btn-success">
+                                <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
+                                Assesmen Selesai
+                              </a>
+                              <?php
+                            } else {
+                              if ($dc['status'] == '5') {
+                              ?>
+                                <button class="btn btn-warning">
+                                  <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
+                                  Meminta Revisi ke Admin
+                                </button>
+                              <?php
+                              } else {
+                              ?>
+                                <button class="btn btn-danger" onclick="request_revisi(<?= $dc['uid'] ?>,<?= $this->uri->segment(3) ?>)">
+                                  Assesmen Tidak Direkomendasi
+                                </button>
                         <?php
+                              }
+                            }
                           }
                         }
                         ?>
@@ -386,27 +451,61 @@
                       <td><?php echo $dc['assignments']; ?></td>
                       <td>
                         <?php
-                        if ($dc['status'] == 1) {
+                        if (!$dc['correct']) {
+                          if ($dc['status'] == '1') {
                         ?>
-                          <a href="<?= base_url('user/detail_assesmen/') . $dc['uid'] ?>" type="button" class="btn btn-secondary btn-icon-text">
-                            <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
-                            Ikuti Assesmen
-                          </a>
+
+                            <a href="<?= base_url('user/apl02/') . $dc['uid'] ?>" type="button" class="btn btn-secondary btn-icon-text">
+                              <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
+                              Ikuti Assesmen
+                            </a>
+                          <?php
+                          } else if ($dc['status'] == '2') {
+                          ?>
+                            <a href="<?= base_url('user/apl02/') . $dc['uid'] ?>" type="button" class="btn btn-secondary btn-icon-text">
+                              <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
+                              Menunggu Asesor Konfirmasi Assesmen
+                            </a>
+                          <?php
+                          } else if ($dc['status'] == '3') {
+                          ?>
+                            <a href="<?= base_url('user/apl02_view/') . $dc['uid'] . '/' . $this->uri->segment(3) ?>" type="button" class="btn btn-success btn-icon-text">
+                              <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
+                              Assesmen Selesai
+                            </a>
+                          <?php
+                          } else if ($dc['status'] == '5') {
+                          ?>
+                            <button class="btn btn-warning">
+                              <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
+                              Meminta Revisi ke Admin
+                            </button>
+                          <?php
+                          }
+                        } else {
+                          if ($dc['correct'] == "Asesmen Dapat Di Lanjutkan") {
+                          ?>
+                            <a href="<?= base_url('user/apl02_view/') . $dc['uid'] . '/' . $this->uri->segment(3) ?>" class="btn btn-success">
+                              <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
+                              Assesmen Selesai
+                            </a>
+                            <?php
+                          } else {
+                            if ($dc['status'] == '5') {
+                            ?>
+                              <button class="btn btn-warning">
+                                <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
+                                Meminta Revisi ke Admin
+                              </button>
+                            <?php
+                            } else {
+                            ?>
+                              <button class="btn btn-danger" onclick="request_revisi(<?= $dc['uid'] ?>,<?= $this->uri->segment(3) ?>)">
+                                Assesmen Tidak Direkomendasi
+                              </button>
                         <?php
-                        } else if ($dc['status'] == 2) {
-                        ?>
-                          <a href="<?= base_url('user/detail_assesmen/') . $dc['uid'] ?>" type="button" class="btn btn-warning btn-icon-text">
-                            <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
-                            Menunggu Feedback Assessor
-                          </a>
-                        <?php
-                        } else if ($dc['status'] == 3) {
-                        ?>
-                          <a href="<?= base_url('user/detail_assesmen/') . $dc['uid'] ?>" type="button" class="btn btn-success btn-icon-text">
-                            <!-- <i class="typcn typcn-warning btn-icon-prepend"></i> -->
-                            Assesmen Selesai
-                          </a>
-                        <?php
+                            }
+                          }
                         }
                         ?>
 
@@ -431,3 +530,37 @@
     </div>
   </div>
 </div>
+
+<!-- Modal starts -->
+<div class="modal fade" id="revisiModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <!-- <h4 class="modal-title" id="exampleModalLabel"></h4> -->
+        <h4 class="modal-title" id="exampleModalLabel">Request Revisi</h4>
+      </div>
+      <form action="<?= base_url('user/request_revisi') ?>" id="revisiForm" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="grades_uid" id="grades_uid_revisi">
+        <input type="hidden" name="asesmen_uid" id="asesmen_uid_revisi">
+        <div class="modal-body">
+          <input type="file" name="revisi_request" id="revisi_request">
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Submit</button>
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- Modal Ends -->
+
+<script>
+  function request_revisi(uid, asesmen_uid) {
+    $('#revisiForm')[0].reset(); // Reset form on modal
+    $('#grades_uid_revisi').val(uid)
+    $('#asesmen_uid_revisi').val(asesmen_uid)
+    // Show modal after table is loaded
+    $('#revisiModal').modal('show');
+  }
+</script>

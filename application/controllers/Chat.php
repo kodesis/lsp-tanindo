@@ -26,16 +26,57 @@ class Chat extends CI_Controller
     public function send_message()
     {
         $guest_id = $this->get_guest_id();
-        $message = $this->input->post('message', true);
+        $new_message = $this->input->post('message', true);
+        $sender_type = $this->input->post('sender_type', true); // 'guest' or 'admin'
 
-        if (!empty($message)) {
+        if (empty($new_message) || empty($sender_type)) {
+            echo json_encode(["error" => "Invalid message format"]);
+            return;
+        }
+
+        // Check if chat exists
+        $chat = $this->db->where('guest_id', $guest_id)->get('chat_messages')->row();
+
+        if ($chat) {
+            $existing_messages = json_decode($chat->message, true);
+            if (!is_array($existing_messages)) {
+                $existing_messages = [];
+            }
+
+            // Append new message
+            $existing_messages[] = [
+                "message" => $new_message,
+                "sender" => $sender_type,
+                "timestamp" => time(),
+            ];
+
+            $this->db->where('guest_id', $guest_id)
+                ->update('chat_messages', ['message' => json_encode($existing_messages), 'status' => 'unread']);
+        } else {
+            // Insert a new chat row
             $this->db->insert('chat_messages', [
                 'guest_id'    => $guest_id,
-                'message'     => $message,
-                'sender_type' => 'guest'
+                'message'     => json_encode([
+                    [
+                        "message" => $new_message,
+                        "sender" => $sender_type,
+                        "timestamp" => time(),
+                        "status" => 'unread'
+                    ]
+                ]),
+                'created_at'  => date('Y-m-d H:i:s'),
+                "status" => 'unread'
+
             ]);
         }
+
+        echo json_encode(["success" => true]);
     }
+
+
+
+
+
 
     public function get_active_guests()
     {
@@ -60,17 +101,18 @@ class Chat extends CI_Controller
     public function get_messages_by_guest()
     {
         $guest_id = $this->input->get('guest_id');
-        if (!$guest_id) {
-            echo json_encode([]);
-            return;
+
+        $chat_entry = $this->db->where("guest_id", $guest_id)->get("chat_messages")->row();
+
+        if ($chat_entry) {
+            echo json_encode(json_decode($chat_entry->message, true));
+        } else {
+            echo json_encode([]); // No messages found
         }
-
-        $this->db->where('guest_id', $guest_id);
-        $this->db->order_by('created_at', 'ASC'); // ✅ Oldest messages first
-        $query = $this->db->get('chat_messages');
-
-        echo json_encode($query->result());
     }
+
+
+
 
 
     // public function admin_reply()
@@ -89,24 +131,48 @@ class Chat extends CI_Controller
 
     public function admin_reply()
     {
-        $guest_id = $this->input->post('guest_id');
-        $message = $this->input->post('message');
+        $guest_id = $this->input->post('guest_id', true);
+        $message = $this->input->post('message', true);
 
-        if (!$guest_id || !$message) {
-            echo json_encode(["error" => "Invalid request"]);
+        if (empty($guest_id) || empty($message)) {
+            echo json_encode(["error" => "Invalid guest or message"]);
             return;
         }
 
-        $data = [
-            'guest_id' => $guest_id,
-            'message' => $message,
-            'sender_type' => 'admin', // Mark as admin message
-            // 'created_at' => date("Y-m-d H:i:s")
-        ];
+        // Fetch existing chat messages
+        $chat = $this->db->where('guest_id', $guest_id)->get('chat_messages')->row();
 
-        $this->db->insert('chat_messages', $data);
+        if ($chat) {
+            $existing_messages = json_decode($chat->message, true);
+            if (!is_array($existing_messages)) {
+                $existing_messages = [];
+            }
+            $existing_messages[] = [
+                "message" => $message,
+                "sender" => "admin",
+                "timestamp" => time()
+            ];
+
+            $this->db->where('guest_id', $guest_id)
+                ->update('chat_messages', ['message' => json_encode($existing_messages)]);
+        } else {
+            $this->db->insert('chat_messages', [
+                'guest_id'    => $guest_id,
+                'message'     => json_encode([
+                    [
+                        "message" => $message,
+                        "sender" => "admin",
+                        "timestamp" => time()
+                    ]
+                ]),
+                'created_at'  => date('Y-m-d H:i:s')
+            ]);
+        }
+
         echo json_encode(["success" => true]);
     }
+
+
 
     public function get_latest_message()
     {
@@ -136,24 +202,42 @@ class Chat extends CI_Controller
     }
     public function get_messages()
     {
-        $guest_id = $this->session->userdata('guest_id'); // Identify the guest
+        $guest_id = $this->session->userdata('guest_id');
 
         if (!$guest_id) {
             echo json_encode([]);
             return;
         }
 
-        $this->db->where('guest_id', $guest_id);
-        $this->db->order_by('created_at', 'ASC'); // ✅ Oldest messages first
-        $query = $this->db->get('chat_messages');
+        $chat = $this->db->where('guest_id', $guest_id)->get('chat_messages')->row();
 
-        echo json_encode($query->result());
+        if ($chat) {
+            echo json_encode(json_decode($chat->message, true));
+        } else {
+            echo json_encode([]);
+        }
     }
+
+
 
     // For Admin
     public function get_unread_count()
     {
         $unreadCount = $this->db->where("status", 'unread')->count_all_results("chat_messages");
         echo json_encode(["unread_count" => $unreadCount]);
+    }
+
+    public function admin_typing()
+    {
+        $guest_id = $this->input->post('guest_id', true);
+        $this->db->where('guest_id', $guest_id)->update('chat_messages', ['admin_typing' => 1]);
+        echo json_encode(["success" => true]);
+    }
+
+    public function admin_stopped_typing()
+    {
+        $guest_id = $this->input->post('guest_id', true);
+        $this->db->where('guest_id', $guest_id)->update('chat_messages', ['admin_typing' => 0]);
+        echo json_encode(["success" => true]);
     }
 }

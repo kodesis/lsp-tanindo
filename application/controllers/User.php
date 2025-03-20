@@ -112,6 +112,7 @@ class User extends CI_Controller
     if (!is_dir($folderPath)) {
       mkdir($folderPath, 0777, true);
     }
+
     $signatureData = $this->input->post('signed'); // Get Base64 signature
     // var_dump($signatureData);
 
@@ -613,5 +614,68 @@ class User extends CI_Controller
     }
     return $uploaded_files; // ✅ Return all uploaded file names
 
+  }
+
+  public function request_revisi()
+  {
+    $grades_uid = $this->input->post('grades_uid');
+    $revisi_request = $this->input->post('revisi_request');
+    $asesmen_uid = $this->input->post('asesmen_uid');
+
+
+
+    $config['upload_path'] = FCPATH . 'uploads/'; // Same as the config file
+    $config['allowed_types'] = 'gif|jpg|jpeg|png';
+    $config['file_name'] = 'revisi_' . uniqid();
+    $config['max_size']      = 5120; // Limit file size to 5MB (in KB)
+    $this->load->library('upload', $config);
+    $this->upload->initialize($config);
+
+    if (!$this->upload->do_upload('revisi_request')) {
+      $error = $this->upload->display_errors();
+
+      $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+        Input Data Failed. Error :' . $error . '
+        </div>');
+      // redirect('admin/add_artikel');
+    } else {
+      $image_data = $this->upload->data();
+      $thumbnail = file_get_contents($image_data['full_path']);
+      $image = $image_data['file_name'];
+
+      // Prepare update data
+      $update_data = [
+        'revisi_request' => $image,
+        'revisi_datetime' => date('Y-m-d H:i:s'),
+        'status' => '5',
+        // 'correct' => null,
+      ];
+
+      $this->db->where('uid', $grades_uid);
+      $this->db->update('grades', $update_data);
+
+      $ad = $this->db->select('user_uid,assesment_uid, course_uid')->from('grades')->join('assesmen', 'assesmen.uid = grades.assesment_uid')->where('grades.uid', $grades_uid)->get()->row();
+      $uc = $this->db->select('uid')->from('user_courses')->where('user_uid', $ad->user_uid)->where('course_uid', $ad->course_uid)->get()->row();
+
+      $data_riwayat = [
+        'user_uid' => $ad->user_uid,
+        'user_courses_uid' => $uc->uid,
+        'assesment_uid' => $ad->assesment_uid,
+        'status' => '2',
+        'text' => 'Meminta Revisi dari Admin'
+      ];
+      $this->db->insert('riwayat_asesment', $data_riwayat);
+
+      // Set success message
+      $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+        Berhasil Melakukan Request Revisi
+        </div>');
+    }
+
+    // Update the grades table
+
+
+    // Redirect to the desired page (e.g., the previous page or dashboard)
+    redirect('user/Assesmen/' . $asesmen_uid); // Change 'Admin/grades_list' to your target page
   }
 }

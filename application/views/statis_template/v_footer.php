@@ -162,23 +162,28 @@
   function sendMessage() {
     let input = document.getElementById("chatInput");
     let message = input.value.trim();
-    if (message !== "") {
-      let chatMessages = document.getElementById("chatMessages");
 
-      let newMessage = document.createElement("div");
-      newMessage.classList.add("chat-bubble", "guest-message");
-      newMessage.innerHTML = `<strong>You:</strong> ${message}`;
-      chatMessages.appendChild(newMessage);
+    if (message === "") return;
 
-      let xhr = new XMLHttpRequest();
-      xhr.open("POST", "<?= base_url('chat/send_message') ?>", true);
-      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      xhr.send("message=" + encodeURIComponent(message));
+    let chatMessages = document.getElementById("chatMessages");
+    let newMessage = document.createElement("div");
+    newMessage.classList.add("chat-bubble", "guest-message");
+    newMessage.innerHTML = `<strong>You:</strong> ${message}`;
+    chatMessages.appendChild(newMessage);
 
-      input.value = "";
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "<?= base_url('chat/send_message') ?>", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    let formData = `message=${encodeURIComponent(message)}&sender_type=guest`;
+    xhr.send(formData);
+
+    input.value = "";
+    chatMessages.scrollTop = chatMessages.scrollHeight;
   }
+
+
+
 
   function loadMessages() {
     let xhr = new XMLHttpRequest();
@@ -187,21 +192,13 @@
       if (xhr.status == 200) {
         let messages = JSON.parse(xhr.responseText);
         let chatMessages = document.getElementById("chatMessages");
-
-        if (messages.length > lastMessageCount && messages[messages.length - 1].sender_type === "admin") {
-          // if (document.getElementById("chatWindow").style.display === "none") {
-          document.getElementById("chatToggle").classList.add("new-message"); // Add 🔴 alert
-          newMessageAlert.play(); // Play sound
-          flashTitle(); // Flash title
-          // }
-        }
-
         chatMessages.innerHTML = "";
+
         messages.forEach(function(msg) {
           let messageDiv = document.createElement("div");
           messageDiv.classList.add("chat-bubble");
 
-          if (msg.sender_type === "admin") {
+          if (msg.sender === "admin") {
             messageDiv.classList.add("admin-message");
             messageDiv.innerHTML = `<strong>Admin:</strong> ${msg.message}`;
           } else {
@@ -213,11 +210,12 @@
         });
 
         chatMessages.scrollTop = chatMessages.scrollHeight;
-        lastMessageCount = messages.length; // Update message count
       }
     };
     xhr.send();
   }
+
+
 
   // Auto refresh chat every 3 seconds
   setInterval(loadMessages, 3000);
